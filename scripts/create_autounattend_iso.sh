@@ -6,6 +6,8 @@
 
 dependencies=( genisoimage dialog )
 
+# TODO - add must run as root / sudo suggestion
+
 # TODO - add all the formatting functions
 
 # List dependencies
@@ -99,6 +101,10 @@ cat ${temp_dir}/isoinfo.$$
 #                       Detect Windows Version for Given ISO                 #
 ##############################################################################
 
+#umount anything from mount location
+# TODO - check if mounted first
+sudo umount /anydeploy/tmp/mount
+sudo mount ${chosen_iso} /anydeploy/tmp/mount
 # TODO use wiminfo
 
 ##############################################################################
@@ -121,7 +127,13 @@ cat ${temp_dir}/isoinfo.$$
 #                      Copy Certain unattend file                            #
 ##############################################################################
 
+sudo rm /anydeploy/tmp/extracted/*
+
+
+
 # TODO - get / generate unattend file for detected windows version and copy to
+
+cp /anydeploy/systems/Windows/unattend_files/autounattend_win10_mbr_audit.xml /anydeploy/tmp/extracted/autounattend.xml
 
 # /anydeploy/tmp/extracted/
 
@@ -132,8 +144,8 @@ cat ${temp_dir}/isoinfo.$$
 
 # TODO - clear /tmp/extracted first
 
-#mkisofs -o anydeploy/iso/autounattend.iso -joliet-long -relaxed-filenames /anydeploy/tmp/extracted/
-
+rm /anydeploy/iso/autounattend.iso
+mkisofs -o /anydeploy/iso/autounattend.iso -joliet-long -relaxed-filenames /anydeploy/tmp/extracted/
 
 ##############################################################################
 #                            Cleanup                                         #

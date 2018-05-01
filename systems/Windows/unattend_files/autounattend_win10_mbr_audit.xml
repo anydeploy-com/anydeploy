@@ -40,8 +40,8 @@
                 <OSImage>
                     <InstallFrom>
                         <MetaData wcm:action="add">
-                        <Key>/IMAGE/NAME</Key>
-                        <value>Windows 10 Home</value>
+                        <Key>/IMAGE/INDEX</Key>
+                        <value>1</value>
                         </MetaData>
                         </InstallFrom>
                     <InstallTo>
