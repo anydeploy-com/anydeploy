@@ -12,10 +12,13 @@ echo "Dependencies listed below:"
 
 script_path=`dirname $0`
 script_dir="${PWD}/${script_path}"
-main_dir=`$script_dir/..`
+main_dir=`cd $script_dir && cd .. && echo ${PWD}`
 
-# Make ISO dir
+# Create Mount Dir
 
-echo "main dir = ${main_dir}"
+cd $main_dir
 
-cd ../tmp
+if [ ! -d "tmp/mount" ]; then
+echo "Directory tmp/mount DOES NOT exists, creating."
+mkdir tmp/mount
+fi
