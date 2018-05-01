@@ -82,5 +82,13 @@ dialog --clear --title "Select ISO" \
 
 menu_choice=`cat ${temp_dir}/chosen_iso.$$`
 
+##############################################################################
+#                            Post ISO Selection                              #
+##############################################################################
 
-echo ${menu_choice}
+
+chosen_iso=`echo "$iso_menu" | grep "${menu_choice} ." | awk '{print $2}'`
+
+isoinfo -d -i $chosen_iso >> ${temp_dir}/isoinfo.$$
+
+cat ${temp_dir}/isoinfo.$$
