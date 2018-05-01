@@ -39,7 +39,7 @@ echo "Dependencies listed below:"
 script_path=`dirname $0`
 script_dir="${PWD}/${script_path}"
 main_dir=`cd $script_dir && cd .. && echo ${PWD}` # TODO - fix, seems ugly but works
-iso_dir="${main_dir/iso}"
+iso_dir="${main_dir}/iso}"
 temp_dir="${main_dir}/tmp"
 # Create Mount Dir
 
