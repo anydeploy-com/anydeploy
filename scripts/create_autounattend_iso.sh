@@ -100,6 +100,15 @@ cat ${temp_dir}/isoinfo.$$
 
 # TODO use wiminfo
 
+##############################################################################
+#                       User Input - ISO type                                #
+##############################################################################
+
+# types of iso's
+
+# seperate iso file - used for fast reference os creation
+# combined iso - can be used to install seperate systems with single dvd / usb / virtual image ( takes longer)
+
 
 
 ##############################################################################
