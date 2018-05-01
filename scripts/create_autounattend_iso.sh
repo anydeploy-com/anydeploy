@@ -49,7 +49,7 @@ if [ ! -d "tmp/mount" ]; then
 echo "Directory tmp/mount DOES NOT exists, creating."
 mkdir tmp/mount
 fi
-
+Actual ISO Creation
 # Detect ISO's
 
 iso_list=(`find ${iso_dir}/ -maxdepth 1 -name "*.iso"`)
@@ -92,3 +92,15 @@ chosen_iso=`echo "$iso_menu" | grep "${menu_choice} ." | awk '{print $2}'`
 isoinfo -d -i $chosen_iso >> ${temp_dir}/isoinfo.$$
 
 cat ${temp_dir}/isoinfo.$$
+
+
+##############################################################################
+#                       Detect Windows Version for Given ISO                 #
+##############################################################################
+
+
+##############################################################################
+#                            Actual ISO Creation                             #
+##############################################################################
+
+#mkisofs -o ../autounattend.iso -joliet-long -relaxed-filenames .
