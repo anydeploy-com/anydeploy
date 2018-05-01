@@ -41,6 +41,7 @@ script_dir="${PWD}/${script_path}"
 main_dir=`cd $script_dir && cd .. && echo ${PWD}` # TODO - fix, seems ugly but works
 iso_dir="${main_dir}/iso"
 temp_dir="${main_dir}/tmp"
+
 # Create Mount Dir
 
 cd ${main_dir}
@@ -107,8 +108,13 @@ cat ${temp_dir}/isoinfo.$$
 # types of iso's
 
 # seperate iso file - used for fast reference os creation
-# combined iso - can be used to install seperate systems with single dvd / usb / virtual image ( takes longer)
 
+# TODO check if current one exists
+# ask to overwrite
+
+# combined iso - can be used to install seperate systems with single dvd / usb / virtual image ( takes longer)
+# TODO check if current one exists
+# ask to overwrite
 
 
 ##############################################################################
