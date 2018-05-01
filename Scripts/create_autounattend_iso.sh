@@ -12,8 +12,10 @@ echo "Dependencies listed below:"
 
 script_path=`dirname $0`
 script_dir="${PWD}/${script_path}"
+main_dir=`$script_dir/..`
 
+# Make ISO dir
 
-# Make Temp Dir
+echo "main dir = ${main_dir}"
 
 cd ../tmp
