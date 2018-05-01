@@ -55,6 +55,13 @@ fi
 iso_list=(`find ${iso_dir}/ -maxdepth 1 -name "*.iso"`)
 iso_menu=`ls ${iso_dir}/*.iso | awk '{print v++,$1}'`
 
+if [ ! ${#iso_list[@]} -gt 0 ]; then
+	echo ""
+    echo "You must have at least 1 iso in $working_dir/iso"
+    echo "Exiting..."
+    exit 1
+fi
+
 ##############################################################################
 #                            Debugging                                       #
 ##############################################################################
