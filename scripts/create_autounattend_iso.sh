@@ -81,3 +81,6 @@ dialog --clear --title "Select ISO" \
       --menu "Move using [UP] [DOWN} Arrow keys, Hit [ENTER] key to select." 20 70 5 $iso_menu 2> ${temp_dir}/chosen_iso.$$
 
 menu_choice=`cat ${temp_dir}/chosen_iso.$$`
+
+
+echo ${menu_choice}
