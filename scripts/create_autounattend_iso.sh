@@ -111,6 +111,7 @@ sudo mount ${chosen_iso} /anydeploy/tmp/mount
 #                       User Input - ISO type                                #
 ##############################################################################
 
+
 # types of iso's
 
 # seperate iso file - used for fast reference os creation
@@ -122,14 +123,15 @@ sudo mount ${chosen_iso} /anydeploy/tmp/mount
 # TODO check if current one exists
 # ask to overwrite
 
+# TODO get all the values for profiling (profile save for later usage)
 
 ##############################################################################
-#                      Copy Certain unattend file                            #
+#                      Generate unattend file                            #
 ##############################################################################
 
 sudo rm /anydeploy/tmp/extracted/*
 
-
+# for home needs manual input for COA
 
 # TODO - get / generate unattend file for detected windows version and copy to
 

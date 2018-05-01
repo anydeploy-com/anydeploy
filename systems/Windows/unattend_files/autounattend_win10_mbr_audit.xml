@@ -29,10 +29,14 @@
             </DiskConfiguration>
             <UserData>
                 <AcceptEula>true</AcceptEula>
-                <FullName>Vagrant Administrator</FullName>
-                <Organization>Vagrant Inc.</Organization>
+                <FullName>Anydeploy Administrator</FullName>
+                <Organization>anydeploy.com</Organization>
                 <ProductKey>
-                    <Key>W269N-WFGWX-YVC9B-4J6C9-T83GX</Key>
+                    <Key>7J2V8-R94WD-VV6RK-GG96B-RX9VX</Key>
+                    <!--  Home <Key>7J2V8-R94WD-VV6RK-GG96B-RX9VX</Key> -->
+                    <!-- Education <Key>NW6C2-QMPVW-D7KKK-3GKT6-VCFB2</Key> -->
+                    <!-- Enterprise <Key>NPPR9-FWDCX-D2C8J-H872K-2YT43</Key> -->
+                    <!-- Professional <Key>W269N-WFGWX-YVC9B-4J6C9-T83GX</Key> -->
                     <WillShowUI>Never</WillShowUI>
                 </ProductKey>
             </UserData>
@@ -93,12 +97,14 @@
                 <Enabled>true</Enabled>
             </AutoLogon>
             <FirstLogonCommands>
-            	<SynchronousCommand wcm:action="add">
+              <!-- Disable network selection after sysprep  -->
+              <SynchronousCommand wcm:action="add">
                     <Order>1</Order>
                     <CommandLine>REG ADD &quot;HKLM\System\CurrentControlSet\Control\Network\NewNetworkWindowOff&quot; /F</CommandLine>
                     <Description>No New Network Block</Description>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
+                <!-- Allow powershell Scripts -->
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd.exe /c powershell -Command "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force"</CommandLine>
                     <Description>Set Execution Policy 64 Bit</Description>
@@ -123,5 +129,4 @@
             <SkipAutoActivation>true</SkipAutoActivation>
         </component>
     </settings>
-    <cpi:offlineImage cpi:source="wim:d:/users/blotek/downloads/win10_1709_englishinternational_x64/sources/install.wim#Windows 10 Pro" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
 </unattend>
