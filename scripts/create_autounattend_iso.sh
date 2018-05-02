@@ -165,17 +165,18 @@ export chosen_edition_index=`cat /anydeploy/tmp/chosen_edition.$$`
 export chosen_edition_name=`cat /anydeploy/tmp/os_version_list.$$ | sed -n ${chosen_edition_index}p`
 
 
-export key="7J2V8-R94WD-VV6RK-GG96B-RX9VX"
 
 echo "chosen edition index: $chosen_edition_index"
 echo "chosen edition name: $chosen_edition_name"
 
-# pickup right COA
+# pickup right COA Key
 
-echo "chosen edition key (match): ${key}"
+chosen_edition_key=`cat /anydeploy/systems/Windows/KMS_Keys_List.md | grep "$chosen_edition_name |" | sed 's/\||//g' | sed -e "s/$chosen_edition_name//" | xargs`
+
+echo "chosen edition key: $chosen_edition_key"
+
 
 #  TODO IMPORTANT match sysprep file based on edition selected
-
 
 #cp /anydeploy/systems/Windows/unattend_files/autounattend_win10_mbr_audit.xml /anydeploy/tmp/extracted/autounattend.xml
 sh /anydeploy/scripts/render_template.sh /anydeploy/systems/Windows/unattend_files/autounattend_win10_mbr_audit_template.xml >> /anydeploy/tmp/extracted/autounattend.xml
