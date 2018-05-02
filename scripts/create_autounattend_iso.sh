@@ -92,8 +92,6 @@ menu_choice=`cat ${temp_dir}/chosen_iso.$$`
 
 chosen_iso=`echo "$iso_menu" | grep "${menu_choice} ." | awk '{print $2}'`
 
-echo "CHOSEN ISO =  ${chosen_iso}"
-
 isoinfo -d -i $chosen_iso >> ${temp_dir}/isoinfo.$$
 
 cat ${temp_dir}/isoinfo.$$
@@ -104,15 +102,22 @@ cat ${temp_dir}/isoinfo.$$
 ##############################################################################
 
 #umount anything from mount location
-# TODO - check if mounted first
+
+if mount | grep "/anydeploy/tmp/mount";
+then
+echo "iso mounted already, unmounting"
 sudo umount /anydeploy/tmp/mount
+fi
+
+# mount selected iso
+
 sudo mount ${chosen_iso} /anydeploy/tmp/mount
 # TODO use wiminfo
 
 ##############################################################################
 #                       User Input - ISO type                                #
 ##############################################################################
-
+# TODO TODO TODO  add part with os version selection + generate all the variables
 
 # types of iso's
 
@@ -147,8 +152,6 @@ sh /anydeploy/scripts/render_template.sh /anydeploy/systems/Windows/unattend_fil
 ##############################################################################
 #                            Actual ISO Creation                             #
 ##############################################################################
-
-# TODO - clear /tmp/extracted first
 
 rm /anydeploy/iso/autounattend.iso
 mkisofs -o /anydeploy/iso/autounattend.iso -joliet-long -relaxed-filenames /anydeploy/tmp/extracted/.
