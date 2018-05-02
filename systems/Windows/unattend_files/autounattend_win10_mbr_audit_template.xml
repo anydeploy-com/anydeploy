@@ -45,7 +45,7 @@
                     <InstallFrom>
                         <MetaData wcm:action=\"add\">
                         <Key>/IMAGE/INDEX</Key>
-                        <value>1</value>
+                        <value>${chosen_edition_index}</value>
                         </MetaData>
                         </InstallFrom>
                     <InstallTo>
