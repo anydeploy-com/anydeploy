@@ -149,7 +149,7 @@ IFS=$'\n' os_edition_name=($(cat /anydeploy/tmp/os_version_list.$$))
 
 
 ##############################################################################
-#                      Generate unattend file                            #
+#                      Generate unattend file                                #
 ##############################################################################
 
 sudo rm /anydeploy/tmp/extracted/*
@@ -176,6 +176,17 @@ chosen_edition_key=`cat /anydeploy/systems/Windows/KMS_Keys_List.md | grep "$cho
 echo "chosen edition key: $chosen_edition_key"
 
 
+##############################################################################
+#                      Dialog MBR / GPT                                      #
+##############################################################################
+
+
+
+
+
+
+# Check if matching sysprep file exists
+
 #  TODO IMPORTANT match sysprep file based on edition selected
 
 #cp /anydeploy/systems/Windows/unattend_files/autounattend_win10_mbr_audit.xml /anydeploy/tmp/extracted/autounattend.xml
@@ -186,6 +197,8 @@ sh /anydeploy/scripts/render_template.sh /anydeploy/systems/Windows/unattend_fil
 #    echo " * Converting Sysprep to Windows compatible (DOS)"
 #    cat /anydeploy/tmp/extracted/autounattend_unix.xml | awk 'sub("$", "\r")' /anydeploy/tmp/extracted/autounattend_unix.xml > /anydeploy/tmp/extracted/autounattend.xml
 #    sleep 1
+
+
 
 
 
