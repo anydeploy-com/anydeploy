@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
-<unattend xmlns="urn:schemas-microsoft-com:unattend">
+<?xml version=\"1.0\" encoding=\"utf-8\"?>
+<unattend xmlns=\"urn:schemas-microsoft-com:unattend\">
     <servicing />
-    <settings pass="windowsPE">
-        <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <settings pass=\"windowsPE\">
+        <component name=\"Microsoft-Windows-Setup\" processorArchitecture=\"amd64\" publicKeyToken=\"31bf3856ad364e35\" language=\"neutral\" versionScope=\"nonSxS\" xmlns:wcm=\"http://schemas.microsoft.com/WMIConfig/2002/State\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">
             <DiskConfiguration>
-                <Disk wcm:action="add">
+                <Disk wcm:action=\"add\">
                     <CreatePartitions>
-                        <CreatePartition wcm:action="add">
+                        <CreatePartition wcm:action=\"add\">
                             <Order>1</Order>
                             <Type>Primary</Type>
                             <Extend>true</Extend>
                         </CreatePartition>
                     </CreatePartitions>
                     <ModifyPartitions>
-                        <ModifyPartition wcm:action="add">
+                        <ModifyPartition wcm:action=\"add\">
                             <Extend>false</Extend>
                             <Format>NTFS</Format>
                             <Letter>C</Letter>
@@ -43,7 +43,7 @@
             <ImageInstall>
                 <OSImage>
                     <InstallFrom>
-                        <MetaData wcm:action="add">
+                        <MetaData wcm:action=\"add\">
                         <Key>/IMAGE/INDEX</Key>
                         <value>1</value>
                         </MetaData>
@@ -57,7 +57,7 @@
                 </OSImage>
             </ImageInstall>
         </component>
-        <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <component name=\"Microsoft-Windows-International-Core-WinPE\" processorArchitecture=\"amd64\" publicKeyToken=\"31bf3856ad364e35\" language=\"neutral\" versionScope=\"nonSxS\" xmlns:wcm=\"http://schemas.microsoft.com/WMIConfig/2002/State\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">
             <SetupUILanguage>
                 <UILanguage>en-US</UILanguage><!-- leave as en-US otherwise will break installation -->
             </SetupUILanguage>
@@ -68,20 +68,20 @@
             <UserLocale>en-US</UserLocale><!-- leave as en-US otherwise will break installation -->
         </component>
     </settings>
-    <settings pass="offlineServicing">
-        <component name="Microsoft-Windows-LUA-Settings" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+    <settings pass=\"offlineServicing\">
+        <component name=\"Microsoft-Windows-LUA-Settings\" processorArchitecture=\"amd64\" publicKeyToken=\"31bf3856ad364e35\" language=\"neutral\" versionScope=\"nonSxS\">
             <EnableLUA>false</EnableLUA>
         </component>
     </settings>
-    <settings pass="oobeSystem">
-        <component name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <settings pass=\"oobeSystem\">
+        <component name=\"Microsoft-Windows-International-Core\" processorArchitecture=\"amd64\" publicKeyToken=\"31bf3856ad364e35\" language=\"neutral\" versionScope=\"nonSxS\" xmlns:wcm=\"http://schemas.microsoft.com/WMIConfig/2002/State\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">
             <InputLocale>en-GB</InputLocale>
             <SystemLocale>en-GB</SystemLocale>
             <UILanguage>en-GB</UILanguage>
             <UILanguageFallback>en-GB</UILanguageFallback>
             <UserLocale>en-GB</UserLocale>
         </component>
-        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <component name=\"Microsoft-Windows-Shell-Setup\" processorArchitecture=\"amd64\" publicKeyToken=\"31bf3856ad364e35\" language=\"neutral\" versionScope=\"nonSxS\" xmlns:wcm=\"http://schemas.microsoft.com/WMIConfig/2002/State\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">
             <OOBE>
                 <HideEULAPage>true</HideEULAPage>
                 <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
@@ -98,15 +98,15 @@
             </AutoLogon>
             <FirstLogonCommands>
               <!-- Disable network selection after sysprep  -->
-              <SynchronousCommand wcm:action="add">
+              <SynchronousCommand wcm:action=\"add\">
                     <Order>1</Order>
                     <CommandLine>REG ADD &quot;HKLM\System\CurrentControlSet\Control\Network\NewNetworkWindowOff&quot; /F</CommandLine>
                     <Description>No New Network Block</Description>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
                 <!-- Allow powershell Scripts -->
-                <SynchronousCommand wcm:action="add">
-                    <CommandLine>cmd.exe /c powershell -Command "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force"</CommandLine>
+                <SynchronousCommand wcm:action=\"add\">
+                    <CommandLine>cmd.exe /c powershell -Command \"Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force\"</CommandLine>
                     <Description>Set Execution Policy 64 Bit</Description>
                     <Order>2</Order>
                     <RequiresUserInput>true</RequiresUserInput>
@@ -115,8 +115,8 @@
             <ShowWindowsLive>false</ShowWindowsLive>
         </component>
     </settings>
-    <settings pass="specialize">
-        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+    <settings pass=\"specialize\">
+        <component name=\"Microsoft-Windows-Shell-Setup\" processorArchitecture=\"amd64\" publicKeyToken=\"31bf3856ad364e35\" language=\"neutral\" versionScope=\"nonSxS\">
             <OEMInformation>
                 <HelpCustomized>false</HelpCustomized>
             </OEMInformation>
@@ -125,7 +125,7 @@
             <TimeZone>GMT Standard Time</TimeZone>
             <RegisteredOwner />
         </component>
-        <component name="Microsoft-Windows-Security-SPP-UX" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <component name=\"Microsoft-Windows-Security-SPP-UX\" processorArchitecture=\"amd64\" publicKeyToken=\"31bf3856ad364e35\" language=\"neutral\" versionScope=\"nonSxS\" xmlns:wcm=\"http://schemas.microsoft.com/WMIConfig/2002/State\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">
             <SkipAutoActivation>true</SkipAutoActivation>
         </component>
     </settings>
