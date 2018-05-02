@@ -6,6 +6,43 @@ Keys Last Updated: 1 May 2018
 
 
 
+## Windows Vista
+
+## Windows 7
+
+| WIM Display Name:               | KMS Client Setup Key |
+| --------------------------------|:--------------------:|
+| Windows 7 Home Basic | x |
+| Windows 7 Home Premium | 7J2V8-R94WD-VV6RK-GG96B-RX9VX |
+| Windows 7 Professional | FJ82H-XT6CR-J8D7P-XQJJ2-GPDD4 |
+| Windows 7 Ultimate | x |
+| Windows 7 Enterprise | x |
+## Windows 8
+
+
+
+## Windows 8.1
+
+## Windows 10
+| WIM Display Name:               | KMS Client Setup Key |
+| --------------------------------|:--------------------:|
+| Windows 10 Home | x |
+| Windows 10 Home N | x |
+| Windows 10 Home Single Language | x |
+| Windows 10 Education | x |
+| Windows 10 Education N | x |
+| Windows 10 Pro | x |
+| Windows 10 Pro N | x |
+| Windows 10 Pro Education | x |
+| Windows 10 Pro Education N | x |
+| Windows 10 Pro for Workstations | x |
+| Windows 10 Pro N for Workstations | x |
+
+
+
+
+
+
 # Windows Server, version 1709
 
 | Operating system edition        | KMS Client Setup Key |
