@@ -90,7 +90,7 @@
             </OOBE>
             <AutoLogon>
                      <Password>
-                        <Value></Value>
+                        <Value>Anydeploy123</Value>
                         <PlainText>true</PlainText>
                      </Password>
                      <Username>Administrator</Username>
@@ -99,7 +99,7 @@
                   </AutoLogon>
                   <UserAccounts>
                     <AdministratorPassword>
-                      <Value></Value> 
+                      <Value>Anydeploy123</Value> 
                       <PlainText>true</PlainText>
                   </AdministratorPassword>
                   </UserAccounts>
