@@ -9,23 +9,35 @@
                         <CreatePartition wcm:action=\"add\">
                             <Order>1</Order>
                             <Type>Primary</Type>
+                            <Size>100</Size>
+                          </CreatePartition>
+                        <CreatePartition wcm:action=\"add\">
                             <Extend>true</Extend>
+                            <Order>2</Order>
+                            <Type>Primary</Type>
                         </CreatePartition>
-                    </CreatePartitions>
-                    <ModifyPartitions>
-                        <ModifyPartition wcm:action=\"add\">
-                            <Extend>false</Extend>
-                            <Format>NTFS</Format>
-                            <Letter>C</Letter>
-                            <Order>1</Order>
-                            <PartitionID>1</PartitionID>
-                            <Label>Windows 10</Label>
-                        </ModifyPartition>
-                    </ModifyPartitions>
-                    <DiskID>0</DiskID>
-                    <WillWipeDisk>true</WillWipeDisk>
+                      </CreatePartitions>
+                          <ModifyPartitions>
+                              <ModifyPartition wcm:action=\"add\">
+                                  <Active>true</Active>
+                                  <Format>NTFS</Format>
+                                  <Label>System Reserved</Label>
+                                  <Order>1</Order>
+                                  <PartitionID>1</PartitionID>
+                                  <TypeID>0x27</TypeID>
+                                </ModifyPartition>
+                                <ModifyPartition wcm:action=\"add\">
+                                  <Active>true</Active>
+                                  <Format>NTFS</Format>
+                                  <Label>OS</Label>
+                                  <Letter>C</Letter>
+                                  <Order>2</Order>
+                                  <PartitionID>2</PartitionID>
+                                </ModifyPartition>
+                            </ModifyPartitions>
+                  <DiskID>0</DiskID>
+                  <WillWipeDisk>true</WillWipeDisk>
                 </Disk>
-                <WillShowUI>OnError</WillShowUI>
             </DiskConfiguration>
             <UserData>
                 <AcceptEula>true</AcceptEula>
@@ -50,7 +62,7 @@
                         </InstallFrom>
                     <InstallTo>
                         <DiskID>0</DiskID>
-                        <PartitionID>1</PartitionID>
+                        <PartitionID>2</PartitionID>
                     </InstallTo>
                     <WillShowUI>OnError</WillShowUI>
                     <InstallToAvailablePartition>false</InstallToAvailablePartition>
