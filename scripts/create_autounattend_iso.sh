@@ -189,8 +189,11 @@ echo "chosen edition key: $chosen_edition_key"
 
 #  TODO IMPORTANT match sysprep file based on edition selected
 
-#cp /anydeploy/systems/Windows/unattend_files/autounattend_win10_mbr_audit.xml /anydeploy/tmp/extracted/autounattend.xml
-sh /anydeploy/scripts/render_template.sh /anydeploy/systems/Windows/unattend_files/autounattend_win10_mbr_audit_template.xml >> /anydeploy/tmp/extracted/autounattend.xml
+# Windows 7 Test
+cp /anydeploy/systems/Windows/unattend_files/autounattend_win7_mbr_audit.xml /anydeploy/tmp/extracted/autounattend.xml
+
+#Windows 10 Generate
+#sh /anydeploy/scripts/render_template.sh /anydeploy/systems/Windows/unattend_files/autounattend_win10_mbr_audit_template.xml >> /anydeploy/tmp/extracted/autounattend.xml
 
 
 ## Convert to DOS compatible
