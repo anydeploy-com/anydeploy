@@ -216,6 +216,27 @@ sh /anydeploy/scripts/render_template.sh /anydeploy/systems/Windows/unattend_fil
 rm /anydeploy/iso/autounattend.iso
 mkisofs -o /anydeploy/iso/autounattend.iso -joliet-long -relaxed-filenames /anydeploy/tmp/extracted/.
 
+
+##############################################################################
+#                            Create VM LibVirt                               #
+##############################################################################
+
+# TODO EXPERIMENTAL - Fix variables
+
+
+# Create QCOW2 Image
+
+qemu-img create -f qcow2 /var/lib/libvirt/images/win10home_mbr$$.qcow2 30G
+
+# Add VM to Libvirt
+
+virt-install \
+--name "Win10Home_MBR$$" \
+--memory 4096  \
+--disk /anydeploy/iso/Win10_1803_English_x64.iso,device=cdrom --check path_in_use=off \
+--disk /anydeploy/iso/autounattend.iso,device=cdrom --check path_in_use=off \
+--disk "/var/lib/libvirt/images/win10home_mbr$$.qcow2" &
+
 ##############################################################################
 #                            Cleanup                                         #
 ##############################################################################
