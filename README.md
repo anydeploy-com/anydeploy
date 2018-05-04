@@ -1,4 +1,4 @@
-![anydeploy logo](https://raw.githubusercontent.com/anydeploy-com/anydeploy/testing/logo_anydeply4_Main_Normal.png =557x140)
+![anydeploy logo](https://raw.githubusercontent.com/anydeploy-com/anydeploy/testing/logo.png)
 
 # anyDEPLOY
 Please note this is still under heavy development and I give no guarantees code here might work as a whole.
