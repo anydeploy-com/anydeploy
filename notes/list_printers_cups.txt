@@ -1,0 +1,6 @@
+root@cups:~# lpstat -p | grep printer | awk '{print $2}'
+HP_LaserJet
+Zebra1
+Zebra_Martin
+Zebra_Testing
+
