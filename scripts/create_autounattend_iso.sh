@@ -141,7 +141,7 @@ IFS=$'\n' os_edition_name=($(cat /anydeploy/tmp/os_version_list.$$))
     dialog --clear \
         --cancel-label "BACK" \
         --title "Some Windows Edition" \
-        --menu "$banner2080" 20 80 10 "${SEcomponentLECTIONINFO[@]}" 2> /anydeploy/tmp/chosen_edition.$$
+        --menu "$banner2080" 20 80 10 "${SELECTIONINFO[@]}" 2> /anydeploy/tmp/chosen_edition.$$
 
 
 
@@ -174,7 +174,7 @@ export chosen_edition_index=`cat /anydeploy/tmp/chosen_edition.$$`
 
 
 export chosen_edition_name=`cat /anydeploy/tmp/os_version_list.$$ | sed -n ${chosen_edition_index}p`
-DP_LAN_Others
+
 
 
 echo "chosen edition index: $chosen_edition_index"

@@ -119,16 +119,9 @@
             <FirstLogonCommands>
               <!-- Disable network selection after sysprep  -->
               <SynchronousCommand wcm:action=\"add\">
-                    <Order>1</Order>
-                            <RunSynchronous>
-               <!-- First synchronous command to run -->
-               <RunSynchronousCommand>
-                  <Order>1</Order>
-                  <Path>REG ADD \"HKLM\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Main\" /f /v PreventFirstRunPage /t REG_DWORD /d 1</Path>
-                  <Description>Disable Microsoft Edge Test</Description>
-               </RunSynchronousCommand>
-            </RunSynchronous>    <CommandLine>REG ADD \"HKLM\System\CurrentControlSet\Control\Network\NewNetworkWindowOff\" /F</CommandLine>
+                    <CommandLine>REG ADD \"HKLM\System\CurrentControlSet\Control\Network\NewNetworkWindowOff\" /F</CommandLine>
                     <Description>No New Network Block</Description>
+                    <Order>1</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
                 <!-- Allow powershell Scripts -->
