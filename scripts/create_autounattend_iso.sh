@@ -62,7 +62,7 @@ fi
 # Detect ISO's
 
 iso_list=(`find ${iso_dir}/ -maxdepth 1 -name "*.iso"`)
-iso_menu=`ls ${iso_dir}/*.iso | grep -v "autounattend" | awk '{print v++,$1}'`
+iso_menu=`ls ${iso_dir}/*.iso | grep -v virtio | grep -v "autounattend" | awk '{print v++,$1}'`
 
 if [ ! ${#iso_list[@]} -gt 0 ]; then
 	echo ""
