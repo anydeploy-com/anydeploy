@@ -1,5 +1,16 @@
 #!/bin/bash
 
+
+# Add gitignore files
+
+touch iso/.gitignore
+
+echo "*.iso" >> iso/.gitignore
+
+touch tmp/.gitignore
+
+echo "*" >> tmp/.gitignore
+
 # Single file installer  will go here.
 
 # Setup Folders
@@ -11,6 +22,7 @@
 # Download virtio iso
 
 # Download dependencies
+
 
 
 # Compile iPXE

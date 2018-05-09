@@ -52,7 +52,13 @@ if [ ! -d "tmp/mount" ]; then
 echo "Directory tmp/mount DOES NOT exists, creating."
 mkdir tmp/mount
 fi
-Actual ISO Creation
+
+if [ ! -d "tmp/extracted" ]; then
+echo "Directory tmp/extracted DOES NOT exists, creating."
+mkdir tmp/extracted
+fi
+
+# Actual ISO Creation
 # Detect ISO's
 
 iso_list=(`find ${iso_dir}/ -maxdepth 1 -name "*.iso"`)
