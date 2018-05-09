@@ -236,20 +236,26 @@ qemu-img create -f qcow2 /var/lib/libvirt/images/win10home_mbr$$.qcow2 30G
 
 virt-install \
 --name "Win10Home_MBR$$" \
---memory 4096  \
+--ram=2048 \
+--memory 2048,maxmemory=4096 \
+--memballoon model=virtio \
 --disk /anydeploy/iso/Win10_1803_English_x64.iso,device=cdrom --check path_in_use=off \
 --disk /anydeploy/iso/autounattend.iso,device=cdrom --check path_in_use=off \
 --disk /anydeploy/iso/virtio-win.iso,device=cdrom --check path_in_use=off \
 --disk "/var/lib/libvirt/images/win10home_mbr$$.qcow2",format=qcow2,bus=virtio,cache=none \
+--network=bridge:br0,model=virtio \
 --events "on_poweroff=preserve" \
 --os-variant "win10" \
---vcpus 2 &
+--vcpus 2 \
+--accelerate --noapic &
 
 
 # List OS Variants
 
 #virt-install --os-variant list
 
+
+#--memballoon model=virtio
 
 
 #--graphics vnc,password=foobar,port=5910,keymap=ja
