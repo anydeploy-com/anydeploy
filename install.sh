@@ -21,6 +21,14 @@ echo "*" >> tmp/.gitignore
 
 # Download virtio iso
 
+
+# TODO check if virtio-win.iso exists
+
+# https://fedoraproject.org/wiki/Windows_Virtio_Drivers#Direct_download
+
+cd iso
+wget https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso --show-progress
+cd ..
 # Download dependencies
 
 

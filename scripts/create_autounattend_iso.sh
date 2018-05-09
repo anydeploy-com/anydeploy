@@ -71,13 +71,6 @@ if [ ! ${#iso_list[@]} -gt 0 ]; then
     exit 1
 fi
 
-##############################################################################
-#                            Debugging                                       #
-##############################################################################
-
-echo "temp_dir = \"${temp_dir}\""
-echo "iso_dir = \"${iso_dir}\""
-
 
 
 ##############################################################################
@@ -123,6 +116,12 @@ sudo mount ${chosen_iso} /anydeploy/tmp/mount
 #how many indexes (for array usage)
 amount_of_indexes=`wiminfo install.wim | grep "Index" | grep -Eo '[0-9]+' | sort -rn | head -n 1`
 
+
+
+## Convert to DOS compatible
+#    echo " * Converting Sysprep to Windows compatible (DOS)"
+#    cat /anydeploy/tmp/extracted/autounattend_unix.xml | awk 'sub("$", "\r")' /anydeploy/tmp/extracted/autounattend_unix.xml > /anydeploy/tmp/extracted/autounattend.xml
+#    sleep 1
 wiminfo /anydeploy/tmp/mount/sources/install.wim | grep "Display Name:" | awk '{$1=$2=""; print $0}' | sed "s/^[ \t]*//" >> ${temp_dir}/os_version_list.$$
 
 # Convert OS Versions to array
@@ -167,6 +166,12 @@ export chosen_edition_index=`cat /anydeploy/tmp/chosen_edition.$$`
 # Select Key for chosen edition
 
 
+## Convert to DOS compatible
+#    echo " * Converting Sysprep to Windows compatible (DOS)"
+#    cat /anydeploy/tmp/extracted/autounattend_unix.xml | awk 'sub("$", "\r")' /anydeploy/tmp/extracted/autounattend_unix.xml > /anydeploy/tmp/extracted/autounattend.xml
+#    sleep 1
+
+
 
 export chosen_edition_name=`cat /anydeploy/tmp/os_version_list.$$ | sed -n ${chosen_edition_index}p`
 
@@ -206,13 +211,6 @@ sh /anydeploy/scripts/render_template.sh /anydeploy/systems/Windows/unattend_fil
 
 
 
-## Convert to DOS compatible
-#    echo " * Converting Sysprep to Windows compatible (DOS)"
-#    cat /anydeploy/tmp/extracted/autounattend_unix.xml | awk 'sub("$", "\r")' /anydeploy/tmp/extracted/autounattend_unix.xml > /anydeploy/tmp/extracted/autounattend.xml
-#    sleep 1
-
-
-
 
 
 ##############################################################################
@@ -241,7 +239,22 @@ virt-install \
 --memory 4096  \
 --disk /anydeploy/iso/Win10_1803_English_x64.iso,device=cdrom --check path_in_use=off \
 --disk /anydeploy/iso/autounattend.iso,device=cdrom --check path_in_use=off \
---disk "/var/lib/libvirt/images/win10home_mbr$$.qcow2" &
+--disk /anydeploy/iso/virtio-win.iso,device=cdrom --check path_in_use=off \
+--disk "/var/lib/libvirt/images/win10home_mbr$$.qcow2",format=qcow2,bus=virtio,cache=none \
+--events "on_poweroff=preserve" \
+--os-variant "win10" \
+--vcpus 2 &
+
+
+# List OS Variants
+
+#virt-install --os-variant list
+
+
+
+#--graphics vnc,password=foobar,port=5910,keymap=ja
+#-p, --paravirt        This guest should be a paravirtualised guest
+#--noautoconsole --wait=-1
 
 ##############################################################################
 #                            Cleanup                                         #
