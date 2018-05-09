@@ -120,7 +120,7 @@ amount_of_indexes=`wiminfo install.wim | grep "Index" | grep -Eo '[0-9]+' | sort
 
 ## Convert to DOS compatible
 #    echo " * Converting Sysprep to Windows compatible (DOS)"
-#    cat /anydeploy/tmp/extracted/autounattend_unix.xml | awk 'sub("$", "\r")' /anydeploy/tmp/extracted/autounattend_unix.xml > /anydeploy/tmp/extracted/autounattend.xml
+#    cat /anydeploy/tmp/extracted/componentautounattend_unix.xml | awk 'sub("$", "\r")' /anydeploy/tmp/extracted/autounattend_unix.xml > /anydeploy/tmp/extracted/autounattend.xml
 #    sleep 1
 wiminfo /anydeploy/tmp/mount/sources/install.wim | grep "Display Name:" | awk '{$1=$2=""; print $0}' | sed "s/^[ \t]*//" >> ${temp_dir}/os_version_list.$$
 
@@ -135,7 +135,7 @@ IFS=$'\n' os_edition_name=($(cat /anydeploy/tmp/os_version_list.$$))
           # Combine Arrays for Dialog Output
 
     for i in "${!os_edition_name[@]}"; do SELECTIONINFO+=( "${os_edition_num[${i}]}" "${os_edition_name[${i}]}" ); done
-
+    
     # Display Dialog for OS Selection
 
     dialog --clear \

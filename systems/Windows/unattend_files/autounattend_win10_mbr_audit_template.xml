@@ -105,7 +105,8 @@
                 <HideEULAPage>true</HideEULAPage>
                 <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
                 <NetworkLocation>Home</NetworkLocation>
-                <ProtectYourPC>1</ProtectYourPC>
+                <ProtectYourPC>3</ProtectYourPC>
+                <SkipUserOOBE>true</SkipUserOOBE>
             </OOBE>
             <AutoLogon>
                 <Password>
@@ -119,7 +120,7 @@
               <!-- Disable network selection after sysprep  -->
               <SynchronousCommand wcm:action=\"add\">
                     <Order>1</Order>
-                    <CommandLine>REG ADD &quot;HKLM\System\CurrentControlSet\Control\Network\NewNetworkWindowOff&quot; /F</CommandLine>
+                    <CommandLine>REG ADD \"HKLM\System\CurrentControlSet\Control\Network\NewNetworkWindowOff\" /F</CommandLine>
                     <Description>No New Network Block</Description>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
@@ -128,6 +129,12 @@
                     <CommandLine>cmd.exe /c powershell -Command \"Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force\"</CommandLine>
                     <Description>Set Execution Policy 64 Bit</Description>
                     <Order>2</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action=\"add\">
+                    <CommandLine>REG ADD \"HKLM\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Main\" /f /v PreventFirstRunPage /t REG_SZ /d 1</CommandLine>
+                    <Description>Disable Microsoft Edge First Run Page</Description>
+                    <Order>3</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
             </FirstLogonCommands>
