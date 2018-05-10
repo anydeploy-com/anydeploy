@@ -1,11 +1,6 @@
 #!/bin/bash
-
-install_dependencies="yes" # "yes","no","prompt"
-iso_dir="default" # "default" "<path>"
-
-
-
-
+install_dependencies="prompt" # "yes","no","prompt"
+operating_system="auto" # "auto", "<options below>"
 # "Windows"
 # "Debian"
 # "CentOS"
@@ -15,8 +10,7 @@ iso_dir="default" # "default" "<path>"
 # "Mac OS X"
 # "OS X"
 # "macOS"
-operating_system=""
-
+operating_system_edition="prompt" # "prompt", "<options below>"
 # "Windows Vista"
 # "Windows 7"
 # "Windows 8"
@@ -27,19 +21,34 @@ operating_system=""
 # "Windows Server 2012"
 # "Windows Server 2012 R2"
 # "Windows Server 2016"
-operating_system_edition=""
-
-
+operating_system_fullname="automatic" # "automatic", "<name>"
 architecture="" # "x86" or "amd64"
-iso_directory=""
-iso_filename=""
-system_firmware="" # "UEFI" "EFI" "BIOS"
-disk_format="" # "mbr", "gpt"
+# Directories
+main_dir="/anydeploy" # "default" or "<path>"
+iso_dir="${main_dir}/iso" # "default" or "<path>"
+temp_dir="${main_dir}/tmp" # "default" or "<path>"
+script_dir="${main_dir}/scripts" # "default" or "<path>"
 
-
+system_firmware="auto" # "auto", "UEFI", "EFI", "BIOS"
+disk_format="auto" # "auto", "mbr", "gpt"
 
 
 # Windows Related
+create_vm="yes" # "yes","no"
+# Virtual machine settings
+virt_vcpus="2" # "<value>"
+virt_name="autodetect" # "autodetect", "prompt", "<name>"
+virt_ram="2048" # "prompt", "<value>"
+virt_ram_max="4096" # "prompt", "<value>"
+virt_memballon="yes" # "yes","no"
+virt_disk_type="qcow2" # "qcow2","lvm","physical","raw"
+virt_disk_path="/var/lib/libvirt/images/${virt_name}.qcow2"
+virt_use_autounattend="yes" #"yes","no"
+virt_use_virtio="yes" # "yes","no"
+virt_os_variant="yes" # "auto","prompt","<value>"
+virt_noapic="yes" # "yes","no"
+virt_accelerate="yes" # "yes","no"
+
 
 # Sysprep (audit)
 sysprep_audit_diskconfiguration_mbr=`cat <<EOF
@@ -149,7 +158,6 @@ sysprep_audit_InstallToPartitionID_mbr="2"
 sysprep_audit_InstallToPartitionID_gpt="4"
 sysprep_audit_arch="${architecture}"
 sysprep_audit_DriverPath="F:" # Virtio Drivers for VM's
-sysprep_audit_DriverPath="" # Regular deployment drivers
 sysprep_audit_InputLocale_PE="en-US" # DO NOT CHANGE THIS
 sysprep_audit_SystemLocale_PE="en-US" # DO NOT CHANGE THIS
 sysprep_audit_UIlanguage_PE="en-US" # DO NOT CHANGE THIS
