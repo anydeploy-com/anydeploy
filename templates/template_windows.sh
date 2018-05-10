@@ -1,4 +1,7 @@
 #!/bin/bash
+
+. /anydeploy/settings/functions.sh
+
 install_dependencies="prompt" # "yes","no","prompt"
 operating_system="auto" # "auto", "<options below>"
 # "Windows"

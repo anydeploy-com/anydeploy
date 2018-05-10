@@ -135,7 +135,6 @@ IFS=$'\n' os_edition_name=($(cat /anydeploy/tmp/os_version_list.$$))
           # Combine Arrays for Dialog Output
 
     for i in "${!os_edition_name[@]}"; do SELECTIONINFO+=( "${os_edition_num[${i}]}" "${os_edition_name[${i}]}" ); done
-
     # Display Dialog for OS Selection
 
     dialog --clear \
