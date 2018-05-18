@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Declare dependencies
-
-deps=( debootstrap sudo dmidecode lspci cups )
-
 # Formatting functions
 # special characters: ✔/▰/✘
 

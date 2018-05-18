@@ -19,6 +19,10 @@
 
 check_root
 
+# Declare dependencies
+
+deps=( debootstrap sudo dmidecode lspci cups )
+
 # Check dependencies
 
 check_deps
@@ -26,13 +30,19 @@ check_deps
 # Load Config File (Dialog)
 
 
-#create dialog_folder_function
+#create dialog_folder_function (as array)
 
-export templates_list=($(ls -lh templates/ | grep -v "total" | awk '{print $9}'))
+export templates_list=$(ls -lh templates/ | grep -v "total" | awk '{print v++,$9}')
 
-echo ${templates_list[0]}
+echo ${templates_list[@]}
 
+sleep 1
 
+dialog --menu "Please choose template to work with" 15 55 5 $templates_list \
+new "Create New Template" \
+menu "Go back to main menu" 2> menuchoices.$$
+
+choice=`cat menuchoices.$$`
 
 
 
