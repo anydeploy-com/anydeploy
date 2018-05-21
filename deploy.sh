@@ -40,9 +40,9 @@ sleep 1
 
 dialog --menu "Please choose template to work with" 15 55 5 $templates_list \
 new "Create New Template" \
-menu "Go back to main menu" 2> menuchoices.$$
+menu "Go back to main menu" 2> tmp/template_list.$$
 
-choice=`cat menuchoices.$$`
+choice=`cat tmp/template_list.$$`
 
 
 
