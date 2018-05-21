@@ -13,6 +13,7 @@
 # Create a temporary file and make sure it goes away when we're dome
 tmp_file=$(tempfile 2>/dev/null) || tmp_file=/tmp/test$$
 trap "rm -f $tmp_file" 0 1 2 5 15
+trap "echo trap executed" 0 1 2 5 15
 
 # Generate the dialog box
 dialog --title "INPUT BOX" \

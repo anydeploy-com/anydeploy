@@ -1,19 +1,54 @@
 #!/bin/bash
 
+            # Include functions
+            . /anydeploy/settings/functions.sh
+
+            # Include global config
+            . /anydeploy/settings/global.sh
+
+            # Clear for readability
+            clear
+
+            # Check if run as root
+
+            check_root
+
+            # Declare dependencies
+
+            deps=( debootstrap sudo dmidecode lspci cups )
+
+            # Check dependencies
+
+            check_deps
+
+            # Load Config File (Dialog)
+
 
 # Add gitignore files
 
-touch iso/.gitignore
+          touch iso/.gitignore
 
-echo "*.iso" >> iso/.gitignore
+          echo "*.iso" >> iso/.gitignore
 
-touch tmp/.gitignore
+          touch tmp/.gitignore
 
-echo "*" >> tmp/.gitignore
+          echo "*" >> tmp/.gitignore
 
 # Single file installer  will go here.
 
 # Setup Folders
+
+          if [ ! -d "tmp/mount" ]; then
+          echo_warn "Directory tmp/mount DOES NOT exists, creating."
+          mkdir tmp/mount
+          fi
+
+          if [ ! -d "tmp/extracted" ]; then
+          echo_warn "Directory tmp/extracted DOES NOT exists, creating."
+          mkdir tmp/extracted
+          fi
+
+
 
 # Setup user, user variables
 
