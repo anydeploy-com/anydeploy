@@ -21,6 +21,10 @@
           : ${DIALOG_ITEM_HELP=4}
           : ${DIALOG_ESC=255}
 
+          # Define temp file and trap to remove it later
+          tmp_file=$(tempfile 2>/dev/null) || tmp_file=tmp/template_list.$$
+          trap "rm -f $tmp_file" 0 1 2 5 15
+          trap "echo Removed temp" 0 1 2 5 15
 
 
 # Display Main Menu
@@ -29,11 +33,9 @@
         export templates_list=$(ls -lh templates/ | grep -v "total" | awk '{print v++,$9}')
         dialog --menu "Please choose template to work with" 20 55 15 $templates_list \
         new "Create New Template" \
-        settings "Settings" \
+        newos "Add New OS (virtual machine)" \
+        settings "Global Settings" \
         shell "Open Shell" \
         exit "Exit" 2> tmp/template_list.$$
 
 choice=`cat tmp/template_list.$$`
-
-# Get the exit status
-return_value=$?
