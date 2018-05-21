@@ -1,5 +1,37 @@
 #!/bin/bash
 
+function check_root {
+
+# Detect if run as root and do so if not
+
+if [[ $EUID -ne 0 ]]; then
+   echo_fail "This script must be run as root"
+   exit 1
+else
+  echo_pass "Running as root / sudo"
+fi
+}
+
+
+
+# Prompt for update and upgrade
+
+read -p "Do you want to update your operating system first - recommended (y/n)? " choice
+case "$choice" in
+  y|Y ) echo "OS Update chosen - updating";;
+  n|N ) echo "Skipping upgrades - updating packages list only";;
+  * ) echo "invalid";;
+esac
+
+
+# Install Git
+
+
+
+# Clone repository
+
+
+
             # Include functions
             . /anydeploy/settings/functions.sh
 
@@ -48,8 +80,6 @@
           mkdir tmp/extracted
           fi
 
-
-
 # Setup user, user variables
 
 # Fix permissions
@@ -69,6 +99,8 @@ cd ..
 
 
 # Compile iPXE
+
+# Install CUPS Print Server
 
 # Install TFTP Server
 

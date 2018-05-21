@@ -27,15 +27,21 @@
           trap "echo Removed temp" 0 1 2 5 15
 
 
-# Display Main Menu
 
+# Define Templates + Naming
+
+#cat template_windows.sh | grep "Template_Name" | awk '$1=$2="";{print $0}' | xargs
 
         export templates_list=$(ls -lh templates/ | grep -v "total" | awk '{print v++,$9}')
+
+# Display Main Menu
+
         dialog --menu "Please choose template to work with" 20 55 15 $templates_list \
         new "Create New Template" \
         newos "Add New OS (virtual machine)" \
         settings "Global Settings" \
         shell "Open Shell" \
-        exit "Exit" 2> tmp/template_list.$$
+        restart "Restart" \
+        exit "Shutdown" 2> tmp/template_list.$$
 
 choice=`cat tmp/template_list.$$`
