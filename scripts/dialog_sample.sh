@@ -6,6 +6,9 @@ options=(1 "Option 1" off    # any option can be set to default to "on"
          3 "Option 3" off
          4 "Option 4" off)
 
+retopt=$?
+
+
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 clear
 
@@ -27,3 +30,5 @@ do
     esac
 done
 
+echo "dupa"
+echo "${reopt}"
