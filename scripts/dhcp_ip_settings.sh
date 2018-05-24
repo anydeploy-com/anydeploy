@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dialog --backtitle "Dialog Form Example" --title "Dialog - Form" \
+dialog --backtitle "DHCP IP Settings" --title "Dialog - Form" \
 --form "\nDialog Sample Label and Values" 25 60 16 \
 "Form Server IP Address:" 1 1 "10.1.1.1" 1 25 25 30 \
 "Form DHCP Start IP:" 2 1 "10.1.1.50" 2 25 25 30 \
