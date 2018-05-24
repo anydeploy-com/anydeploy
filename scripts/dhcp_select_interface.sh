@@ -2,6 +2,10 @@
 
 # List interfaces
 
+# GET IP
+
+#hostname -I
+
 SAVEIFS=$IFS
 
 
@@ -44,7 +48,8 @@ done
 
 # Dialog single interface menu
 
-selected_interface=$(dialog --menu "please pick interfaces for dhcp server to listen on" 30 100 10 ${interface_dialog_name[@]} 2>&1 >/dev/tty)
+selected_interface=$(dialog --backtitle "anydeploy Installer - Step X of Y" \
+                    --menu "please pick interfaces for dhcp server to listen on" 30 100 10 ${interface_dialog_name[@]} 2>&1 >/dev/tty)
 
 echo "selected interface:" $selected_interface # Echo for debugging
 
@@ -56,6 +61,9 @@ echo "selected interface:" $selected_interface # Echo for debugging
 
 #export selected_interface=($(echo $selected_interface_dialog | tr " " ,)) # Add , between interfaces if multiple
 #echo "selected interfaces:" $selected_interface # Echo for debugging
+
+
+
 
 
 IFS=$SAVEIFS
