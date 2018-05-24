@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source "$(pwd)/bash-spinner/spinner.sh"
+source "$(pwd)/spinner.sh"
 
 # test success
 start_spinner 'sleeping for 2 secs...'
