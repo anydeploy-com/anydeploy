@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source spinner/ora.sh
+source spinner.sh
 
 task_1() {
   apt update -y #&> /anydeploy/tmp/update
