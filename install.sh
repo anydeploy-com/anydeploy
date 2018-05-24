@@ -4,7 +4,6 @@
 # Clear input
 #exec /usr/bin/fbterm "$@"
 clear
-fbterm --font-size 18 "$@"
 
 # Basic installer functions
 
@@ -146,7 +145,6 @@ fbterm --font-size 18 "$@"
           fi
 
           }
-net-tools
 
           function update_upgrade_os {
 
@@ -204,143 +202,19 @@ net-tools
           }
 
           function debootstrap_debian9_x64 {
-            # Create NFS share dir
-            mkdir "/anydeploy/nfs"
-            # Add gitignore file to nfs dir
-            touch /anydeploy/nfs/.gitignore
-            # git ignore anything within /nfs Folder
-            echo "*" >> /anydeploy/nfs/.gitignore
-            # Create Dir for netboot anydeploy OS
-            mkdir "/anydeploy/nfs/anynetlive_amd64"
-            # Add Working Dir variable
-            export ANYNET_DIR="/anydeploy/nfs/anynetlive_amd64"
-            # Remove temp dir when finished
-            #trap 'rm -rf "${WORK_DIR}"' EXIT
-
-            # Debootstrap Debian + Non free + Drivers
-            # https://packages.debian.org/source/jessie/firmware-nonfree
-
-            # Firmware List
-
-            # firmware-linux
-            # firmware-realtek
-            # firmware-bnx2
-            # firmware-atheros
-            # firmware-iwlwifi
-            # firmware-ipw2x00 - Require license agreement agree (interactive question)
-            # firmware-intelwimax
-            # firmware-qlogic
-            # firmware-ralink - Not required - included in nonfree misc
-            # firmware-netxen
-
-            debootstrap --components=main,non-free --include=linux-image-amd64,openssh-server,nano,python,initramfs-tools,syslinux-common,firmware-linux,firmware-realtek,firmware-bnx2,firmware-atheros,firmware-iwlwifi,firmware-intelwimax,firmware-qlogic,firmware-netxen \
-            stretch ${ANYNET_DIR} http://deb.debian.org/debian/
+            . scripts/debootstrap_debian9_x64.sh
           }
 
-          function debootstrap_postinstall_x64 {
-          # Edit Sources
-            # looks fine
-            # Fix Hostname
-            rm "${ANYNET_DIR}/etc/hostname"
-            echo "anylive_x64" >> "${ANYNET_DIR}/etc/hostname"
-            # Fix Nameservers (resolv.conf)
-            rm "${ANYNET_DIR}/etc/resolv.conf"
-            touch "${ANYNET_DIR}/etc/resolv.conf"
-            cat >"${ANYNET_DIR}/etc/resolv.conf" << EOF
-nameserver 8.8.8.8
-nameserver 8.8.4.4
-EOF
-            # Fix Locales
-            export LANGUAGE=”en_GB.UTF-8″
-            echo 'LANGUAGE=”en_GB.UTF-8"' >> "${ANYNET_DIR}/etc/default/locale"
-            echo 'LC_ALL=”en_GB.UTF-8"' >> "${ANYNET_DIR}/etc/default/locale"
-            echo 'LC_ALL=”en_GB.UTF-8"' >> "${ANYNET_DIR}/etc/environment"
-            # Setup mounts (fstab)
-            rm "${ANYNET_DIR}/etc/fstab"
-            touch "${ANYNET_DIR}/etc/fstab"
-            cat >"${ANYNET_DIR}/etc/fstab" << EOF
-proc /proc proc defaults 0 0
-/dev/nfs / nfs defaults 1 1
-none /tmp tmpfs defaults 0 0
-none /run tmpfs defaults 0 0
-none /var/tmp tmpfs defaults 0 0
-none /media   tmpfs defaults 0 0
-none /var/log tmpfs defaults 0 0
-hostname anylive_x64
-EOF
-            # Disable installation of recommended packages
-            echo 'APT::Install-Recommends "false";' >"${ANYNET_DIR}/etc/apt/apt.conf.d/50norecommends"
-            # Add SSH key
-            # TODO
-            # Configure Networking
-
-            # Run chroot tasks
-
-            # TODO ADD TRAP TO REMOVE  CHROOT POSTINSTALL SCRIPT
-
-            # Generate chroot postinstall script
-            touch ${ANYNET_DIR}/chrootpostinstall.sh
-            # Add content to it
-            # TODO - echo output to postinstall.log and verify afterwards
-            cat >"${ANYNET_DIR}/chrootpostinstall.sh" << EOF
-hostnamectl set-hostname anylive64
-locale-gen
-dpkg-reconfigure locales
-apt update -y && apt upgrade -y
-apt install -y nfs-common initramfs-tools
-touch /postinstall_log.txt
-echo "postinstall finished" >> /postinstall_log.txt
-TZ='Europe/London'; export TZ
-EOF
-            # Make it executable
-            chmod +x ${ANYNET_DIR}/chrootpostinstall.sh
-            # Execute postinstall chroot script within chroot
-            chroot ${ANYNET_DIR} ./chrootpostinstall.sh
-            # Remove postinstall chroot script
-            rm ${ANYNET_DIR}/chrootpostinstall.sh
-            # Fix original hostname
-            hostnamectl set-hostname anydeploy
-            # Restart bash to apply original hostname to prompt
-            bash
-            # Verify if postinstall script run succesfully - ${ANYNET_DIR}/postinstall_log.txt
-            # du -sh /anydeploy/nfs/anynetlive_amd64/ - verify size (~750MiB)
-            # check if files exist
-            # TODO
-            # Create User
-            # TODO
-            # Add SSH KEY
-            # TODO
-            # Change initramfs options to be netboot compatible
-            # TODO
-            # rebuild initramfs
+          function debootstrap_debian9_x64_postinstall {
+          . scripts/debootstrap_debian9_x64_postinstall.sh
           }
 
-          function install_dhcp {
-            #install
+          function install_dhcp_package {
           apt install -y isc-dhcp-server
-            #select interface ( add to /etc/default/isc-dhcp-server)
+          }
 
-            # List interfaces
-            #ifconfig -a | grep -v "lo:" | grep "mtu" | awk '{print $1}' | tr -d :
-
-
-            #get vendor
-            #cat /sys/class/net/enp0s25/device/vendor | sed -e 's/\0x//g'
-
-            # get device
-            #cat /sys/class/net/enp0s25/device/device | sed -e 's/\0x//g'
-
-
-
-            #get name
-            ##lspci -nn
-
-            IFS=$'\n' interface_num=($(ifconfig -a | grep -v "lo:" | grep "mtu" | awk '{print $1}' | tr -d : | awk '{print NR}'))
-            IFS=$'\n' interface_name=($(ifconfig -a | grep -v "lo:" | grep "mtu" | awk '{print $1}' | tr -d :))
-
-            INTERFACESARRAY=()
-            for i in "${!interface_name[@]}"; do INTERFACESARRAY+=( "${interface_num[${i}]}" "${interface_name[${i}]}" ); done
-
+          function install_dhcp_selectinterface {
+            . scripts/dhcp_select_interface.sh
           }
 
 
@@ -376,19 +250,20 @@ EOF
 
       # TODO - for system + live (chroot)
 
+
+# Install DHCP Server
+      # TODO ADD PROMPT to install or use dnsmasq
+
+      install_dhcp_selectinterface
+
+
 # Create Anylive 64 bit environment
 
       debootstrap_debian9_x64
 
 # Configure Anylive 64 bit environment
 
-      debootstrap_postinstall_x64
-
-# Install DHCP Server
-# TODO ADD PROMPT to install or use dnsmasq
-
-      install_dhcp
-
+      debootstrap_debian9_x64_postinstall
 
 # Fix permissions
 

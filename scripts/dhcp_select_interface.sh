@@ -42,12 +42,20 @@ interface_dialog_selection+=("${interfaces[${i}]}" "${interface_name[${i}]}" "of
 done
 
 
+# Dialog single interface menu
+
+selected_interface=$(dialog --menu "please pick interfaces for dhcp server to listen on" 30 100 10 ${interface_dialog_name[@]} 2>&1 >/dev/tty)
+
+echo "selected interface:" $selected_interface # Echo for debugging
+
 # Dialog Checkboxes
 
-selected_interface_dialog=$(dialog --checklist "please pick interfaces for dhcp server to listen on" 30 100 10 ${interface_dialog_selection[@]} 2>&1 >/dev/tty)
 
-export selected_interface=($(echo $selected_interface_dialog | tr " " ,)) # Add , between interfaces if multiple
-echo "selected interfaces:" $selected_interface # Echo for debugging
+
+#selected_interface_dialog=$(dialog --checklist "please pick interfaces for dhcp server to listen on" 30 100 10 ${interface_dialog_selection[@]} 2>&1 >/dev/tty)
+
+#export selected_interface=($(echo $selected_interface_dialog | tr " " ,)) # Add , between interfaces if multiple
+#echo "selected interfaces:" $selected_interface # Echo for debugging
 
 
 IFS=$SAVEIFS
