@@ -11,7 +11,6 @@ select_interface () {
 
 SAVEIFS=$IFS
 
-
 interfaces=($(ls /sys/class/net/*/device | grep "sys/class" | cut -d / -f 5))                                                                     # Interface Name
 for interface in "${interfaces[@]}" ; do interfaces_devpath+=($(readlink -f /sys/class/net/${interface})) ; done                                  # Interface Devpath
 for interface_path in ${interfaces_devpath[@]} ; do
@@ -120,7 +119,7 @@ sleep 3
 # brctl | grep ${selected_interface}
 
 
-# TODO add question - configure as bridge, support apple mac's, enable forwarding 
+# TODO add question - configure as bridge, support apple mac's, enable forwarding
 
 # REMOVE BRIDGE
 
