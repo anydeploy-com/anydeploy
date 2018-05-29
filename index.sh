@@ -24,7 +24,6 @@
           # Define temp file and trap to remove it later
           tmp_file=$(tempfile 2>/dev/null) || tmp_file=tmp/template_list.$$
           trap "rm -f $tmp_file" 0 1 2 5 15
-          trap "echo Removed temp" 0 1 2 5 15
 
 
 SAVEIFS=$IFS
@@ -89,7 +88,9 @@ shell () {
 }
 
 poweroff () {
-  poweroff
+  # TODO - Uncomment
+  echo "poweroff disabled (need to be uncommented in index.sh)"
+  #poweroff
 }
 
 main_menu () {
@@ -103,9 +104,9 @@ IFS=$'\n'
           capture "Capture OS" \
           specs "Display / Print Specs" \
           tasks "Other Tasks" \
-          options "Options" \
-          shell "Open Shell" \
-          poweroff "Power Off" 2> tmp/template_list.$$
+          options "Open Settings" \
+          shell "Open Linux Shell" \
+          poweroff "Shutdown System" 2> tmp/template_list.$$
 
 
 IFS=$SAVEIFS
