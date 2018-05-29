@@ -89,6 +89,8 @@ shell () {
 }
 
 shutdown () {
+  echo_warn "System is going to shutdown in 3 secs"
+  sleep 3
   poweroff
 }
 
