@@ -71,9 +71,19 @@ capture () {
   echo "TO BE DONE"
 }
 
+tests () {
+  echo "TO BE DONE"
+}
+
 specs () {
   echo "TO BE DONE"
 }
+
+print () {
+  echo "TO BE DONE"
+}
+
+
 
 tasks () {
   echo "TO BE DONE"
@@ -102,7 +112,9 @@ IFS=$'\n'
           ${template_list[@]} \
           deploy "Deploy OS" \
           capture "Capture OS" \
-          specs "Display / Print Specs" \
+          tests "Run Tests" \
+          specs "Display Specification" \
+          print "Print Specification" \
           tasks "Other Tasks" \
           options "Open Settings" \
           shell "Open Linux Shell" \
