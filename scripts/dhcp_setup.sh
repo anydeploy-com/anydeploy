@@ -96,6 +96,19 @@ setup_ip () {
 
 # TODO detect bridged interfaces
 
+# brctl | grep ${selected_interface}
+
+
+# REMOVE BRIDGE
+
+
+# Down interface to be able to remove bridge
+# ifconfig eno1 down
+# ifconfig br0 down
+# brctl delbr br0
+
+
+
 
 dialog --backtitle "DHCP Server - IP Settings for ${selected_interface}" --title "Dialog - Form" \
 --form "\nIP Adresses Setup:" 25 60 16 \
