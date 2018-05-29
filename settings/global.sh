@@ -7,4 +7,4 @@ temp_dir_default="${main_dir}/tmp" # "default" or "<path>"
 script_dir_default="${main_dir}/scripts" # "default" or "<path>"
 
 # Main Menu
-display_templates_in_mainmenu="yes" # "yes" or "no"
+display_templates_in_mainmenu="no" # "yes" or "no"

@@ -56,27 +56,63 @@ IFS=$SAVEIFS
 
 
 
+# If templates in menu disabled in global config then clear array
+
+if [ "${display_templates_in_mainmenu}" = "no" ] ; then
+export template_list=()
+fi
 
 # Display Main Menu
 
+deploy () {
+  echo "TO BE DONE"
+}
+
+capture () {
+  echo "TO BE DONE"
+}
+
+specs () {
+  echo "TO BE DONE"
+}
+
+other () {
+  echo "TO BE DONE"
+}
+
+settings () {
+  echo "TO BE DONE"
+}
+
+shell () {
+  exit 1
+}
+
+shutdown () {
+  shutdown now
+}
+
 main_menu () {
+
 
 IFS=$'\n'
 
-      dialog --menu "Please choose template to work with:" 20 55 15 \
-        ${template_list[@]} \
-        new "Create New Template" \
-        newos "Add New OS (virtual machine)" \
-        settings "Global Settings" \
-        shell "Open Shell" \
-        restart "Restart" \
-        exit "Shutdown" 2> tmp/template_list.$$
+        dialog --backtitle "anydeploy - Main Menu" --menu "Main Menu - select task:" 20 55 15 \
+          ${template_list[@]} \
+          deploy "Deploy OS" \
+          capture "Capture OS" \
+          specs "Display / Print Specs" \
+          other "Other Tasks" \
+          settings "Settings" \
+          shell "Open Shell" \
+          shutdown "Shutdown" 2> tmp/template_list.$$
+
 
 IFS=$SAVEIFS
 
 menu_selection=`cat tmp/template_list.$$`
 
-echo "selected menu:" $menu_selection # Echo for debugging
+$menu_selection
 
 }
 
