@@ -112,7 +112,9 @@ sleep 3
 
 # Detect running dhcp server:
 
-#sudo nmap --script broadcast-dhcp-discover -e eno1
+#nmap --script broadcast-dhcp-discover -e eno1
+
+# (takes 25 seconds to detect if missing)
 
 
 # Example Output
