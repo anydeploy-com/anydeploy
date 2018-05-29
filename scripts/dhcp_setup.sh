@@ -90,6 +90,8 @@ setup_ip
 
 setup_ip () {
 
+# TODO - if on ubuntu detect if using netplan and remove this crap
+
 # TODO - if interface has ip already also detect and display
 
 # TODO - if dhcp server installed detect current ip addresses
