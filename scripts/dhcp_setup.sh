@@ -51,7 +51,7 @@ done
 
 # Dialog single interface menu
 
-export selected_interface=$(dialog --backtitle "DHCP Server - Interface Selection" \
+selected_interface=$(dialog --backtitle "DHCP Server - Interface Selection" \
                     --menu "please pick interfaces for dhcp server to listen on" 30 100 10 ${interface_dialog_name[@]} 2>&1 >/dev/tty)
 
 
@@ -92,7 +92,26 @@ setup_ip () {
 
 # TODO - if on ubuntu detect if using netplan and remove this crap
 
-# TODO - if interface has ip already also detect and display
+# Detect Current IP address and add message.
+
+selected_interface_old_ip=$(ifconfig ${selected_interface} | grep inet | awk '{print $2}')
+
+echo "Selected interface old ip : ${selected_interface_old_ip}"
+
+
+if [ ! -z "${selected_interface_old_ip}"  ]; then
+  echo "old ip has value"
+  proposed_ip="${selected_interface_old_ip}"
+  echo "proposed ip = ${proposed_ip}"
+  ipaddr_desc="Your system had IP address attached on selected interface, using same IP as default"
+else
+  echo "no ip found - using default as proposed ip"
+  proposed_ip="10.1.1.250"
+  ipaddr_desc="Your system didn't have any IP address attached on selected interface, using defaults"
+fi
+sleep 3
+
+
 
 # TODO - if dhcp server installed detect current ip addresses
 
@@ -112,9 +131,9 @@ setup_ip () {
 
 
 
-dialog --backtitle "DHCP Server - IP Settings for ${selected_interface}" --title "Dialog - Form" \
---form "\nIP Adresses Setup:" 25 60 16 \
-"Server IP Address:" 1 1 "10.1.1.1" 1 25 25 30 \
+dialog --backtitle "DHCP Server - IP Settings for ${selected_interface}" --title "Dialog - IP settings for ${selected_interface}" \
+--form "\n${ipaddr_desc}:" 25 60 16 \
+"Server IP Address:" 1 1 "${proposed_ip}" 1 25 25 30 \
 "DHCP Start IP:" 2 1 "10.1.1.50" 2 25 25 30 \
 "DHCP End IP:" 3 1 "10.1.1.250" 3 25 25 30 \
 "Gateway:" 4 1 "10.1.1.254" 4 25 25 30 \
@@ -126,6 +145,8 @@ dhcp_startip=$(cat /anydeploy/tmp/form.$$ | head -n 2 | tail -n 1)
 dhcp_endip=$(cat /anydeploy/tmp/form.$$ | head -n 3 | tail -n 1)
 gateway=$(cat /anydeploy/tmp/form.$$ | head -n 4 | tail -n 1)
 
+
+echo "${selected_interface} old IP address: ${selected_interface_old_ip}"
 echo "IP Address: ${ip_address}"
 echo "DHCP Start IP: ${dhcp_startip}"
 echo "DHCP End IP: ${dhcp_endip}"
