@@ -29,6 +29,3 @@ do
             ;;
     esac
 done
-
-echo "dupa"
-echo "${reopt}"

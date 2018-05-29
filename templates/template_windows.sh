@@ -1,6 +1,7 @@
 #!/bin/bash
 
-#Template_Name = Windows 10 Test Template
+templatename="Windows 10 Test Template"
+
 . /anydeploy/settings/functions.sh
 
 install_dependencies="prompt" # "yes","no","prompt"

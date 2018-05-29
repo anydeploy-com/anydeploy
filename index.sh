@@ -1,7 +1,7 @@
 #!/bin/bash
 
           # Include functions
-          . /anydeploy/settings/functions.sh
+          . /anydeploy/scripts/includes/functions.sh
 
           # Include global config
           . /anydeploy/settings/global.sh
@@ -27,16 +27,44 @@
           trap "echo Removed temp" 0 1 2 5 15
 
 
+SAVEIFS=$IFS
 
-# Define Templates + Naming
 
-#cat template_windows.sh | grep "Template_Name" | awk '$1=$2="";{print $0}' | xargs
 
-        export templates_list=$(ls -lh templates/ | grep -v "total" | awk '{print v++,$9}')
+# Template Filenames Array
+        template_filenames=($(ls -lh templates/ | grep -v "total" | awk '{print $9}'))
+
+IFS=$'\n'
+
+# Template Names Array
+        for i in "${template_filenames[@]}"
+        do
+          template_names+=($(cat templates/${i} | grep "templatename" | cut -d "=" -f 2 | sed 's/\"//g'))
+        done
+
+
+
+# Combine Arrays for dialog display
+        for i in "${!template_filenames[@]}"; do
+          template_list+=("${template_filenames[${i}]}" "${template_names[${i}]}")
+        done
+
+IFS=$SAVEIFS
+
+#        selected_template=$(dialog --backtitle "anydeploy Installer - Step X of Y" \
+#                            --menu "please pick interfaces for dhcp server to listen on" 30 100 10 ${template_list[@]} 2>&1 >/dev/tty)
+
+
+
 
 # Display Main Menu
 
-        dialog --menu "Please choose template to work with" 20 55 15 $templates_list \
+main_menu () {
+
+IFS=$'\n'
+
+      dialog --menu "Please choose template to work with:" 20 55 15 \
+        ${template_list[@]} \
         new "Create New Template" \
         newos "Add New OS (virtual machine)" \
         settings "Global Settings" \
@@ -44,4 +72,16 @@
         restart "Restart" \
         exit "Shutdown" 2> tmp/template_list.$$
 
-choice=`cat tmp/template_list.$$`
+IFS=$SAVEIFS
+
+menu_selection=`cat tmp/template_list.$$`
+
+echo "selected menu:" $menu_selection # Echo for debugging
+
+}
+
+#echo "Template filenames: ${template_filenames[0]}"
+#echo "Template names: ${template_names[0]}"
+#echo "Template List: ${template_list[1]}"
+
+main_menu
