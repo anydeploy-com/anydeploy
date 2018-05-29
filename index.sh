@@ -89,7 +89,7 @@ shell () {
 }
 
 shutdown () {
-  shutdown now
+  poweroff
 }
 
 main_menu () {
