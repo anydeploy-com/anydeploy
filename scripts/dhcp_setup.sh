@@ -110,6 +110,27 @@ else
 fi
 sleep 3
 
+# Detect running dhcp server:
+
+#sudo nmap --script broadcast-dhcp-discover -e eno1
+
+
+# Example Output
+
+#Pre-scan script results:
+#| broadcast-dhcp-discover:
+#|   Response 1 of 1:
+#|     IP Offered: 10.1.1.234
+#|     DHCP Message Type: DHCPOFFER
+#|     Server Identifier: 10.1.1.254
+#|     IP Address Lease Time: 5m00s
+#|     Subnet Mask: 255.255.255.0
+#|     Router: 10.1.1.254
+#|     Domain Name Server: 10.1.1.254, 8.8.8.8, 8.8.4.4
+#|     Domain Name: ldcd.co.uk
+#|     NetBIOS Name Server: 10.1.1.251
+#|_    NetBIOS Node Type: 8
+
 
 
 # TODO - if dhcp server installed detect current ip addresses
