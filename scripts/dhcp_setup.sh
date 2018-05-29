@@ -6,6 +6,9 @@
 
 #hostname -I
 
+
+select_interface () {
+
 SAVEIFS=$IFS
 
 
@@ -48,26 +51,18 @@ done
 
 # Dialog single interface menu
 
-selected_interface=$(dialog --backtitle "anydeploy Installer - Step X of Y" \
+export selected_interface=$(dialog --backtitle "DHCP Server - Interface Selection" \
                     --menu "please pick interfaces for dhcp server to listen on" 30 100 10 ${interface_dialog_name[@]} 2>&1 >/dev/tty)
 
-echo "selected interface:" $selected_interface # Echo for debugging
 
 # Dialog Checkboxes
-
-
 
 #selected_interface_dialog=$(dialog --checklist "please pick interfaces for dhcp server to listen on" 30 100 10 ${interface_dialog_selection[@]} 2>&1 >/dev/tty)
 
 #export selected_interface=($(echo $selected_interface_dialog | tr " " ,)) # Add , between interfaces if multiple
 #echo "selected interfaces:" $selected_interface # Echo for debugging
 
-
-
-
-
 IFS=$SAVEIFS
-
 
 #echo INTERFACES INDEXES: ${!interfaces[@]}
 #echo INTERFACES LIST: ${interfaces[@]}
@@ -86,3 +81,43 @@ IFS=$SAVEIFS
 #echo DIALOG NAME2: ${interface_dialog_name[1]}
 #echo DIALOG NAME3: ${interface_dialog_name[2]}
 #echo DIALOG_SELECTION: ${interface_dialog_selection[@]}
+
+setup_ip
+
+}
+
+
+
+setup_ip () {
+
+# TODO - if interface has ip already also detect and display
+
+# TODO - if dhcp server installed detect current ip addresses
+
+# TODO detect bridged interfaces
+
+
+dialog --backtitle "DHCP Server - IP Settings for ${selected_interface}" --title "Dialog - Form" \
+--form "\nIP Adresses Setup:" 25 60 16 \
+"Server IP Address:" 1 1 "10.1.1.1" 1 25 25 30 \
+"DHCP Start IP:" 2 1 "10.1.1.50" 2 25 25 30 \
+"DHCP End IP:" 3 1 "10.1.1.250" 3 25 25 30 \
+"Gateway:" 4 1 "10.1.1.254" 4 25 25 30 \
+2>/anydeploy/tmp/form.$$
+
+
+ip_address=$(cat /anydeploy/tmp/form.$$ | head -n 1)
+dhcp_startip=$(cat /anydeploy/tmp/form.$$ | head -n 2 | tail -n 1)
+dhcp_endip=$(cat /anydeploy/tmp/form.$$ | head -n 3 | tail -n 1)
+gateway=$(cat /anydeploy/tmp/form.$$ | head -n 4 | tail -n 1)
+
+echo "IP Address: ${ip_address}"
+echo "DHCP Start IP: ${dhcp_startip}"
+echo "DHCP End IP: ${dhcp_endip}"
+echo "Gateway IP: ${gateway}"
+
+sleep 5
+
+}
+
+select_interface
