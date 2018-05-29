@@ -75,11 +75,11 @@ specs () {
   echo "TO BE DONE"
 }
 
-other () {
+tasks () {
   echo "TO BE DONE"
 }
 
-settings () {
+options () {
   echo "TO BE DONE"
 }
 
