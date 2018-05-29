@@ -88,9 +88,7 @@ shell () {
   exit 1
 }
 
-shutdown () {
-  echo_warn "System is going to shutdown in 3 secs"
-  sleep 3
+poweroff () {
   poweroff
 }
 
@@ -104,10 +102,10 @@ IFS=$'\n'
           deploy "Deploy OS" \
           capture "Capture OS" \
           specs "Display / Print Specs" \
-          other "Other Tasks" \
-          settings "Settings" \
+          tasks "Other Tasks" \
+          options "Options" \
           shell "Open Shell" \
-          shutdown "Shutdown" 2> tmp/template_list.$$
+          poweroff "Power Off" 2> tmp/template_list.$$
 
 
 IFS=$SAVEIFS
