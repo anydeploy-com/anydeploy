@@ -120,6 +120,8 @@ sleep 3
 # brctl | grep ${selected_interface}
 
 
+# TODO add question - configure as bridge, support apple mac's, enable forwarding 
+
 # REMOVE BRIDGE
 
 
