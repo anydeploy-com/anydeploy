@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. /anydeploy/includes/functions.sh
+
 # List interfaces
 
 # GET IP
@@ -38,7 +40,7 @@ for iface_index in "${!interface_bus[@]}"; do
   fi
 done
 
-# Fix back IFS
+
 
 
 # Combine Arrays for dialog display
@@ -61,6 +63,7 @@ selected_interface=$(dialog --backtitle "DHCP Setup - Interface Selection" \
 #export selected_interface=($(echo $selected_interface_dialog | tr " " ,)) # Add , between interfaces if multiple
 #echo "selected interfaces:" $selected_interface # Echo for debugging
 
+# Fix back IFS
 IFS=$SAVEIFS
 
 #echo INTERFACES INDEXES: ${!interfaces[@]}
@@ -104,7 +107,7 @@ if [ ! -z "${selected_interface_old_ip}" ]; then
 #  echo "Proposed ip = ${proposed_ip}"
   ipaddr_desc="Your system had IP address attached on selected interface, using same IP as default"
 else
-#  echo "no ip found - using default as proposed ip"
+#  echo "no ip found - usin/etc/default/isc-dhcp-serverg default as proposed ip"
   proposed_ip="192.168.1.254"
   proposed_dhcp_start="192.168.1.10"
   proposed_dhcp_end="192.168.1.200"
@@ -204,13 +207,14 @@ dialog --backtitle "DHCP Setup - IP Settings for ${selected_interface}" --title 
 # Get values after form is processed
 
 ip_address=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 1)
-dhcp_startip=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 2 | tail -n 1)
-dhcp_endip=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 3 | tail -n 1)
-gateway=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 4 | tail -n 1)
-dns_server1=""
-dns_server2=""
-dns_server3=""
-
+subnet_mask=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 2 | tail -n 1)
+dhcp_startip=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 3 | tail -n 1)
+dhcp_endip=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 4 | tail -n 1)
+gateway=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 5 | tail -n 1)
+dns_server1="$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 6 | tail -n 1)"
+dns_server2="$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 7 | tail -n 1)"
+dns_server3="$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 8 | tail -n 1)"
+domain="$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 9 | tail -n 1)"
 
     # TODO prompt to enable postrouting if gateway empty
 
@@ -223,7 +227,7 @@ dns_server3=""
 #echo "Gateway IP: ${gateway}"
 
 configure_interface
-
+# Fix back IFS
 }
 
 configure_interface () {
@@ -254,9 +258,10 @@ install_isc_dhcp
 }
 
 install_isc_dhcp () {
-echo "TBD"
 
-#apt-get install isc-dhcp-server -y
+  # TODO - check if already installed and prompt what to do
+
+        apt-get install isc-dhcp-server -y
 
 configure_isc_dhcp
 }
@@ -266,14 +271,66 @@ configure_isc_dhcp () {
 
 echo "TBD"
 
+  # /etc/default/isc-dhcp-server
+
+        # make copy (.anybackup)
+
+        cp /etc/default/isc-dhcp-server /etc/default/isc-dhcp-server.anybackup
+
+        # replace interface (ipv4)
+
+        sed -i -e "/INTERFACESv4=/ s/=.*/=${selected_interface}/" /etc/default/isc-dhcp-server
+
+
   # /etc/dhcp/dhcpd.conf
 
         # make copy (.anybackup)
 
+        cp /etc/dhcp/dhcpd.conf /etc/dhcp/dhcpd.conf.anybackup
+
         # overwrite with EOF + variables
+
+
+#        ${ip_address}
+#        ${subnet_mask}
+#        ${dhcp_startip}
+#        ${dhcp_endip}
+#        ${gateway}
+#        ${dns_server1}
+#        ${dns_server2}
+#        ${dns_server3}
+#        ${domain}
+
+
+cat >"/etc/dhcp/dhcpd.conf" << EOF
+        option domain-name "${domain}";
+        option domain-name-servers ${dns_server1}, ${dns_server2};
+        # Set up our desired subnet:
+        subnet 192.168.1.0 netmask ${subnet_mask} {
+            range ${dhcp_startip} ${dhcp_endip};
+            option subnet-mask ${subnet_mask};
+            option broadcast-address 192.168.1.255;
+            option routers ${gateway};
+            option domain-name-servers home;
+        }
+        default-lease-time 600;
+        max-lease-time 7200;
+        # Show that we want to be the only DHCP server in this network:
+        authoritative;
+EOF
 
         # restart isc dhcp
 
+        sudo service isc-dhcp-server restart
+
+cleanup
+
+}
+
+cleanup () {
+  echo "cleaning up"
+#  rm /anydeploy/tmp/dhcp_discover.$$
+#  rm /anydeploy/tmp/ip_settings_form.$$
 }
 
 

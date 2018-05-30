@@ -35,16 +35,17 @@ fi
 
 
 
-function check_deps
-
-# Define dependencies and verify them
-{
+function check_deps {
 for i in "${deps[@]}"
 do
 if which $i >/dev/null; then
 echo_pass "Dependency $i is installed"
 elif which cupsd >/dev/null; then # cups exception
 echo_pass "Dependency $i is installed" # cups exception
+elif which netstat >/dev/null; then
+echo_pass "Dependency $i is installed" # netstat exception
+elif which ifconfig >/dev/null; then
+echo_pass "Dependency $i is installed" # ifconfig exception
 else
 echo_warn "Dependency $i is not installed"
   read -p " Do you want me to install $i (y/n)? " CONT
