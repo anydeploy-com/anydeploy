@@ -229,10 +229,50 @@ configure_interface
 configure_interface () {
 echo "TBD"
 
+# /etc/network/interfaces
+
+      # make copy (.anybackup)
+
+      # remove selected interface until first space
+
+      # remove bridge connected to selected interface until space
+
+      # add interface lines (don't overwrite)
+
+      # add vmbr0 lines (don't overwrite)
+
+      # restart networking
+
+# /etc/resolv.conf
+
+      # make copy (.anybackup)
+
+      # overwrite with selected dns servers
+
+install_isc_dhcp
+
 }
 
 install_isc_dhcp () {
 echo "TBD"
+
+#apt-get install isc-dhcp-server -y
+
+configure_isc_dhcp
+}
+
+
+configure_isc_dhcp () {
+
+echo "TBD"
+
+  # /etc/dhcp/dhcpd.conf
+
+        # make copy (.anybackup)
+
+        # overwrite with EOF + variables
+
+        # restart isc dhcp
 
 }
 
