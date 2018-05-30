@@ -63,39 +63,39 @@ fi
 
 # Display Main Menu
 
-deploy () {
+DEPLOY () {
   echo "TO BE DONE"
 }
 
-capture () {
+CAPTURE () {
   echo "TO BE DONE"
 }
 
-tests () {
+TESTS () {
   echo "TO BE DONE"
 }
 
-specs () {
+SPECS () {
   echo "TO BE DONE"
 }
 
-print () {
+PRINT () {
   echo "TO BE DONE"
 }
 
-tasks () {
+TASKS () {
   echo "TO BE DONE"
 }
 
-options () {
+OPTIONS () {
   echo "TO BE DONE"
 }
 
-shell () {
+SHELL () {
   exit 1
 }
 
-poweroff () {
+POWEROFF () {
   # TODO - Uncomment
   echo "poweroff disabled (need to be uncommented in index.sh)"
   #poweroff
@@ -108,15 +108,15 @@ IFS=$'\n'
 
         dialog --backtitle "anydeploy - Main Menu" --menu "Main Menu - select task:" 20 55 15 \
           ${template_list[@]} \
-          deploy "Deploy OS" \
-          capture "Capture OS" \
-          tests "Run Tests" \
-          specs "Display Specification" \
-          print "Print Specification" \
-          tasks "Other Tasks" \
-          options "Open Settings" \
-          shell "Open Linux Shell" \
-          poweroff "Shutdown System" 2> tmp/template_list.$$
+          DEPLOY "Deploy OS" \
+          CAPTURE "Capture OS" \
+          TESTS "Run Tests" \
+          SPECS "Display Specification" \
+          PRINT "Print Specification" \
+          TASKS "Other Tasks" \
+          OPTIONS "Open Settings" \
+          SHELL "Open Linux Shell" \
+          POWEROFF "Shutdown System" 2> tmp/template_list.$$
 
 
 IFS=$SAVEIFS

@@ -105,9 +105,9 @@ if [ ! -z "${selected_interface_old_ip}" ]; then
   ipaddr_desc="Your system had IP address attached on selected interface, using same IP as default"
 else
 #  echo "no ip found - using default as proposed ip"
-  proposed_ip="10.1.1.250"
-  proposed_dhcp_start="10.1.1.10"
-  proposed_dhcp_end="10.1.1.250"
+  proposed_ip="192.168.1.254"
+  proposed_dhcp_start="192.168.1.10"
+  proposed_dhcp_end="192.168.1.200"
   ipaddr_desc="Your system didn't have any IP address attached on selected interface, using defaults"
 fi
 
@@ -128,52 +128,90 @@ for i in $(seq 0 1 100) ; do sleep 0.25; echo $i | dialog --backtitle "DHCP Setu
 
 current_gateway_ip=$(cat /anydeploy/tmp/dhcp_discover.$$ | sed -n 's/Router://p' | cut -d "|" -f 2 | xargs)
 
+
 if [ ! -z "${current_gateway_ip}" ]; then
 #    echo "dhcp server exists on selected interface"
 #    echo "Current Gateway IP Address: ${current_gateway_ip}"
     proposed_gateway="${current_gateway_ip}"
+    proposed_subnet=$(cat /anydeploy/tmp/dhcp_discover.$$ | grep "Subnet Mask:" | sed -n 's/Subnet Mask://p' | cut -d "|" -f 2 | xargs)
     subnet_pre=$(echo ${current_gateway_ip} | cut -d "." -f 1,2,3)
     proposed_dhcp_start="${subnet_pre}.10"
     proposed_dhcp_end="${subnet_pre}.250"
     gateway_desc="Gateway found on selected interface, using same as default"
+
+
+    # Detect DNS Servers
+    dns_servers=$(cat /anydeploy/tmp/dhcp_discover.$$ | grep "Domain Name Server:" | sed -n 's/Domain Name Server: //p' | cut -d "|" -f 2 | xargs)
+
+    dns_server1=$(echo ${dns_servers} | cut -d " " -f 1 | tr -d "," )
+    dns_server2=$(echo ${dns_servers} | cut -d " " -f 2 | tr -d "," )
+    dns_server3=$(echo ${dns_servers} | cut -d " " -f 3 | tr -d "," )
+
+    # Get Domain
+
+    domain=$(cat /anydeploy/tmp/dhcp_discover.$$ | grep "Domain Name:" | sed -n 's/Domain Name://p' | cut -d "|" -f 2 | xargs
+    ldcd.co.uk)
 else
-#    echo "dhcp server doesn't exist on selected interface, asking user to turn on routing"
-    # TODO enable routing question?
+#    echo "dhcp server doesn't exist on selected interface"
+    proposed_subnet="255.255.255.0"
     proposed_gateway=""
+    proposed_dhcp_start="192.168.1.10"
+    proposed_dhcp_end="192.168.1.250"
     gateway_desc="Couldn't find default gateway, using empty"
+    domain="anydeploy"
+    dns_server1="8.8.8.8"
+    dns_server2="8.8.4.4"
 fi
 
 # TODO detect bridged interfaces
 
-# brctl | grep ${selected_interface}
+# brctl show | grep ${selected_interface}
 
-
-# TODO add question - configure as bridge, support apple mac's, enable forwarding (if no gateway is specified)
 
 # REMOVE BRIDGE
 
-
 # Down interface to be able to remove bridge
-# ifconfig eno1 down
+
+# brctl delif br0 eno1
 # ifconfig br0 down
 # brctl delbr br0
 
+# service networking restart
+
+
+
+
+# TODO add question - configure as bridge, support apple mac's, enable forwarding (if no gateway is specified)
 
 
 
 dialog --backtitle "DHCP Setup - IP Settings for ${selected_interface}" --title "Dialog - IP settings for ${selected_interface}" \
 --form "\n${ipaddr_desc}\n${gateway_desc}:" 25 60 16 \
 "Server IP Address:" 1 1 "${proposed_ip}" 1 25 25 30 \
-"DHCP Start IP:" 2 1 "${proposed_dhcp_start}" 2 25 25 30 \
-"DHCP End IP:" 3 1 "${proposed_dhcp_end}" 3 25 25 30 \
-"Gateway:" 4 1 "$proposed_gateway" 4 25 25 30 \
-2>/anydeploy/tmp/form.$$
+"Subnet Mask:" 2 1 "${proposed_subnet}" 2 25 25 30 \
+"DHCP Start IP:" 3 1 "${proposed_dhcp_start}" 3 25 25 30 \
+"DHCP End IP:" 4 1 "${proposed_dhcp_end}" 4 25 25 30 \
+"Gateway:" 5 1 "${proposed_gateway}" 5 25 25 30 \
+"DNS1:" 7 1 "${dns_server1}" 7 25 25 30 \
+"DNS2:" 8 1 "${dns_server2}" 8 25 25 30 \
+"DNS3:" 9 1 "${dns_server3}" 9 25 25 30 \
+"Domain:" 11 1 "${domain}" 11 25 25 30 \
+2>/anydeploy/tmp/ip_settings_form.$$
 
 
-ip_address=$(cat /anydeploy/tmp/form.$$ | head -n 1)
-dhcp_startip=$(cat /anydeploy/tmp/form.$$ | head -n 2 | tail -n 1)
-dhcp_endip=$(cat /anydeploy/tmp/form.$$ | head -n 3 | tail -n 1)
-gateway=$(cat /anydeploy/tmp/form.$$ | head -n 4 | tail -n 1)
+# Get values after form is processed
+
+ip_address=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 1)
+dhcp_startip=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 2 | tail -n 1)
+dhcp_endip=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 3 | tail -n 1)
+gateway=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 4 | tail -n 1)
+dns_server1=""
+dns_server2=""
+dns_server3=""
+
+
+    # TODO prompt to enable postrouting if gateway empty
+
 
 
 #echo "${selected_interface} old IP address: ${selected_interface_old_ip}"
@@ -182,8 +220,19 @@ gateway=$(cat /anydeploy/tmp/form.$$ | head -n 4 | tail -n 1)
 #echo "DHCP End IP: ${dhcp_endip}"
 #echo "Gateway IP: ${gateway}"
 
-sleep 5
+configure_interface
 
 }
+
+configure_interface () {
+echo "TBD"
+
+}
+
+install_isc_dhcp () {
+echo "TBD"
+
+}
+
 
 select_interface
