@@ -240,7 +240,7 @@ clear
 
 # Declare dependencies
 
-      deps=( dialog debootstrap sudo dmidecode lspci cups net-tools )
+      deps=( dialog debootstrap sudo dmidecode lspci cups net-tools nmap )
 
 # Check dependencies
 

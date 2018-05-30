@@ -50,7 +50,7 @@ done
 
 # Dialog single interface menu
 
-selected_interface=$(dialog --backtitle "DHCP Server - Interface Selection" \
+selected_interface=$(dialog --backtitle "DHCP Setup - Interface Selection" \
                     --menu "please pick interfaces for dhcp server to listen on" 30 100 10 ${interface_dialog_name[@]} 2>&1 >/dev/tty)
 
 
@@ -95,47 +95,53 @@ setup_ip () {
 
 selected_interface_old_ip=$(ifconfig ${selected_interface} | grep inet | awk '{print $2}')
 
-echo "Selected interface old ip : ${selected_interface_old_ip}"
+#echo "Selected interface old ip : ${selected_interface_old_ip}"
 
 
-if [ ! -z "${selected_interface_old_ip}"  ]; then
-  echo "old ip has value"
+if [ ! -z "${selected_interface_old_ip}" ]; then
+#  echo "old ip has value"
   proposed_ip="${selected_interface_old_ip}"
-  echo "proposed ip = ${proposed_ip}"
+#  echo "Proposed ip = ${proposed_ip}"
   ipaddr_desc="Your system had IP address attached on selected interface, using same IP as default"
 else
-  echo "no ip found - using default as proposed ip"
+#  echo "no ip found - using default as proposed ip"
   proposed_ip="10.1.1.250"
+  proposed_dhcp_start="10.1.1.10"
+  proposed_dhcp_end="10.1.1.250"
   ipaddr_desc="Your system didn't have any IP address attached on selected interface, using defaults"
 fi
-sleep 3
-
-# Detect running dhcp server:
-
-#nmap --script broadcast-dhcp-discover -e eno1
-
-# (takes 25 seconds to detect if missing)
 
 
-# Example Output
+# Detect running dhcp server and setup gateway ip if current exists - run as seperate process (&)
 
-#Pre-scan script results:
-#| broadcast-dhcp-discover:
-#|   Response 1 of 1:
-#|     IP Offered: 10.1.1.234
-#|     DHCP Message Type: DHCPOFFER
-#|     Server Identifier: 10.1.1.254
-#|     IP Address Lease Time: 5m00s
-#|     Subnet Mask: 255.255.255.0
-#|     Router: 10.1.1.254
-#|     Domain Name Server: 10.1.1.254, 8.8.8.8, 8.8.4.4
-#|     Domain Name: ldcd.co.uk
-#|     NetBIOS Name Server: 10.1.1.251
-#|_    NetBIOS Node Type: 8
+nmap --script broadcast-dhcp-discover -e ${selected_interface} &> /anydeploy/tmp/dhcp_discover.$$ &
+
+
+# Display dhcp detection script (takes 25 seconds for nmap to detect if missing)
+# TODO - make process shorter if dhcp_discover already contains variables
+
+for i in $(seq 0 1 100) ; do sleep 0.25; echo $i | dialog --backtitle "DHCP Setup - Detecting Current DHCP settings on ${selected_interface}" --gauge "Detecting your current dhcp settings (ip address, subnet, gateway etc.)" 10 70 0; done
 
 
 
-# TODO - if dhcp server installed detect current ip addresses
+# If dhcp server installed detect current ip addresses
+
+current_gateway_ip=$(cat /anydeploy/tmp/dhcp_discover.$$ | sed -n 's/Router://p' | cut -d "|" -f 2 | xargs)
+
+if [ ! -z "${current_gateway_ip}" ]; then
+#    echo "dhcp server exists on selected interface"
+#    echo "Current Gateway IP Address: ${current_gateway_ip}"
+    proposed_gateway="${current_gateway_ip}"
+    subnet_pre=$(echo ${current_gateway_ip} | cut -d "." -f 1,2,3)
+    proposed_dhcp_start="${subnet_pre}.10"
+    proposed_dhcp_end="${subnet_pre}.250"
+    gateway_desc="Gateway found on selected interface, using same as default"
+else
+#    echo "dhcp server doesn't exist on selected interface, asking user to turn on routing"
+    # TODO enable routing question?
+    proposed_gateway=""
+    gateway_desc="Couldn't find default gateway, using empty"
+fi
 
 # TODO detect bridged interfaces
 
@@ -155,12 +161,12 @@ sleep 3
 
 
 
-dialog --backtitle "DHCP Server - IP Settings for ${selected_interface}" --title "Dialog - IP settings for ${selected_interface}" \
---form "\n${ipaddr_desc}:" 25 60 16 \
+dialog --backtitle "DHCP Setup - IP Settings for ${selected_interface}" --title "Dialog - IP settings for ${selected_interface}" \
+--form "\n${ipaddr_desc}\n${gateway_desc}:" 25 60 16 \
 "Server IP Address:" 1 1 "${proposed_ip}" 1 25 25 30 \
-"DHCP Start IP:" 2 1 "10.1.1.50" 2 25 25 30 \
-"DHCP End IP:" 3 1 "10.1.1.250" 3 25 25 30 \
-"Gateway:" 4 1 "10.1.1.254" 4 25 25 30 \
+"DHCP Start IP:" 2 1 "${proposed_dhcp_start}" 2 25 25 30 \
+"DHCP End IP:" 3 1 "${proposed_dhcp_end}" 3 25 25 30 \
+"Gateway:" 4 1 "$proposed_gateway" 4 25 25 30 \
 2>/anydeploy/tmp/form.$$
 
 
@@ -170,11 +176,11 @@ dhcp_endip=$(cat /anydeploy/tmp/form.$$ | head -n 3 | tail -n 1)
 gateway=$(cat /anydeploy/tmp/form.$$ | head -n 4 | tail -n 1)
 
 
-echo "${selected_interface} old IP address: ${selected_interface_old_ip}"
-echo "IP Address: ${ip_address}"
-echo "DHCP Start IP: ${dhcp_startip}"
-echo "DHCP End IP: ${dhcp_endip}"
-echo "Gateway IP: ${gateway}"
+#echo "${selected_interface} old IP address: ${selected_interface_old_ip}"
+#echo "IP Address: ${ip_address}"
+#echo "DHCP Start IP: ${dhcp_startip}"
+#echo "DHCP End IP: ${dhcp_endip}"
+#echo "Gateway IP: ${gateway}"
 
 sleep 5
 
