@@ -147,10 +147,12 @@ if [ ! -z "${current_gateway_ip}" ]; then
     dns_server2=$(echo ${dns_servers} | cut -d " " -f 2 | tr -d "," )
     dns_server3=$(echo ${dns_servers} | cut -d " " -f 3 | tr -d "," )
 
-    # Get Domain
+    # Get Domain # TODO change to anydeploy if empty
 
     domain=$(cat /anydeploy/tmp/dhcp_discover.$$ | grep "Domain Name:" | sed -n 's/Domain Name://p' | cut -d "|" -f 2 | xargs
     ldcd.co.uk)
+
+
 else
 #    echo "dhcp server doesn't exist on selected interface"
     proposed_subnet="255.255.255.0"
