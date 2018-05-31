@@ -96,7 +96,7 @@ setup_ip () {
 
 # Detect Current IP address and add message.
 
-selected_interface_old_ip=$(ifconfig ${selected_interface} | grep inet | awk '{print $2}')
+selected_interface_old_ip=$(ifconfig ${selected_interface} | grep "inet " | awk '{print $2}')
 
 #echo "Selected interface old ip : ${selected_interface_old_ip}"
 
@@ -124,7 +124,7 @@ fi
 
 #dhcpcd -T eno1 | grep routers | cut -d "=" -f 2 | tr \' " " | xargs
 
-nmap --script broadcast-dhcp-discover -e ${selected_interface} &> /anydeploy/tmp/dhcp_discover.$$ &
+dhcpcd -T ${selected_interface} &> /anydeploy/tmp/dhcp_discover.$$ &
 
 
 # Display dhcp detection script (takes 25 seconds for nmap to detect if missing)
@@ -136,14 +136,14 @@ for i in $(seq 0 1 100) ; do sleep 0.25; echo $i | dialog --backtitle "DHCP Setu
 
 # If dhcp server installed detect current ip addresses
 
-current_gateway_ip=$(cat /anydeploy/tmp/dhcp_discover.$$ | sed -n 's/Router://p' | cut -d "|" -f 2 | xargs)
+current_gateway_ip=$(cat /anydeploy/tmp/dhcp_discover.$$ | grep new_routers | uniq | cut -d "=" -f 2 | tr "'" " " | xargs)
 
 
 if [ ! -z "${current_gateway_ip}" ]; then
 #    echo "dhcp server exists on selected interface"
 #    echo "Current Gateway IP Address: ${current_gateway_ip}"
     proposed_gateway="${current_gateway_ip}"
-    proposed_subnet=$(cat /anydeploy/tmp/dhcp_discover.$$ | grep "Subnet Mask:" | sed -n 's/Subnet Mask://p' | cut -d "|" -f 2 | xargs)
+    proposed_subnet=$(cat /anydeploy/tmp/dhcp_discover.$$ | grep "new_subnet_mask" | cut -d "=" -f 2 | tr "'" " " | xargs)
     subnet_pre=$(echo ${current_gateway_ip} | cut -d "." -f 1,2,3)
     proposed_dhcp_start="${subnet_pre}.10"
     proposed_dhcp_end="${subnet_pre}.250"
@@ -151,16 +151,15 @@ if [ ! -z "${current_gateway_ip}" ]; then
 
 
     # Detect DNS Servers
-    dns_servers=$(cat /anydeploy/tmp/dhcp_discover.$$ | grep "Domain Name Server:" | sed -n 's/Domain Name Server: //p' | cut -d "|" -f 2 | xargs)
+    dns_servers=$(cat /anydeploy/tmp/dhcp_discover.$$ | grep "new_domain_name_servers" | cut -d "=" -f 2 | tr "'" " " | xargs | tr " " ",")
 
-    dns_server1=$(echo ${dns_servers} | cut -d " " -f 1 | tr -d "," )
-    dns_server2=$(echo ${dns_servers} | cut -d " " -f 2 | tr -d "," )
-    dns_server3=$(echo ${dns_servers} | cut -d " " -f 3 | tr -d "," )
+    dns_server1=$(echo ${dns_servers} | cut -d "," -f 1)
+    dns_server2=$(echo ${dns_servers} | cut -d "," -f 2)
+    dns_server3=$(echo ${dns_servers} | cut -d "," -f 3)
 
     # Get Domain # TODO change to anydeploy if empty
 
-    domain=$(cat /anydeploy/tmp/dhcp_discover.$$ | grep "Domain Name:" | sed -n 's/Domain Name://p' | cut -d "|" -f 2 | xargs
-    ldcd.co.uk)
+    domain=$(cat /anydeploy/tmp/dhcp_discover.$$ | grep "new_domain_name=" | cut -d "=" -f 2 | tr "'" " " | xargs)
 
 
 else
