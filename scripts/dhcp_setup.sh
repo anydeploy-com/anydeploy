@@ -117,6 +117,13 @@ fi
 
 # Detect running dhcp server and setup gateway ip if current exists - run as seperate process (&)
 
+#apt install dhcpcd5
+
+
+#dhcpcd -T eno1
+
+#dhcpcd -T eno1 | grep routers | cut -d "=" -f 2 | tr \' " " | xargs
+
 nmap --script broadcast-dhcp-discover -e ${selected_interface} &> /anydeploy/tmp/dhcp_discover.$$ &
 
 
