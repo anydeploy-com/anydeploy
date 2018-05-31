@@ -237,13 +237,17 @@ echo "TBD"
 
       # make copy (.anybackup)
 
-      # remove selected interface until first space
+      # find bridges connected to selected interface
 
-      # remove bridge connected to selected interface until space
+      # remove bridges connected to selected interface until first space
+
+      # remove selected interface until first space
 
       # add interface lines (don't overwrite)
 
       # add vmbr0 lines (don't overwrite)
+
+      # remove unecessary spaces?
 
       # restart networking
 
@@ -321,7 +325,7 @@ EOF
 
         # restart isc dhcp
 
-        sudo service isc-dhcp-server restart
+        service isc-dhcp-server restart
 
 cleanup
 
