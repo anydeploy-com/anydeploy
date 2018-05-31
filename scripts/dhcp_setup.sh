@@ -339,8 +339,8 @@ cleanup
 
 cleanup () {
   echo "cleaning up"
-#  rm /anydeploy/tmp/dhcp_discover.$$
-#  rm /anydeploy/tmp/ip_settings_form.$$
+  rm /anydeploy/tmp/dhcp_discover.$$
+  rm /anydeploy/tmp/ip_settings_form.$$
 }
 
 

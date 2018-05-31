@@ -88,8 +88,22 @@ TASKS () {
 }
 
 OPTIONS () {
-  echo "TO BE DONE"
+  dialog --backtitle "anydeploy - Settings Menu" --menu "Settings Menu - select task:" 20 55 15 \
+    DHCPSERVER "DHCP Server Setup" \
+    GLOBAL "Global Settings" \
+    MAIN_MENU "Go Back to Main Menu" 2> tmp/options_list.$$
+
+    options_list=`cat tmp/options_list.$$`
+
+    $options_list
+
 }
+
+DHCPSERVER () {
+  . /anydeploy/scripts/dhcp_setup.sh
+  MAIN_MENU
+}
+
 
 SHELL () {
   exit 1
@@ -101,7 +115,7 @@ POWEROFF () {
   #poweroff
 }
 
-main_menu () {
+MAIN_MENU () {
 
 
 IFS=$'\n'
@@ -131,4 +145,4 @@ $menu_selection
 #echo "Template names: ${template_names[0]}"
 #echo "Template List: ${template_list[1]}"
 
-main_menu
+MAIN_MENU
