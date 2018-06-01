@@ -241,6 +241,8 @@ echo "TBD"
 
 # /etc/network/interfaces
 
+      # remove network-manager (if installed)
+
       # make copy (.anybackup)
 
       cp /etc/network/interfaces /etc/network/interfaces.anybackup
