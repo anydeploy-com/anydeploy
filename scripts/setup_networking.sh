@@ -71,36 +71,12 @@ selected_interface=$(dialog --backtitle "DHCP Setup - Interface Selection" \
                        echo "ok pressed"
                     else
                        echo "cancel pressed"
+                       cleanup
                        exit 1;
                     fi
 
-# Dialog Checkboxes
-
-#selected_interface_dialog=$(dialog --checklist "please pick interfaces for dhcp server to listen on" 30 100 10 ${interface_dialog_selection[@]} 2>&1 >/dev/tty)
-
-#export selected_interface=($(echo $selected_interface_dialog | tr " " ,)) # Add , between interfaces if multiple
-#echo "selected interfaces:" $selected_interface # Echo for debugging
-
     # Fix back IFS
     IFS=$SAVEIFS
-
-#echo INTERFACES INDEXES: ${!interfaces[@]}
-#echo INTERFACES LIST: ${interfaces[@]}
-#echo INTERFACES DEVPATHS: ${interfaces_devpath[@]}
-#echo INTERFACE BUS: ${interface_bus[@]}
-#echo INTERFACE VENDOR_ID: ${interface_vendor_id[@]}
-#echo INTERFACE MODEL_ID: ${interface_model_id[@]}
-#echo INTERFACE VENDEV_ID: ${interface_vendev_id[@]}
-#echo INTERFACE NAME: ${interface_name[@]}
-#echo ""
-#echo INTERFACE NAME1: ${interface_name[0]}
-#echo INTERFACE NAME2: ${interface_name[1]}
-#echo INTERFACE NAME3: ${interface_name[2]}
-#echo ""
-#echo DIALOG NAME1: ${interface_dialog_name[0]}
-#echo DIALOG NAME2: ${interface_dialog_name[1]}
-#echo DIALOG NAME3: ${interface_dialog_name[2]}
-#echo DIALOG_SELECTION: ${interface_dialog_selection[@]}
 
 setup_ip
 
@@ -114,7 +90,8 @@ setup_ip () {
 
 # Detect Current IP address and add message.
 
-selected_interface_bridge=$(brctl show | grep "${selected_interface}" | awk '{print $1}')
+  # Define Bridge interface if it's configured
+  selected_interface_bridge=$(brctl show | grep "${selected_interface}" | awk '{print $1}')
 
 if [ ! -z "${selected_interface_bridge}" ] ; then
 bridge_desc="Bridge has been detected on selected interface. Using bridge settings detection"
@@ -149,7 +126,7 @@ else
 dhcpcd -T ${selected_interface} &> /anydeploy/tmp/dhcp_discover.$$ &
 fi
 
-# Display dhcp detection script (takes 25 seconds for nmap to detect if missing)
+# Display dhcp detection script (wait 25 seconds before declare it missing)
 # TODO - make process shorter if dhcp_discover already contains variables
 
 for i in $(seq 0 1 100) ; do sleep 0.25; echo $i | dialog --backtitle "DHCP Setup - Detecting Current DHCP settings on ${selected_interface}" --gauge "Detecting your current dhcp settings (ip address, subnet, gateway etc.)" 10 70 0; done
@@ -220,13 +197,11 @@ dialog --backtitle "DHCP Setup - IP Settings for ${selected_interface}" --title 
 --form "\n${bridge_desc}\n${ipaddr_desc}\n${gateway_desc}:" 25 60 16 \
 "Server IP Address:" 1 1 "${proposed_ip}" 1 25 25 30 \
 "Subnet Mask:" 2 1 "${proposed_subnet}" 2 25 25 30 \
-"DHCP Start IP:" 3 1 "${proposed_dhcp_start}" 3 25 25 30 \
-"DHCP End IP:" 4 1 "${proposed_dhcp_end}" 4 25 25 30 \
-"Gateway:" 5 1 "${proposed_gateway}" 5 25 25 30 \
-"DNS1:" 7 1 "${dns_server1}" 7 25 25 30 \
-"DNS2:" 8 1 "${dns_server2}" 8 25 25 30 \
-"DNS3:" 9 1 "${dns_server3}" 9 25 25 30 \
-"Domain:" 11 1 "${domain}" 11 25 25 30 \
+"Gateway:" 3 1 "${proposed_gateway}" 3 25 25 30 \
+"DNS1:" 5 1 "${dns_server1}" 5 25 25 30 \
+"DNS2:" 6 1 "${dns_server2}" 6 25 25 30 \
+"DNS3:" 7 1 "${dns_server3}" 7 25 25 30 \
+"Domain:" 9 1 "${domain}" 9 25 25 30 \
 2>/anydeploy/tmp/ip_settings_form.$$
 
 if test $? -eq 0
@@ -234,6 +209,7 @@ then
    echo "ok pressed"
 else
    echo "cancel pressed"
+   cleanup
    exit 1;
 fi
 
@@ -265,25 +241,55 @@ configure_interface
 }
 
 configure_interface () {
-echo "TBD"
-
 # /etc/network/interfaces
+
+
+      # TODO generate bridge name (if default vmbr0 is taken)
 
       # remove network-manager (if installed)
 
       # make copy (.anybackup)
 
+      echo "making a backup of current interfaces file in /etc/network/interfaces.anybackup"
+      sleep 2
       cp /etc/network/interfaces /etc/network/interfaces.anybackup
 
       # remove interface and bridges
 
       remove_interface ${selected_interface}
+      echo "removing interface"
+      sleep 2
+
+
 
       # add interface lines (don't overwrite)
 
+      TAB=$'\t'
+      echo "adding interfaces"
+      sleep 2
+
+      echo "" >> /etc/network/interfaces
+      echo "iface ${selected_interface} inet manual" >> /etc/network/interfaces
+
       # add bridge (vmbr0) lines (don't overwrite)
 
+      # TODO i1 add empty line only if one isn't there
+      echo "" >> /etc/network/interfaces
+      echo "auto vmbr1" >> /etc/network/interfaces
+      echo "iface vmbr1 inet static" >> /etc/network/interfaces # TODO i5 replace vmbr1 with dynamic interface
+      echo "${TAB}address ${proposed_ip}" >> /etc/network/interfaces
+      echo "${TAB}netmask ${proposed_subnet}" >> /etc/network/interfaces
+      if [ ! -z "${proposed_gateway}" ]; then
+      echo "${TAB}${proposed_gateway}" >> /etc/network/interfaces
+      fi
+      echo "${TAB}bridge_ports ${selected_interface}" >> /etc/network/interfaces
+      echo "${TAB}bridge_stp off" >> /etc/network/interfaces
+      echo "${TAB}bridge_fd 0" >> /etc/network/interfaces
+
+
       # restart networking
+
+      service networking restart
 
 # /etc/resolv.conf
 
@@ -291,75 +297,12 @@ echo "TBD"
 
       # overwrite with selected dns servers
 
-install_isc_dhcp
 
-}
+# TODO Verify if interface is up and running otherwise print error and prompt what to do       
 
-install_isc_dhcp () {
-
-  # TODO - check if already installed and prompt what to do
-
-        apt-get install isc-dhcp-server -y
-
-configure_isc_dhcp
-}
+# TODO Add interface and bridge name to global config file
 
 
-configure_isc_dhcp () {
-
-echo "TBD"
-
-  # /etc/default/isc-dhcp-server
-
-        # make copy (.anybackup)
-
-        cp /etc/default/isc-dhcp-server /etc/default/isc-dhcp-server.anybackup
-
-        # replace interface (ipv4)
-
-        sed -i -e "/INTERFACESv4=/ s/=.*/=${selected_interface}/" /etc/default/isc-dhcp-server
-
-
-  # /etc/dhcp/dhcpd.conf
-
-        # make copy (.anybackup)
-
-        cp /etc/dhcp/dhcpd.conf /etc/dhcp/dhcpd.conf.anybackup
-
-        # overwrite with EOF + variables
-
-
-#        ${ip_address}
-#        ${subnet_mask}
-#        ${dhcp_startip}
-#        ${dhcp_endip}
-#        ${gateway}
-#        ${dns_server1}
-#        ${dns_server2}
-#        ${dns_server3}
-#        ${domain}
-
-
-cat >"/etc/dhcp/dhcpd.conf" << EOF
-        option domain-name "${domain}";
-        option domain-name-servers ${dns_server1}, ${dns_server2};
-        # Set up our desired subnet:
-        subnet 192.168.1.0 netmask ${subnet_mask} {
-            range ${dhcp_startip} ${dhcp_endip};
-            option subnet-mask ${subnet_mask};
-            option broadcast-address 192.168.1.255;
-            option routers ${gateway};
-            option domain-name-servers home;
-        }
-        default-lease-time 600;
-        max-lease-time 7200;
-        # Show that we want to be the only DHCP server in this network:
-        authoritative;
-EOF
-
-        # restart isc dhcp
-
-        service isc-dhcp-server restart
 
 cleanup
 

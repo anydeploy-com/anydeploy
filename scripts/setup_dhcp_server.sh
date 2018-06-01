@@ -317,7 +317,7 @@ echo "TBD"
 
         # replace interface (ipv4)
 
-        sed -i -e "/INTERFACESv4=/ s/=.*/=${selected_interface}/" /etc/default/isc-dhcp-server
+        sed -i -e "/INTERFACESv4=/ s/=.*/=vmbr1/" /etc/default/isc-dhcp-server # TODO - USE DYNAMIC BRIDGE
 
 
   # /etc/dhcp/dhcpd.conf
