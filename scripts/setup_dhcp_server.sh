@@ -66,6 +66,13 @@ done
 selected_interface=$(dialog --backtitle "DHCP Setup - Interface Selection" \
                     --menu "please pick interfaces for dhcp server to listen on" 30 100 10 ${interface_dialog_name[@]} 2>&1 >/dev/tty)
 
+                    if test $? -eq 0
+                    then
+                       echo "ok pressed"
+                    else
+                       echo "cancel pressed"
+                       exit 1;
+                    fi
 
 # Dialog Checkboxes
 
@@ -221,6 +228,14 @@ dialog --backtitle "DHCP Setup - IP Settings for ${selected_interface}" --title 
 "DNS3:" 9 1 "${dns_server3}" 9 25 25 30 \
 "Domain:" 11 1 "${domain}" 11 25 25 30 \
 2>/anydeploy/tmp/ip_settings_form.$$
+
+if test $? -eq 0
+then
+   echo "ok pressed"
+else
+   echo "cancel pressed"
+   exit 1;
+fi
 
 
 # Get values after form is processed
