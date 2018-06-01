@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Networking
+default_interface=""
+
 # Directories
 main_dir_default="/anydeploy" # "default" or "<path>"
 iso_dir_default="${main_dir}/iso" # "default" or "<path>"

@@ -12,31 +12,40 @@
 select_interface () {
 
 SAVEIFS=$IFS
+# Array of physical interfaces
+interfaces=($(ls /sys/class/net/*/device | grep "sys/class" | cut -d / -f 5))
+# Interfaces Devpaths
+for interface in "${interfaces[@]}" ; do interfaces_devpath+=($(readlink -f /sys/class/net/${interface})) ; done
 
-interfaces=($(ls /sys/class/net/*/device | grep "sys/class" | cut -d / -f 5))                                                                     # Interface Name
-for interface in "${interfaces[@]}" ; do interfaces_devpath+=($(readlink -f /sys/class/net/${interface})) ; done                                  # Interface Devpath
 for interface_path in ${interfaces_devpath[@]} ; do
-interface_bus+=($(udevadm info --path=$interface_path | grep "ID_BUS" | cut -d "=" -f 2))                                                         # Interface Bus
-interface_vendor_id+=($(udevadm info --path=$interface_path | grep "ID_VENDOR_ID" | cut -d "=" -f 2 | sed -e 's/\0x//g'))                         # Interface Vendor ID
-interface_model_id+=($(udevadm info --path=$interface_path | grep "ID_MODEL_ID" | cut -d "=" -f 2 | sed -e 's/\0x//g'))                           # Interface Model ID
+# Interface Buses
+interface_bus+=($(udevadm info --path=$interface_path | grep "ID_BUS" | cut -d "=" -f 2))
+# Interface Vendor ID
+interface_vendor_id+=($(udevadm info --path=$interface_path | grep "ID_VENDOR_ID" | cut -d "=" -f 2 | sed -e 's/\0x//g'))
+# Interface Model ID
+interface_model_id+=($(udevadm info --path=$interface_path | grep "ID_MODEL_ID" | cut -d "=" -f 2 | sed -e 's/\0x//g'))
 done
-for i in "${!interfaces[@]}"; do interface_vendev_id+=( "${interface_vendor_id[${i}]}":"${interface_model_id[${i}]}" ); done                      # Interface VENDEV ID
+# Interface VENDEV ID ie (8086:1502)
+for i in "${!interfaces[@]}"; do interface_vendev_id+=( "${interface_vendor_id[${i}]}":"${interface_model_id[${i}]}" ); done
 # Device Names
 
-# Change IFS for proper device names (contain spaces)
-IFS=$'\n'
+    # Change IFS for proper device names (contain spaces)
+    IFS=$'\n'
 
 interface_name=()
 for iface_index in "${!interface_bus[@]}"; do
   if [ "${interface_bus[${iface_index}]}" = "pci"  ] ; then
-  #sample : interface_name+=($(lspci -d 8086:15a2 | cut -d ":" -f 3,4,5 | xargs))
-  interface_name+=($(lspci -d ${interface_vendev_id[${iface_index}]} | tail -n1 | cut -d ":" -f 3,4,5 | xargs))                                   # Interface Name (PCI)
+  # Interface Name (PCI)
+          #sample : interface_name+=($(lspci -d 8086:15a2 | cut -d ":" -f 3,4,5 | xargs))
+  interface_name+=($(lspci -d ${interface_vendev_id[${iface_index}]} | tail -n1 | cut -d ":" -f 3,4,5 | xargs))
   elif [ "${interface_bus[${iface_index}]}" = "usb"  ] ; then
-  #sample : interface_name+=($(lsusb -d 0b95:7720 | sed -e 's/.*0b95:7720//' | xargs))
-  interface_name+=($(lsusb -d ${interface_vendev_id[${iface_index}]} | tail -n1 | awk '{$1=$2=$3=$4=$5=$6="";print $0}' | xargs))                 # Interface Name (USB)
+  # Interface Name (USB)
+          #sample : interface_name+=($(lsusb -d 0b95:7720 | sed -e 's/.*0b95:7720//' | xargs))
+  interface_name+=($(lsusb -d ${interface_vendev_id[${iface_index}]} | tail -n1 | awk '{$1=$2=$3=$4=$5=$6="";print $0}' | xargs))
   else
+  # Interface Name (UNKNOWN)
   echo "Warning - this interface is unknown" # TODO - add to log file
-  interface_name+=("unknown")                                                                                                                     # Interface Name (UNKNOWN)
+  interface_name+=("unknown")
   fi
 done
 
@@ -45,8 +54,10 @@ done
 
 # Combine Arrays for dialog display
 for i in "${!interfaces[@]}"; do
-interface_dialog_name+=("${interfaces[${i}]}" "${interface_bus[${i}]}: ${interface_name[${i}]}")                                                   # Interface Dialog Name
-interface_dialog_selection+=("${interfaces[${i}]}" "${interface_name[${i}]}" "off")                                                                # Interface Dialog Name
+  # Interface Dialog Name
+interface_dialog_name+=("${interfaces[${i}]}" "${interface_bus[${i}]}: ${interface_name[${i}]}")
+  # Interface Dialog Name
+interface_dialog_selection+=("${interfaces[${i}]}" "${interface_name[${i}]}" "off")
 done
 
 
@@ -63,8 +74,8 @@ selected_interface=$(dialog --backtitle "DHCP Setup - Interface Selection" \
 #export selected_interface=($(echo $selected_interface_dialog | tr " " ,)) # Add , between interfaces if multiple
 #echo "selected interfaces:" $selected_interface # Echo for debugging
 
-# Fix back IFS
-IFS=$SAVEIFS
+    # Fix back IFS
+    IFS=$SAVEIFS
 
 #echo INTERFACES INDEXES: ${!interfaces[@]}
 #echo INTERFACES LIST: ${interfaces[@]}
@@ -92,11 +103,19 @@ setup_ip
 
 setup_ip () {
 
-# TODO - if on ubuntu detect if using netplan and remove this crap
+# TODO - if on ubuntu detect if using netplan and remove it + install ifupdown
 
 # Detect Current IP address and add message.
 
+selected_interface_bridge=$(brctl show | grep "${selected_interface}" | awk '{print $1}')
+
+if [ ! -z "${selected_interface_bridge}" ] ; then
+bridge_desc="Bridge has been detected on selected interface. Using bridge settings detection"
+selected_interface_old_ip=$(ifconfig ${selected_interface_bridge} | grep "inet " | awk '{print $2}')
+else
 selected_interface_old_ip=$(ifconfig ${selected_interface} | grep "inet " | awk '{print $2}')
+bridge_desc=""
+fi
 
 #echo "Selected interface old ip : ${selected_interface_old_ip}"
 
@@ -117,22 +136,16 @@ fi
 
 # Detect running dhcp server and setup gateway ip if current exists - run as seperate process (&)
 
-#apt install dhcpcd5
-
-
-#dhcpcd -T eno1
-
-#dhcpcd -T eno1 | grep routers | cut -d "=" -f 2 | tr \' " " | xargs
-
+if [ ! -z "${selected_interface_bridge}" ] ; then
+dhcpcd -T ${selected_interface_bridge} &> /anydeploy/tmp/dhcp_discover.$$ &
+else
 dhcpcd -T ${selected_interface} &> /anydeploy/tmp/dhcp_discover.$$ &
-
+fi
 
 # Display dhcp detection script (takes 25 seconds for nmap to detect if missing)
 # TODO - make process shorter if dhcp_discover already contains variables
 
 for i in $(seq 0 1 100) ; do sleep 0.25; echo $i | dialog --backtitle "DHCP Setup - Detecting Current DHCP settings on ${selected_interface}" --gauge "Detecting your current dhcp settings (ip address, subnet, gateway etc.)" 10 70 0; done
-
-
 
 # If dhcp server installed detect current ip addresses
 
@@ -197,7 +210,7 @@ fi
 
 
 dialog --backtitle "DHCP Setup - IP Settings for ${selected_interface}" --title "Dialog - IP settings for ${selected_interface}" \
---form "\n${ipaddr_desc}\n${gateway_desc}:" 25 60 16 \
+--form "\n${bridge_desc}\n${ipaddr_desc}\n${gateway_desc}:" 25 60 16 \
 "Server IP Address:" 1 1 "${proposed_ip}" 1 25 25 30 \
 "Subnet Mask:" 2 1 "${proposed_subnet}" 2 25 25 30 \
 "DHCP Start IP:" 3 1 "${proposed_dhcp_start}" 3 25 25 30 \
