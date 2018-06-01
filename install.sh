@@ -240,7 +240,7 @@ clear
 
 # Declare dependencies
 
-      deps=( dialog debootstrap sudo dmidecode lspci cups net-tools nmap )
+      deps=( dialog debootstrap sudo dmidecode lspci cups net-tools bridge-utils dhcpcd5 )
 
 # Check dependencies
 

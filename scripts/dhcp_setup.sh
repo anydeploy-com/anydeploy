@@ -174,7 +174,7 @@ else
     dns_server2="8.8.4.4"
 fi
 
-# TODO detect bridged interfaces
+# TODO detect bridged interfaces)
 
 # brctl show | grep ${selected_interface}
 
@@ -243,17 +243,15 @@ echo "TBD"
 
       # make copy (.anybackup)
 
-      # find bridges connected to selected interface
+      cp /etc/network/interfaces /etc/network/interfaces.anybackup
 
-      # remove bridges connected to selected interface until first space
+      # remove interface and bridges
 
-      # remove selected interface until first space
+      remove_interface ${selected_interface}
 
       # add interface lines (don't overwrite)
 
-      # add vmbr0 lines (don't overwrite)
-
-      # remove unecessary spaces?
+      # add bridge (vmbr0) lines (don't overwrite)
 
       # restart networking
 
