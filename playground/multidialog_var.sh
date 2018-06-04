@@ -8,13 +8,16 @@ dns_server2=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 
 dns_server3=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 10 60 2 "DNS Server 3:" 1 1 "DNS Server 3" 1 25 25 15 2>&1 >/dev/tty)
 domain=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 10 60 2 "Domain:" 1 1 "Domain" 1 25 25 15 2>&1 >/dev/tty)
 
-echo ${ip_address[@]}
-echo ${subnet_mask[@]}
-echo ${gateway[@]}
-echo ${dns_server1[@]}
-echo ${dns_server2[@]}
-echo ${dns_server3[@]}
-echo ${domain[@]}
+echo "ip_address: ${ip_address[@]}"
+echo "subnet_mask: ${subnet_mask[@]}"
+echo "gateway: ${gateway[@]}"
+echo "dns_server1: ${dns_server1[@]}"
+echo "dns_server2: ${dns_server2[@]}"
+echo "dns_server3: ${dns_server3[@]}"
+echo "domain: ${domain[@]}"
+
+
+
 sleep 1
 
 

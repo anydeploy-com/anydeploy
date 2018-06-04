@@ -112,17 +112,14 @@ fi
 
 # Get values after form is processed
 
-ip_address=$(dialog --backtitle "DHCP Setup - Interface Selection" --form "title" 25 60 16 "IP address:" 1 1 "${proposed_ip}" 1 25 25 30 2>&1 >/dev/tty)
+ip_address=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 10 60 2 "IP Address:" 1 1 "${proposed_ip}" 1 25 25 15 2>&1 >/dev/tty)
+subnet_mask=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 10 60 2 "Subnet Mask:" 1 1 "${proposed_subnet}" 1 25 25 15 2>&1 >/dev/tty)
+gateway=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 10 60 2 "Gateway:" 1 1 "${proposed_gateway}" 1 25 25 15 2>&1 >/dev/tty)
+dns_server1=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 10 60 2 "DNS Server 1:" 1 1 "${dns_server1}" 1 25 25 15 2>&1 >/dev/tty)
+dns_server2=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 10 60 2 "DNS Server 2:" 1 1 "${dns_server2}" 1 25 25 15 2>&1 >/dev/tty)
+dns_server3=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 10 60 2 "DNS Server 3:" 1 1 "${dns_server3}" 1 25 25 15 2>&1 >/dev/tty)
+domain=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 10 60 2 "Domain:" 1 1 "${domain}" 1 25 25 15 2>&1 >/dev/tty)
 
-#ip_address=$(dialog --backtitle "DHCP Setup - IP Settings for ${selected_interface}" --title "Dialog - IP settings for ${selected_interface}" --form "\n${bridge_desc}\n${ipaddr_desc}\n${gateway_desc}:" 25 60 16 "Server IP Address:" 1 1 "${proposed_ip}" 1 25 25 30)
-#subnet_mask=$(dialog --backtitle "DHCP Setup - IP Settings for ${proposed_subnet}" --title "Dialog - IP settings for ${proposed_subnet}" --form "\n${bridge_desc}\n${ipaddr_desc}\n${gateway_desc}:" 25 60 16 "Server IP Address:" 1 1 "${proposed_subnet}" 1 25 25 30)
-dhcp_startip=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 3 | tail -n 1)
-dhcp_endip=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 4 | tail -n 1)
-gateway=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 5 | tail -n 1)
-dns_server1="$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 6 | tail -n 1)"
-dns_server2="$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 7 | tail -n 1)"
-dns_server3="$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 8 | tail -n 1)"
-domain="$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 9 | tail -n 1)"
 
 
 
