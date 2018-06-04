@@ -101,7 +101,7 @@ OPTIONS () {
 
 }
 
-IP_ADDRESS () {
+SELECT_INTERFACE () {
   . /anydeploy/scripts/setup_interface.sh
   MAIN_MENU
 }
