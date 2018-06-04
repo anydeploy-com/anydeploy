@@ -3,11 +3,47 @@
 . /anydeploy/includes/functions.sh
 
 
+dhcpsetup () {
+  dialog --backtitle "anydeploy - DHCP SETUP" --menu "DHCP SETUP - select task:" 20 55 15 \
+    RUNSERVER "Setup DHCP Server (ISC DHCP SERVER)" \
+    DNSMASQ "Use DHCP Proxy (dnsmasq)" \
+    USEOWN "Use my current dhcp server" \
+    OPTIONS "Go Back to Options Menu" 2> tmp/options_list.$$
+
+    options_list=`cat tmp/options_list.$$`
+
+    $options_list
+
+}
+
+
+RUNSERVER () {
+
+install_isc_dhcp
+configure_isc_dhcp
+}
+
+
 install_isc_dhcp () {
 
   # TODO - check if already installed and prompt what to do
 
-        apt-get install isc-dhcp-server -y
+echo "ip_address: ${ip_address}"
+echo "subnet_mask: ${subnet_mask}"
+echo "dhcp_startip: ${dhcp_startip}"
+echo "dhcp_endip: ${dhcp_endip}"
+echo "gateway: ${gateway}"
+echo "dns_server1: ${dns_server1}"
+echo "dns_server2: ${dns_server2}"
+echo "dns_server3: ${dns_server3}"
+echo "domain: ${domain}"
+
+sleep 20
+
+#        apt-get install isc-dhcp-server -y
+
+
+
 
 configure_isc_dhcp
 }
@@ -80,4 +116,4 @@ cleanup () {
 }
 
 
-select_interface
+dhcpsetup

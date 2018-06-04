@@ -2,12 +2,6 @@
 
 . /anydeploy/includes/functions.sh
 
-# List interfaces
-
-# GET IP
-
-#hostname -I
-
 
 select_interface () {
 

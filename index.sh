@@ -96,6 +96,7 @@ OPTIONS () {
     MAIN_MENU "Go Back to Main Menu" 2> tmp/options_list.$$
 
     options_list=`cat tmp/options_list.$$`
+    rm /anydeploy/tmp/options_list.$$
 
     $options_list
 
@@ -119,6 +120,7 @@ DHCPSERVER () {
 
 
 SHELL () {
+  cleanup
   exit 1
 }
 
@@ -154,8 +156,15 @@ $menu_selection
 
 }
 
+cleanup () {
+  echo "cleaning up"
+  rm /anydeploy/tmp/template_list.$$
+}
+
+
 #echo "Template filenames: ${template_filenames[0]}"
 #echo "Template names: ${template_names[0]}"
 #echo "Template List: ${template_list[1]}"
 
 MAIN_MENU
+cleanup
