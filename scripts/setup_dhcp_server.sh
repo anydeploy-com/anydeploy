@@ -26,7 +26,16 @@ configure_isc_dhcp
 
 install_isc_dhcp () {
 
+
+  dhcp_startip=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 10 60 2 "DHCP Start IP:" 1 1 "${proposed_dhcp_start}" 1 25 25 15 2>&1 >/dev/tty)
+  dhcp_endip=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 10 60 2 "DHCP End IP:" 1 1 "${proposed_dhcp_end}" 1 25 25 15 2>&1 >/dev/tty)
+
+
   # TODO - check if already installed and prompt what to do
+
+  proposed_dhcp_start="${subnet_pre}.10"
+  proposed_dhcp_end="${subnet_pre}.250"
+
 
 echo "ip_address: ${ip_address}"
 echo "subnet_mask: ${subnet_mask}"
@@ -111,8 +120,6 @@ cleanup
 
 cleanup () {
   echo "cleaning up"
-  rm /anydeploy/tmp/dhcp_discover.$$
-  rm /anydeploy/tmp/ip_settings_form.$$
 }
 
 
