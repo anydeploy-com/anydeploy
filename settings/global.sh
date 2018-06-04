@@ -2,6 +2,7 @@
 
 # Networking
 default_interface=""
+default_bridge=""
 
 # Directories
 main_dir_default="/anydeploy" # "default" or "<path>"

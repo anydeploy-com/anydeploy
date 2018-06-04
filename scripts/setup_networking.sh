@@ -69,6 +69,9 @@ selected_interface=$(dialog --backtitle "DHCP Setup - Interface Selection" \
                     if test $? -eq 0
                     then
                        echo "ok pressed"
+                       # save to global config
+                       sed -e "/default_interface=/ s/=.*/=\"${selected_interface}\"/" global.sh
+                       sed -e "/default_bridge=/ s/=.*/=\"vmbr1\"/" global.sh
                     else
                        echo "cancel pressed"
                        cleanup
@@ -298,7 +301,7 @@ configure_interface () {
       # overwrite with selected dns servers
 
 
-# TODO Verify if interface is up and running otherwise print error and prompt what to do       
+# TODO Verify if interface is up and running otherwise print error and prompt what to do
 
 # TODO Add interface and bridge name to global config file
 
