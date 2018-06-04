@@ -89,7 +89,7 @@ TASKS () {
 
 OPTIONS () {
   dialog --backtitle "anydeploy - Settings Menu" --menu "Settings Menu - select task:" 20 55 15 \
-    SELECTINTERFACE "Setup Networking" \
+    INTERFACE "Select Interface" \
     IPADDRESS "Setup Networking" \
     DHCPSERVER "DHCP Server Setup" \
     GLOBAL "Global Settings" \
@@ -101,7 +101,7 @@ OPTIONS () {
 
 }
 
-SELECTINTERFACE () {
+INTERFACE () {
   . /anydeploy/scripts/setup_interface.sh
   OPTIONS
 }
