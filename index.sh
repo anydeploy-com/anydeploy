@@ -89,8 +89,8 @@ TASKS () {
 
 OPTIONS () {
   dialog --backtitle "anydeploy - Settings Menu" --menu "Settings Menu - select task:" 20 55 15 \
-    SELECT_INTERFACE "Setup Networking" \
-    IP_ADDRESS "Setup Networking" \
+    SELECTINTERFACE "Setup Networking" \
+    IPADDRESS "Setup Networking" \
     DHCPSERVER "DHCP Server Setup" \
     GLOBAL "Global Settings" \
     MAIN_MENU "Go Back to Main Menu" 2> tmp/options_list.$$
@@ -101,20 +101,20 @@ OPTIONS () {
 
 }
 
-SELECT_INTERFACE () {
+SELECTINTERFACE () {
   . /anydeploy/scripts/setup_interface.sh
-  MAIN_MENU
+  OPTIONS
 }
 
-IP_ADDRESS () {
+IPADDRESS () {
   . /anydeploy/scripts/setup_ipaddress.sh
-  MAIN_MENU
+  OPTIONS
 }
 
 
 DHCPSERVER () {
   . /anydeploy/scripts/setup_dhcp_server.sh
-  MAIN_MENU
+  OPTIONS
 }
 
 

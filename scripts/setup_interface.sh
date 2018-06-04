@@ -81,14 +81,19 @@ selected_interface=$(dialog --backtitle "DHCP Setup - Interface Selection" \
     # Fix back IFS
     IFS=$SAVEIFS
 
-}
-
 cleanup
 
 }
 
+
+
+
+
+
+
 cleanup () {
   echo "cleaning up"
+  interface_dialog_name=()
   rm /anydeploy/tmp/dhcp_discover.$$
   rm /anydeploy/tmp/ip_settings_form.$$
 }
