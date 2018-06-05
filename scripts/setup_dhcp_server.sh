@@ -19,39 +19,42 @@ dhcpsetup () {
 
 RUNSERVER () {
 
-install_isc_dhcp
-configure_isc_dhcp
+setup_dhcp_start_end
 }
 
 
-install_isc_dhcp () {
+setup_dhcp_start_end () {
+
+#  echo "ip_address: ${ip_address}"
+#  echo "subnet_mask: ${subnet_mask}"
+#  echo "dhcp_startip: ${dhcp_startip}"
+#  echo "dhcp_endip: ${dhcp_endip}"
+#  echo "gateway: ${gateway}"
+#  echo "dns_server1: ${dns_server1}"
+#  echo "dns_server2: ${dns_server2}"
+#  echo "dns_server3: ${dns_server3}"
+#  echo "domain: ${domain}"
+#
+#  sleep 10
 
 
   dhcp_startip=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 10 60 2 "DHCP Start IP:" 1 1 "${proposed_dhcp_start}" 1 25 25 15 2>&1 >/dev/tty)
   dhcp_endip=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 10 60 2 "DHCP End IP:" 1 1 "${proposed_dhcp_end}" 1 25 25 15 2>&1 >/dev/tty)
 
 
-  # TODO - check if already installed and prompt what to do
+install_isc_dhcp
 
-  proposed_dhcp_start="${subnet_pre}.10"
-  proposed_dhcp_end="${subnet_pre}.250"
-
-
-echo "ip_address: ${ip_address}"
-echo "subnet_mask: ${subnet_mask}"
-echo "dhcp_startip: ${dhcp_startip}"
-echo "dhcp_endip: ${dhcp_endip}"
-echo "gateway: ${gateway}"
-echo "dns_server1: ${dns_server1}"
-echo "dns_server2: ${dns_server2}"
-echo "dns_server3: ${dns_server3}"
-echo "domain: ${domain}"
-
-sleep 20
-
-#        apt-get install isc-dhcp-server -y
+}
 
 
+
+install_isc_dhcp () {
+
+# Start Installation
+
+# TODO - check if installed already and prompt to reinstall if installed
+
+apt-get install isc-dhcp-server -y
 
 
 configure_isc_dhcp
@@ -70,7 +73,7 @@ echo "TBD"
 
         # replace interface (ipv4)
 
-        sed -i -e "/INTERFACESv4=/ s/=.*/=vmbr1/" /etc/default/isc-dhcp-server # TODO - USE DYNAMIC BRIDGE
+        sed -i -e "/INTERFACESv4=/ s/=.*/=anybr0/" /etc/default/isc-dhcp-server # TODO - USE DYNAMIC BRIDGE
 
 
   # /etc/dhcp/dhcpd.conf
@@ -94,28 +97,39 @@ echo "TBD"
 
 
 cat >"/etc/dhcp/dhcpd.conf" << EOF
-        option domain-name "${domain}";
-        option domain-name-servers ${dns_server1}, ${dns_server2};
-        # Set up our desired subnet:
-        subnet 192.168.1.0 netmask ${subnet_mask} {
-            range ${dhcp_startip} ${dhcp_endip};
-            option subnet-mask ${subnet_mask};
-            option broadcast-address 192.168.1.255;
-            option routers ${gateway};
-            option domain-name-servers home;
-        }
-        default-lease-time 600;
-        max-lease-time 7200;
-        # Show that we want to be the only DHCP server in this network:
-        authoritative;
+option domain-name "anydeploy";
+# Use Google public DNS server (or use faster values that your internet provider gave you!):
+option domain-name-servers 8.8.8.8, 8.8.4.4;
+# Set up our desired subnet:
+subnet 192.168.1.0 netmask 255.255.255.0 {
+    range 192.168.1.101 192.168.1.254;
+    option subnet-mask 255.255.255.0;
+    option broadcast-address 192.168.1.255;
+    option routers 192.168.1.254;
+    option domain-name-servers 8.8.8.8, 8.8.4.4;
+}
+default-lease-time 600;
+max-lease-time 7200;
+# Show that we want to be the only DHCP server in this network:
+authoritative;
 EOF
 
         # restart isc dhcp
 
         service isc-dhcp-server restart
 
-cleanup
+        # Enable server
 
+        systemctl enable isc-dhcp-server
+
+restart_networking
+
+}
+
+
+restart_networking () {
+  service networking restart
+  cleanup
 }
 
 cleanup () {

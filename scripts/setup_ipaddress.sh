@@ -30,8 +30,8 @@ if [ ! -z "${selected_interface_old_ip}" ]; then
 else
 #  echo "no ip found - usin/etc/default/isc-dhcp-serverg default as proposed ip"
   proposed_ip="192.168.1.254"
-  proposed_dhcp_start="192.168.1.10"
-  proposed_dhcp_end="192.168.1.200"
+#  proposed_dhcp_start="192.168.1.10"
+#  proposed_dhcp_end="192.168.1.200"
   ipaddr_desc="Your system didn't have any IP address attached on selected interface, using defaults"
 fi
 
@@ -44,10 +44,25 @@ else
 dhcpcd -T ${selected_interface} &> /anydeploy/tmp/dhcp_discover.$$ &
 fi
 
+pid=$(ps aux | grep dhcpcd -T | grep -v grep | awk '{print $2}')
+
+
+i=0
+while kill -0 $pid 2>/dev/null
+do
+  i=$(( (i+1) %4 ))
+  #printf " - Detecting Current DHCP Settings\r${spin:$i:1}"
+  for i in $(seq 0 1 100) ; do sleep 0.05; echo $i | dialog --backtitle "DHCP Setup - Detecting Current DHCP settings on ${selected_interface}" --gauge "Detecting your current dhcp settings (ip address, subnet, gateway etc.)" 10 70 0; done
+done
+
+
+
+
 # Display dhcp detection script (wait 25 seconds before declare it missing)
 # TODO - make process shorter if dhcp_discover already contains variables
 
-for i in $(seq 0 1 100) ; do sleep 0.25; echo $i | dialog --backtitle "DHCP Setup - Detecting Current DHCP settings on ${selected_interface}" --gauge "Detecting your current dhcp settings (ip address, subnet, gateway etc.)" 10 70 0; done
+
+#for i in $(seq 0 1 100) ; do sleep 0.25; echo $i | dialog --backtitle "DHCP Setup - Detecting Current DHCP settings on ${selected_interface}" --gauge "Detecting your current dhcp settings (ip address, subnet, gateway etc.)" 10 70 0; done
 
 # If dhcp server installed detect current ip addresses
 
@@ -59,7 +74,7 @@ if [ ! -z "${current_gateway_ip}" ]; then
 #    echo "Current Gateway IP Address: ${current_gateway_ip}"
     proposed_gateway="${current_gateway_ip}"
     proposed_subnet=$(cat /anydeploy/tmp/dhcp_discover.$$ | grep "new_subnet_mask" | cut -d "=" -f 2 | tr "'" " " | xargs)
-    subnet_pre=$(echo ${current_gateway_ip} | cut -d "." -f 1,2,3)
+    subnet_pre=$(echo ${proposed_ip} | cut -d "." -f 1,2,3)
     proposed_dhcp_start="${subnet_pre}.10"
     proposed_dhcp_end="${subnet_pre}.250"
     gateway_desc="Gateway found on selected interface, using same as default"
@@ -120,6 +135,62 @@ dns_server2=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 
 dns_server3=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 10 60 2 "DNS Server 3:" 1 1 "${dns_server3}" 1 25 25 15 2>&1 >/dev/tty)
 domain=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 10 60 2 "Domain:" 1 1 "${domain}" 1 25 25 15 2>&1 >/dev/tty)
 
+
+if [ -z "${proposed_gateway}" ]; then
+  dialog --title "Postrouting" \
+  --backtitle "anydeploy No gateway defined - enable postrouting" \
+  --yesno "No gateway has been defined - would you like to enable postrouting?\n\n This will enable internet access on ${selected_interface} interface" 10 70
+
+  # Get exit status
+  # 0 means user hit [yes] button.
+  # 1 means user hit [no] button.
+  # 255 means user hit [Esc] key.
+  response=$?
+  case $response in
+     0) echo "Enabling postrouting"
+      # Enable forwarding
+      sysctl -w net.ipv4.ip_forward=1
+      # Save Changes for pernament
+      echo "1" > /proc/sys/net/ipv4/ip_forward
+      # Uncomment /etc/sysctl.conf # net.ipv4.ip_forward=1
+      sed -i '/net.ipv4.ip_forward/s/^#//g' /etc/sysctl.conf
+      # Live Apply changes
+      sysctl -p
+      # Detect internet enabled interface
+      net_iface=$(route | grep "default" | awk '{print $8}')
+
+
+      # IPTABLES
+
+      #Install iptables-persistent
+
+
+
+      apt-get install iptables-persistent -y
+      rm /etc/iptables/rules.v4
+      touch /etc/iptables/rules.v4
+cat >"/etc/iptables/rules.v4" << EOF
+*nat
+:PREROUTING ACCEPT [3448:701197]
+:INPUT ACCEPT [2617:608016]
+:OUTPUT ACCEPT [635:137144]
+:POSTROUTING ACCEPT [180:14711]
+-A POSTROUTING -o ${net_iface} -j MASQUERADE
+COMMIT
+*filter
+:INPUT ACCEPT [44701:49666478]
+:FORWARD ACCEPT [244334:236658033]
+:OUTPUT ACCEPT [28299:3566120]
+COMMIT
+EOF
+      # Apply iptables rules
+      iptables-apply /etc/iptables/rules.v4
+
+      ;;
+     1) echo "Postrouting not enabled - skipping";;
+     255) echo "[ESC] Postrouting not enabled - skipping";;
+  esac
+fi
 
 
 
@@ -206,8 +277,8 @@ configure_interface () {
 
       # TODO i1 add empty line only if one isn't there
       echo "" >> /etc/network/interfaces
-      echo "auto vmbr1" >> /etc/network/interfaces
-      echo "iface vmbr1 inet static" >> /etc/network/interfaces # TODO i5 replace vmbr1 with dynamic interface
+      echo "auto anybr0" >> /etc/network/interfaces
+      echo "iface anybr0 inet static" >> /etc/network/interfaces # TODO i5 replace vmbr1 with dynamic interface
       echo "${TAB}address ${proposed_ip}" >> /etc/network/interfaces
       echo "${TAB}netmask ${proposed_subnet}" >> /etc/network/interfaces
       if [ ! -z "${proposed_gateway}" ]; then

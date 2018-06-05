@@ -65,7 +65,7 @@ selected_interface=$(dialog --backtitle "DHCP Setup - Interface Selection" \
                        echo "ok pressed"
                        # save to global config
                        sed -e "/default_interface=/ s/=.*/=\"${selected_interface}\"/" global.sh
-                       sed -e "/default_bridge=/ s/=.*/=\"vmbr1\"/" global.sh
+                       sed -e "/default_bridge=/ s/=.*/=\"anybr0\"/" global.sh
                     else
                        echo "cancel pressed"
                        cleanup
