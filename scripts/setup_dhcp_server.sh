@@ -97,21 +97,59 @@ echo "TBD"
 
 
 cat >"/etc/dhcp/dhcpd.conf" << EOF
-option domain-name "anydeploy";
-# Use Google public DNS server (or use faster values that your internet provider gave you!):
-option domain-name-servers 8.8.8.8, 8.8.4.4;
-# Set up our desired subnet:
-subnet 192.168.1.0 netmask 255.255.255.0 {
-    range 192.168.1.101 192.168.1.254;
-    option subnet-mask 255.255.255.0;
-    option broadcast-address 192.168.1.255;
-    option routers 192.168.1.254;
-    option domain-name-servers 8.8.8.8, 8.8.4.4;
-}
-default-lease-time 600;
-max-lease-time 7200;
-# Show that we want to be the only DHCP server in this network:
+option space PXE;
+option PXE.mtftp-ip    code 1 = ip-address;
+option PXE.mtftp-cport code 2 = unsigned integer 16;
+option PXE.mtftp-sport code 3 = unsigned integer 16;
+option PXE.mtftp-tmout code 4 = unsigned integer 8;
+option PXE.mtftp-delay code 5 = unsigned integer 8;
+option arch code 93 = unsigned integer 16; # RFC4578
+
+use-host-decl-names on;
+ddns-update-style interim;
+ignore client-updates;
+next-server 192.168.1.254;
 authoritative;
+
+subnet 192.168.1.0 netmask 255.255.255.0 {
+    option subnet-mask 255.255.255.0;
+    range dynamic-bootp 192.168.1.10 192.168.1.254;
+    default-lease-time 21600;
+    max-lease-time 43200;
+    option domain-name-servers 8.8.8.8, 8.8.4.4;
+    option routers 192.168.1.254;
+
+    class "UEFI-32-1" {
+    match if substring(option vendor-class-identifier, 0, 20) = "PXEClient:Arch:00006";
+    filename "syslinux32.efi";
+    }
+
+    class "UEFI-32-2" {
+    match if substring(option vendor-class-identifier, 0, 20) = "PXEClient:Arch:00002";
+     filename "syslinux32.efi";
+    }
+
+    class "UEFI-64-1" {
+    match if substring(option vendor-class-identifier, 0, 20) = "PXEClient:Arch:00007";
+     filename "syslinux.efi";
+    }
+
+    class "UEFI-64-2" {
+    match if substring(option vendor-class-identifier, 0, 20) = "PXEClient:Arch:00008";
+    filename "syslinux.efi";
+    }
+
+    class "UEFI-64-3" {
+    match if substring(option vendor-class-identifier, 0, 20) = "PXEClient:Arch:00009";
+     filename "syslinux.efi";
+    }
+
+    class "Legacy" {
+    match if substring(option vendor-class-identifier, 0, 20) = "PXEClient:Arch:00000";
+    filename "pxelinux.0";
+    }
+
+}
 EOF
 
         # restart isc dhcp
