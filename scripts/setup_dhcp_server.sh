@@ -1,7 +1,7 @@
 #!/bin/bash
 
 . /anydeploy/includes/functions.sh
-
+. /anydeploy/settings/global.sh
 
 dhcpsetup () {
   dialog --backtitle "anydeploy - DHCP SETUP" --menu "DHCP SETUP - select task:" 20 55 15 \

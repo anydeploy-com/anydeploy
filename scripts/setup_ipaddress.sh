@@ -1,6 +1,7 @@
 #!/bin/bash
 
 . /anydeploy/includes/functions.sh
+. /anydeploy/settings/global.sh
 
 setup_ip () {
 
