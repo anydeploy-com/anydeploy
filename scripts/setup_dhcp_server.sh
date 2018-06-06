@@ -60,7 +60,7 @@ apt-get install isc-dhcp-server -y
 configure_isc_dhcp
 }
 
-
+sudo cp -r /usr/lib/syslinux/modules/bios /anydeploy/tftp/boot/isolinux
 configure_isc_dhcp () {
 
 echo "TBD"
