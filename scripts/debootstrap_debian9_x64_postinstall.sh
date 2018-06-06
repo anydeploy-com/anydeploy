@@ -64,6 +64,7 @@ touch /postinstall_log.txt
 echo "postinstall finished" >> /postinstall_log.txt
 TZ='Europe/London'; export TZ
 update-initramfs -u
+echo "root:anydeploy" | chpasswd
 EOF
   # Make it executable
   chmod +x ${ANYNET_DIR}/chrootpostinstall.sh
