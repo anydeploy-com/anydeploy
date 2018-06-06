@@ -59,7 +59,7 @@ apt-get install locales -y
 locale-gen en_GB.UTF-8
 #dpkg-reconfigure locales
 apt update -y && apt upgrade -y
-apt install -y nfs-common initramfs-tools net-tools
+apt install -y nfs-common initramfs-tools net-tools pciutils usbutils
 touch /postinstall_log.txt
 echo "postinstall finished" >> /postinstall_log.txt
 TZ='Europe/London'; export TZ
