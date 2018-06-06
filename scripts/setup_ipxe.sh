@@ -11,8 +11,10 @@ mkdir /anydeploy/sources
 
 
 # Clone ipxe
+touch /anydeploy/sources/.gitignore
+echo "*" > "/anydeploy/sources/.gitignore"
 
-git clone git://git.ipxe.org/ipxe.git
+git clone git://git.ipxe.org/ipxe.git /anydeploy/sources/ipxe
 
 # Install building deps
 
