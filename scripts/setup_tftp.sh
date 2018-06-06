@@ -29,33 +29,48 @@ TFTP_ADDRESS="0.0.0.0:69"
 TFTP_OPTIONS="-s"
 EOF
 
+# SETUP BIOS
 
-# Copy PXELINUX BIOS
+          # Copy PXELINUX BIOS
 
-mkdir /anydeploy/tftp/bios
-cp /usr/lib/PXELINUX/pxelinux.0 /anydeploy/tftp/bios/
-cp /usr/lib/syslinux/modules/bios/ldlinux.c32 /anydeploy/tftp/bios/
+          mkdir /anydeploy/tftp/bios
+          cp /usr/lib/PXELINUX/pxelinux.0 /anydeploy/tftp/bios/
+          cp /usr/lib/syslinux/modules/bios/ldlinux.c32 /anydeploy/tftp/bios/
 
-# Copy UEFI{32,64} Syslinux
+          # Mkdir bios
 
-#mkdir /anydeploy/tftp/{efi32,efi64}
-#cp /usr/lib/SYSLINUX.EFI/efi32/syslinux.efi /anydeploy/tftp/efi32/syslinux32.efi
-#cp /usr/lib/syslinux/modules/efi32/ldlinux.e32 /anydeploy/tftp/efi32/
-#cp /usr/lib/SYSLINUX.EFI/efi64/syslinux.efi /anydeploy/tftp/efi64/syslinux.efi
-#cp /usr/lib/syslinux/modules/efi64/ldlinux.e64 /anydeploy/tftp/efi64/
+          mkdir /anydeploy/tftp/bios
+
+          #mkdir pxelinux.cfg
+
+          mkdir /anydeploy/tftp/bios/pxelinux.cfg
+
+          # Create Config File
+
+          touch /anydeploy/tftp/bios/pxelinux.cfg/default
 
 
-# Mkdir bios
+          # Copy Libraries for BIOS
 
-mkdir /anydeploy/tftp/bios
+          cp /usr/lib/syslinux/modules/bios/menu.c32 /anydeploy/tftp/bios/
+          cp /usr/lib/syslinux/modules/bios/libutil.c32 /anydeploy/tftp/bios/
+          cp /usr/lib/syslinux/modules/bios/libcom32.c32 /anydeploy/tftp/bios/
+          cp /usr/lib/syslinux/modules/bios/vesamenu.c32 /anydeploy/tftp/bios/
 
-#mkdir pxelinux.cfg
 
-mkdir /anydeploy/tftp/bios/pxelinux.cfg
+# SETUP EFI32
 
-# Create Config File
+# TODO
 
-touch /anydeploy/tftp/bios/pxelinux.cfg/default
+
+
+# SETUP EFI64
+
+# TODO
+
+
+
+
 
 
 # Add config
@@ -73,25 +88,6 @@ LABEL anyDeploy
         kernel images/pmagic/bzImage
         append noapic initrd=images/pmagic/initrd.gz root=/dev/ram0 init=/linuxrc ramdisk_size=100000
 EOF
-
-
-
-# Copy Libraries for BIOS
-
-cp /usr/lib/syslinux/modules/bios/menu.c32 /anydeploy/tftp/bios/
-cp /usr/lib/syslinux/modules/bios/libutil.c32 /anydeploy/tftp/bios/
-cp /usr/lib/syslinux/modules/bios/libcom32.c32 /anydeploy/tftp/bios/
-cp /usr/lib/syslinux/modules/bios/vesamenu.c32 /anydeploy/tftp/bios/
-
-
-# Copy Libraries for EFI32
-
-# TODO
-
-# Copy Libraries for EFI64
-
-# TODO
-
 
 
 # Restart TFTPD

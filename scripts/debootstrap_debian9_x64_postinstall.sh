@@ -11,10 +11,10 @@ nameserver 8.8.8.8
 nameserver 8.8.4.4
 EOF
   # Fix Locales
-  export LANGUAGE=”en_GB.UTF-8″
-  echo 'LANGUAGE=”en_GB.UTF-8"' >> "${ANYNET_DIR}/etc/default/locale"
-  echo 'LC_ALL=”en_GB.UTF-8"' >> "${ANYNET_DIR}/etc/default/locale"
-  echo 'LC_ALL=”en_GB.UTF-8"' >> "${ANYNET_DIR}/etc/environment"
+  export LANGUAGE="en_GB.UTF-8"
+  echo "LANGUAGE=\"en_GB.UTF-8\"" >> "${ANYNET_DIR}/etc/default/locale"
+  echo "LC_ALL=\"en_GB.UTF-8\"" >> "${ANYNET_DIR}/etc/default/locale"
+  echo "LC_ALL=\"en_GB.utf8\"" >> "${ANYNET_DIR}/etc/environment"
   # Setup mounts (fstab)
   rm "${ANYNET_DIR}/etc/fstab"
   touch "${ANYNET_DIR}/etc/fstab"
@@ -30,8 +30,18 @@ hostname anylive_x64
 EOF
   # Disable installation of recommended packages
   echo 'APT::Install-Recommends "false";' >"${ANYNET_DIR}/etc/apt/apt.conf.d/50norecommends"
-  # Add SSH key
-  # TODO
+
+  # Change initramfs options to be netboot compatible
+
+      #change MODULES=netboot in chrooted "/etc/initramfs-tools/initramfs.conf"
+
+      sed -i "/MODULES=/ s/=.*/=netboot/" ${ANYNET_DIR}/etc/initramfs-tools/initramfs.conf
+
+
+      #add BOOT=nfs to chrooted "/etc/initramfs-tools/initramfs.conf"
+
+      echo "BOOT=nfs" >> ${ANYNET_DIR}/etc/initramfs-tools/initramfs.conf
+
   # Configure Networking
 
   # Run chroot tasks
@@ -43,14 +53,17 @@ EOF
   # Add content to it
   # TODO - echo output to postinstall.log and verify afterwards
   cat >"${ANYNET_DIR}/chrootpostinstall.sh" << EOF
+#!/bin/bash
 hostnamectl set-hostname anylive64
-locale-gen
-dpkg-reconfigure locales
+apt-get install locales -y
+locale-gen en_GB.UTF-8
+#dpkg-reconfigure locales
 apt update -y && apt upgrade -y
 apt install -y nfs-common initramfs-tools
 touch /postinstall_log.txt
 echo "postinstall finished" >> /postinstall_log.txt
 TZ='Europe/London'; export TZ
+update-initramfs -u
 EOF
   # Make it executable
   chmod +x ${ANYNET_DIR}/chrootpostinstall.sh
@@ -70,6 +83,3 @@ EOF
   # TODO
   # Add SSH KEY
   # TODO
-  # Change initramfs options to be netboot compatible
-  # TODO
-  # rebuild initramfs
