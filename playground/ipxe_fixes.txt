@@ -1,0 +1,9 @@
+# ENABLE FRAMEBUFFER
+(fix resolution etc)
+
+
+//#define CONSOLE_FRAMEBUFFER     /* Graphical framebuffer console */
+
+to
+
+#define CONSOLE_FRAMEBUFFER     /* Graphical framebuffer console */

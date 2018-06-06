@@ -121,33 +121,57 @@ subnet 192.168.1.0 netmask 255.255.255.0 {
 
     class "UEFI-32-1" {
     match if substring(option vendor-class-identifier, 0, 20) = "PXEClient:Arch:00006";
-    filename "syslinux32.efi";
+    filename "efi32/syslinux32.efi";
     }
 
     class "UEFI-32-2" {
     match if substring(option vendor-class-identifier, 0, 20) = "PXEClient:Arch:00002";
-     filename "syslinux32.efi";
+     filename "efi32/syslinux32.efi";
     }
 
     class "UEFI-64-1" {
     match if substring(option vendor-class-identifier, 0, 20) = "PXEClient:Arch:00007";
-     filename "syslinux.efi";
+     filename "ipxe.efi";
     }
 
     class "UEFI-64-2" {
     match if substring(option vendor-class-identifier, 0, 20) = "PXEClient:Arch:00008";
-    filename "syslinux.efi";
+    filename "ipxe.efi";
     }
 
     class "UEFI-64-3" {
     match if substring(option vendor-class-identifier, 0, 20) = "PXEClient:Arch:00009";
-     filename "syslinux.efi";
+     filename "ipxe.efi";
     }
 
     class "Legacy" {
     match if substring(option vendor-class-identifier, 0, 20) = "PXEClient:Arch:00000";
-    filename "pxelinux.0";
+    filename "undionly.kpxe";
     }
+
+
+# naming
+
+# "anyapple" translates to : 61:6e:79:61:70:70:6c:65
+
+
+    class "Apple-Intel-Netboot" {
+    match if substring (option vendor-class-identifier, 0, 14) = "AAPLBSDPC/i386";
+    option dhcp-parameter-request-list 1,3,17,43,60;
+    if (option dhcp-message-type = 8) {
+        option vendor-class-identifier "AAPLBSDPC";
+        if (substring(option vendor-encapsulated-options, 0, 3) = 01:01:01) {
+            # BSDP List
+            option vendor-encapsulated-options 01:01:01:04:02:80:00:07:04:81:00:05:2a:09:0D:81:00:05:2a:08:61:6e:79:61:70:70:6c:65;
+        }
+        elsif (substring(option vendor-encapsulated-options, 0, 3) = 01:01:02) {
+            # BSDP Select
+            option vendor-encapsulated-options 01:01:02:08:04:81:00:05:2a:82:0a:4e:65:74:42:6f:6f:74:30:30:31;
+            filename "ipxemac.efi";
+            next-server 192.168.1.254;
+        }
+    }
+}
 
 }
 EOF
