@@ -58,6 +58,29 @@ EOF
           cp /usr/lib/syslinux/modules/bios/vesamenu.c32 /anydeploy/tftp/bios/
 
 
+          # Copy Kernel
+          cp /anydeploy/nfs/anynetlive_amd64/vmlinuz /anydeploy/tftp/bios/vmlinuz
+          chmod 777 /anydeploy/tftp/bios/vmlinuz
+
+          # Copy init
+          cp /anydeploy/nfs/anynetlive_amd64/initrd.img /anydeploy/tftp/bios/initrd.img
+          chmod 777 /anydeploy/tftp/bios/vmlinuz
+
+          # Add config
+
+          cat >"/anydeploy/tftp/bios/pxelinux.cfg/default" << EOF
+default menu.c32
+prompt 0
+timeout 50 # 50 = 5 sec
+ONTIMEOUT anydeploy_debian
+
+MENU TITLE anyDeploy Menu
+
+label anydeploy_debian
+kernel vmlinuz
+append rw initrd=initrd.img root=/dev/nfs ip=dhcp nfsroot=192.168.1.254:/anydeploy/nfs/anynetlive_amd64
+EOF
+
 # SETUP EFI32
 
 # TODO
@@ -66,16 +89,39 @@ EOF
 
 # SETUP EFI64
 
-# TODO
+          # Copy PXELINUX EFI64
+
+          mkdir /anydeploy/tftp/efi
+          cp /usr/lib/SYSLINUX.EFI/efi64/syslinux.efi /anydeploy/tftp/efi64/
+          cp /usr/lib/syslinux/modules/efi64/ldlinux.e64 /anydeploy/tftp/efi64/
 
 
+          #mkdir pxelinux.cfg
+
+          mkdir /anydeploy/tftp/efi64/pxelinux.cfg
+
+          # Create Config File
+
+          touch /anydeploy/tftp/efi64/pxelinux.cfg/default
 
 
+          # Copy Modules for EFI64
+
+          cp /usr/lib/syslinux/modules/efi64/* /anydeploy/tftp/efi64/
 
 
-# Add config
+          # Copy Kernel
+          cp /anydeploy/nfs/anynetlive_amd64/vmlinuz /anydeploy/tftp/efi64/vmlinuz
+          chmod 777 /anydeploy/tftp/efi64/vmlinuz
 
-cat >"/anydeploy/tftp/bios/pxelinux.cfg/default" << EOF
+          # Copy init
+          cp /anydeploy/nfs/anynetlive_amd64/initrd.img /anydeploy/tftp/efi64/initrd.img
+          chmod 777 /anydeploy/tftp/efi64/vmlinuz
+
+
+          # Add config
+
+          cat >"/anydeploy/tftp/efi64/pxelinux.cfg/default" << EOF
 default menu.c32
 prompt 0
 timeout 50 # 50 = 5 sec
@@ -89,20 +135,17 @@ append rw initrd=initrd.img root=/dev/nfs ip=dhcp nfsroot=192.168.1.254:/anydepl
 EOF
 
 
+
+
+
 # Restart TFTPD
 
 service tftpd-hpa restart
 
 }
 
-# ln kernel and init
+# Copy Kernel and init
 
-#readlink -f /anydeploy/tftp/vmlinuz
-ln -s /anydeploy/nfs/anynetlive_amd64/vmlinuz /anydeploy/tftp/bios/vmlinuz
-chmod 777 /anydeploy/tftp/bios/vmlinuz
-#readlink -f /anydeploy/tftp/initrd.img
-ln -s /anydeploy/nfs/anynetlive_amd64/initrd.img /anydeploy/tftp/bios/initrd.img
-chmod 777 /anydeploy/tftp/bios/vmlinuz
 
 
 
