@@ -19,12 +19,15 @@ echo "*" > /anydeploy/tftp/.gitignore
 
 # Edit /etc/default/tftpd-hpa (TFTP_DIRECTORY=/anydeploy/tftp)
 
-# # /etc/default/tftpd-hpa
 
-# TFTP_USERNAME="tftp"
-# TFTP_DIRECTORY="/anydeploy/tftp"
-# TFTP_ADDRESS="0.0.0.0:69"
-# TFTP_OPTIONS="-s"
+rm /etc/default/tftpd-hpa
+touch /etc/default/tftpd-hpa
+cat >"/etc/default/tftpd-hpa" << EOF
+TFTP_USERNAME="tftp"
+TFTP_DIRECTORY="/anydeploy/tftp"
+TFTP_ADDRESS="0.0.0.0:69"
+TFTP_OPTIONS="-s"
+EOF
 
 
 # Copy PXELINUX BIOS
@@ -88,6 +91,12 @@ cp /usr/lib/syslinux/modules/bios/vesamenu.c32 /anydeploy/tftp/bios/
 # Copy Libraries for EFI64
 
 # TODO
+
+
+
+# Restart TFTPD
+
+service tftpd-hpa restart
 
 }
 
