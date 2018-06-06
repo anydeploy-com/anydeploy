@@ -78,15 +78,14 @@ EOF
 cat >"/anydeploy/tftp/bios/pxelinux.cfg/default" << EOF
 default menu.c32
 prompt 0
-timeout 300 # 300 = 30 sec
-ONTIMEOUT local
+timeout 50 # 50 = 5 sec
+ONTIMEOUT anydeploy_debian
 
 MENU TITLE anyDeploy Menu
 
-LABEL anyDeploy
-        MENU LABEL Anydeploy
-        kernel images/pmagic/bzImage
-        append noapic initrd=images/pmagic/initrd.gz root=/dev/ram0 init=/linuxrc ramdisk_size=100000
+label anydeploy_debian
+kernel vmlinuz
+append rw initrd=initrd.img root=/dev/nfs ip=dhcp nfsroot=192.168.1.254:/anydeploy/nfs/anynetlive_amd64
 EOF
 
 
@@ -95,6 +94,16 @@ EOF
 service tftpd-hpa restart
 
 }
+
+# ln kernel and init
+
+#readlink -f /anydeploy/tftp/vmlinuz
+ln -s /anydeploy/nfs/anynetlive_amd64/vmlinuz /anydeploy/tftp/bios/vmlinuz
+chmod 777 /anydeploy/tftp/bios/vmlinuz
+#readlink -f /anydeploy/tftp/initrd.img
+ln -s /anydeploy/nfs/anynetlive_amd64/initrd.img /anydeploy/tftp/bios/initrd.img
+chmod 777 /anydeploy/tftp/bios/vmlinuz
+
 
 
 setup_tftp
