@@ -30,21 +30,6 @@ EOF
 
 echo "BOOT=nfs" >> ${anynet_amd64}/etc/initramfs-tools/initramfs.conf
 
-
-# Enable Autologin (root)
-
-#startexec="-\/sbin\/agetty --skip-login --login-options \"-f root\" %I 38400 linux"
-#sed -i "/ExecStart=/ s/=.*/=${startexec}/" ${anynet_amd64}/lib/systemd/system/getty@.service
-
-
-# Generate Postinstall file
-
-cat >"${anynet_amd64}/postinstall.sh" << EOF
-#!/bin/bash
-
-update-initramfs -u
-EOF
-
 echo "setting up nfs"
 
 apt-get install nfs-kernel-server nfs-common -y
