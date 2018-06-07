@@ -7,6 +7,6 @@ choose --default anydeploy --timeout 15000 target && goto ${target}
 
 :anydeploy
 
-kernel http://192.168.1.254/vmlinuz initrd=initrd.img nfsroot=192.168.1.254:/anydeploy/nfs/anynetlive_amd64 rw ip=dhcp net.ifnames=0
+kernel http://192.168.1.254/vmlinuz initrd=initrd.img nfsroot=192.168.1.254:/nfs/any64 rw ip=dhcp net.ifnames=0
 initrd http://192.168.1.254/initrd.img
 boot

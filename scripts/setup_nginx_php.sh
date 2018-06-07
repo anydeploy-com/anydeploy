@@ -59,6 +59,9 @@ mkdir /anydeploy/www
 
 touch /anydeploy/www/index.php
 
+
+ # TODO - change ip 192.168.1.254 to ${next-server} ipxe variable
+
 cat >"/anydeploy/www/index.php" << EOF
 <?php
  phpinfo();
@@ -77,7 +80,7 @@ choose --default anydeploy --timeout 15000 target && goto ${target}
 
 :anydeploy
 
-kernel http://192.168.1.254/vmlinuz initrd=initrd.img nfsroot=192.168.1.254:/anydeploy/nfs/anynetlive_amd64 rw ip=dhcp net.ifnames=0
+kernel http://192.168.1.254/vmlinuz initrd=initrd.img nfsroot=192.168.1.254:/nfs/any64 rw ip=dhcp net.ifnames=0
 initrd http://192.168.1.254/initrd.img
 boot
 EOF
@@ -87,14 +90,11 @@ EOF
 #ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
 
-# Copy Kernel # TODO - replace with ln
-cp /anydeploy/nfs/anynetlive_amd64/vmlinuz /anydeploy/www/
+# Copy kernel (ln doesnt work well)
+cp /nfs/any64/vmlinuz /anydeploy/www/vmlinuz
 
-# Copy init # TODO - replace with ln
-cp /anydeploy/nfs/anynetlive_amd64/initrd.img /anydeploy/www/
-
-
-
+# Copy init (ln doesnt work well)
+cp /nfs/any64/initrd.img /anydeploy/www/initrd.img
 
 # Restart nginx
 

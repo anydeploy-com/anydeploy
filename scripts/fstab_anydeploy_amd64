@@ -1,0 +1,5 @@
+none /       tmpfs size=95% 0 1
+none /tmp     tmpfs size=95% 0 1
+none /var/tmp tmpfs size=95% 0 1
+none /var/log tmpfs size=95% 0 1
+192.168.1.254:/anydeploy/nfs/anynetlive_amd64 /anydeploy/nfs/anynetlive_amd64 nfs rw,noatime,nolock,noauto 1 1
