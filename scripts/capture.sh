@@ -74,12 +74,49 @@ else
   echo "Partitions found on ${selected_disk}: ${#SELECTED_DISK_PARTITIONS[@]}"
 
 
+# Windows Recovery
+
+# Windows Recovery Environment (RE) partition (hidden NTFS partition type 07h)
+
+# gdisk type = 2700 (regular partition is 0700)
+
+  # sample Windows 10 (proper install )
+
+
+
+  # /dev/sda1     2048  1023999  1021952  499M Windows recovery environment
+# /dev/sda2  1024000  1226751   202752   99M EFI System
+# /dev/sda3  1226752  1259519    32768   16M Microsoft reserved
+# /dev/sda4  1259520 41940991 40681472 19.4G Microsoft basic data
+
+
+
   #echo "selected disk partitions array: ${SELECTED_DISK_PARTITIONS[@]}"
   #echo "selected disk partitions array start sector: ${SELECTED_DISK_PARTITIONS_STARTSECTOR[@]}"
   #echo "selected disk partitions array end sector: ${SELECTED_DISK_PARTITIONS_ENDSECTOR[@]}"
   #echo "selected disk partitions array sectorcount: ${SELECTED_DISK_PARTITIONS_SECTORCOUNT[@]}"
   #echo "selected disk partitions array size: ${SELECTED_DISK_PARTITIONS_SIZE[@]}"
   #echo "selected disk partitions array name: ${SELECTED_DISK_PARTITIONS_NAME[@]}"
+
+
+echo "SAMPLE PARTITION MAKING"
+
+# DO NOT RUN IF YOU DONT KNOW WHAT ARE YOU DOING
+
+
+
+
+
+
+
+
+#sgdisk -og $1 # CAREFUL CLEARS PARTITION TABLE
+#sgdisk -n 1:2048:4095 -c 1:"BIOS Boot Partition" -t 1:ef02 $1
+#sgdisk -n 2:4096:413695 -c 2:"EFI System Partition" -t 2:ef00 $1
+#sgdisk -n 3:413696:823295 -c 3:"Linux /boot" -t 3:8300 $1
+#ENDSECTOR=`sgdisk -E $1`
+#sgdisk -n 4:823296:$ENDSECTOR -c 4:"Linux LVM" -t 4:8e00 $1
+#sgdisk -p $1
 
 
 
