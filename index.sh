@@ -150,9 +150,9 @@ IFS=$'\n'
 
 IFS=$SAVEIFS
 
-menu_selection=`cat tmp/template_list.$$`
+#menu_selection=`cat tmp/template_list.$$`
 
-$menu_selection
+#$menu_selection
 
 }
 

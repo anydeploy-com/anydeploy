@@ -51,6 +51,26 @@ cat >"${anynet_amd64}/fixlocales.sh" << EOF
     TZ='Europe/London'; export TZ
 EOF
 
+
+# Add autorun
+
+cat >"${anynet_amd64}etc/systemd/system/anydeploy.service" << EOF
+[Unit]
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/anydeploy/index.sh
+StandardInput=tty
+TTYPath=/dev/tty1
+TTYReset=yes
+TTYVHangup=yes
+
+[Install]
+WantedBy=default.target
+EOF
+
+
 cat >"${anynet_amd64}/postinstall.sh" << EOF
 # Setup Hostname
 
@@ -80,7 +100,38 @@ cat >"${anynet_amd64}/postinstall.sh" << EOF
   # TODO
 # Add SSH KEY
   # TODO
+
+# Install Git
+apt-get install git -y
+
+# Install dialog
+apt-get install dialog -y
+
+# Install net-tools
+
+apt-get install net-tools -y
+
+# Install Partclone
+
+apt-get install partclone -y
+
+# Clone Repository
+git clone git://github.com/anydeploy-com/anydeploy /anydeploy
+
+
+# Permit Root Login over ssh (temporary)
+
+echo "PermitRootLogin yes" >> "/etc/ssh/sshd_config"
+
+
+# Enable autorun
+
+echo "sleep 2" >> /root/.bashrc
+echo "cd /anydeploy" >> /root/.bashrc
+echo "./index.sh" >> /root/.bashrc
+
 EOF
+
 
 # Enable Autologin (root)
 
