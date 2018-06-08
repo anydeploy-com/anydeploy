@@ -125,7 +125,11 @@ apt-get install smartmontools -y
 
 # Install less
 
-apt-get install smartmontools -y
+apt-get install less -y
+
+# Install lspci, lsusb
+
+apt-get install pciutils usbutils -y
 
 # Clone Repository
 git clone git://github.com/anydeploy-com/anydeploy /anydeploy
