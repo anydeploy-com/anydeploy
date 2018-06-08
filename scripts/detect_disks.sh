@@ -30,11 +30,15 @@ echo Physical Disk Devices found: ${#PHYSICALDISKS[@]}
   DISK_SERIAL[$i]=$(smartctl -i /dev/${PHYSICALDISKS[$i]} | grep "Serial Number" | awk '{print $3,$4,$5,$6}' | xargs)
   DISK_SMART[$i]=$(smartctl -a /dev/${PHYSICALDISKS[$i]} | grep "SMART overall-health self-assessment test result" | awk '{print $6}')
   DISK_IS_SSD[$i]=""
+  #DISK_DIALOG[$i]=( "${PHYSICALDISKS[$i]}" "${DISK_MODEL[$i]}" )
 
 	# write seperate for LSI 3ware / Areca / HighPoint, HP CCISS, LSI MegaRAID, Intel Matrix/Rapid, Adaptec SAS
 
 
     done
+
+
+
 
 # TODO - change to if exists then remove
 
@@ -55,7 +59,6 @@ for ((i=0; i < ${#PHYSICALDISKS[@]}; i++))
 
 	echo -e "DISK${DISK_NUM[$i]},${PHYSICALDISKS[$i]},${DISK_SIZE[$i]},${DISK_MODEL[$i]},${DISK_SERIAL[$i]},${DISK_MODEL_FAMILY[$i]},${DISK_SMART[$i]},${DISK_RPM[$i]}" >> $disk_tempfile
     done
-
 
 # convert to tab delimated
 

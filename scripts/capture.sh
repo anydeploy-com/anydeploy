@@ -6,6 +6,23 @@
 
   # Select Disk ( array + dialog)
 
+
+  SAVEIFS=$IFS
+
+      IFS=$'\n'
+
+  for i in "${!PHYSICALDISKS[@]}"; do DISK_DIALOG+=( "${PHYSICALDISKS[${i}]}" "${DISK_MODEL[${i}]} / ${DISK_MODEL_FAMILY[${i}]} [${DISK_SIZE[${i}]}] " ); done
+
+
+
+
+
+  selected_disk=$(dialog --backtitle "anydeploy ${devtype} - Capture - Select Disk" \
+                      --menu "Select Disk" 30 100 10 ${DISK_DIALOG[@]} 2>&1 >/dev/tty)
+
+
+      IFS=$SAVEIFS
+
   # Mount + detect OS / Version / Codename / Revision / Architecture / Boot Type
 
   # Generate name and prompt if okay
