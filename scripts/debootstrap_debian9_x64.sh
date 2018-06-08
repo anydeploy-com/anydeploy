@@ -124,6 +124,7 @@ apt-get install nfs-common -y
 apt-get install smartmontools -y
 
 # Install less
+
 apt-get install smartmontools -y
 
 # Clone Repository
@@ -136,12 +137,13 @@ echo "PermitRootLogin yes" >> "/etc/ssh/sshd_config"
 
 
 # Enable autorun
-
 echo "sleep 2" >> /root/.bashrc
 echo "cd /anydeploy" >> /root/.bashrc
 echo "./index.sh" >> /root/.bashrc
 
 EOF
+
+
 
 
 # Enable Autologin (root)
@@ -162,3 +164,6 @@ rm ${anynet_amd64}/postinstall.sh
 
 cp ${anynet_amd64}/vmlinuz /anydeploy/www/
 cp ${anynet_amd64}/initrd.img /anydeploy/www/
+
+
+mkdir ${anynet_amd64}/anydeploy

@@ -90,3 +90,13 @@ sed -i "/${iface_to_remove}/,/^$/d" /etc/network/interfaces
 function check_dirs {
 echo "TODO"
   }
+
+
+# Detect if client or server
+  rootmount_type_nfs=$(mount | grep "on / " | grep "nfs")
+
+  if [ ! -z "${rootmount_type_nfs}" ]; then
+  devtype="client"
+  else
+  devtype="server"
+  fi

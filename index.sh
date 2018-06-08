@@ -28,15 +28,6 @@
 
 SAVEIFS=$IFS
 
-# Detect if client or server
-rootmount_type_nfs=$(mount | grep "on / " | grep "nfs")
-
-if [ ! -z "${rootmount_type_nfs}" ]; then
-devtype="client"
-else
-devtype="server"
-fi
-
 
 
 # Template Filenames Array
@@ -78,6 +69,7 @@ DEPLOY () {
 
 CAPTURE () {
   . /anydeploy/scripts/capture.sh
+  MAIN_MENU
 }
 
 TESTS () {

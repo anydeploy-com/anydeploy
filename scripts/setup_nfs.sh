@@ -13,8 +13,10 @@ mkdir /nfs/images
 mkdir /nfs/any64
 
 touch /etc/exports
-echo "/nfs/images *(rw,no_root_squash,async,insecure,no_subtree_check,fsid=0)" >> /etc/exports
-echo "/nfs/any64 *(rw,no_root_squash,async,insecure,no_subtree_check,fsid=1)" >> /etc/exports
+echo "/anydeploy *(rw,no_root_squash,async,insecure,no_subtree_check)" >> /etc/exports
+echo "/nfs/images *(rw,no_root_squash,async,insecure,no_subtree_check)" >> /etc/exports
+echo "/nfs/any64 *(rw,no_root_squash,async,insecure,no_subtree_check)" >> /etc/exports
+
 
 exportfs -a
 service nfs-kernel-server restart

@@ -1,8 +1,21 @@
-#!/bin/bash
+#!/bin/bash      IFS=$SAVEIFS
+
+# Include functions
+. /anydeploy/scripts/includes/functions.sh
+
+# Include global config
+. /anydeploy/settings/global.sh
 
   # Detect Disks
 
   . /anydeploy/scripts/detect_disks.sh
+
+
+  # Reset to default - in case of re-run
+  DISK_DIALOG=()
+
+  # If server prompt if physical disk or VM
+  # TODO
 
   # Select Disk ( array + dialog)
 
@@ -17,19 +30,28 @@
 
 
 
-  selected_disk=$(dialog --backtitle "anydeploy ${devtype} - Capture - Select Disk" \
+  export selected_disk=$(dialog --backtitle "anydeploy ${devtype} - Capture - Select Disk" \
                       --menu "Select Disk" 30 100 10 ${DISK_DIALOG[@]} 2>&1 >/dev/tty)
 
+  IFS=$SAVEIFS
+
   echo "Selected Disk: ${selected_disk}"
+  sleep 5
 
 
-      IFS=$SAVEIFS
 
   # Mount + detect OS / Version / Codename / Revision / Architecture / Boot Type
 
   echo "Listing Parts on ${selected_disk}"
 
-sfdisk -l /dev/sda | grep "/dev/" | grep -v "Disk"
+sfdisk -l /dev/${selected_disk} | grep "/dev/" | grep -v "Disk"
+
+
+SELECTED_DISK_PARTITIONS=($(sfdisk -l /dev/${selected_disk} | grep "/dev/" | grep -v "Disk" | awk '{print $1}'))
+
+echo "selected disk partitions array: ${SELECTED_DISK_PARTITIONS[@]} "
+
+sleep 5
 
   # Generate name and prompt if okay
 
