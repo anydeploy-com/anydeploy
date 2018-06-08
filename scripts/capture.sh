@@ -10,9 +10,17 @@
 
   . /anydeploy/scripts/detect_disks.sh
 
+  # Stop if no disks detected
+
+  if [ ${#PHYSICALDISKS[@]} -eq 0 ]; then
+      sleep 1
+  else
 
   # Reset to default - in case of re-run
   DISK_DIALOG=()
+
+
+
 
   # If server prompt if physical disk or VM
   # TODO
@@ -53,6 +61,7 @@ echo "selected disk partitions array: ${SELECTED_DISK_PARTITIONS[@]} "
 
 sleep 5
 
+fi
   # Generate name and prompt if okay
 
   # Create folder with name

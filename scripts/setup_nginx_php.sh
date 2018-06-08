@@ -75,7 +75,7 @@ cat >"/anydeploy/www/menu.ipxe" << EOF
 menu anyDeploy PXE menu
 item anydeploy Anydeploy
 
-choose --default anydeploy --timeout 15000 target && goto ${target}
+choose --default anydeploy --timeout 5000 target && goto ${target}
 #choose os && goto ${os}
 
 :anydeploy
