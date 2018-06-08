@@ -1,7 +1,8 @@
 #!/bin/bash
 
-echo "dupa"
+  # Detect Disks
 
+  . /anydeploy/scripts/detect_disks.sh
 
   # Select Disk ( array + dialog)
 

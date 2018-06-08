@@ -119,6 +119,10 @@ apt-get install partclone -y
 
 apt-get install nfs-common -y
 
+# Install Smart Mon Tools
+
+apt-get install smartmontools -y
+
 # Clone Repository
 git clone git://github.com/anydeploy-com/anydeploy /anydeploy
 
