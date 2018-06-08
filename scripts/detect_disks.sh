@@ -21,15 +21,15 @@ echo Physical Disk Devices found: ${#PHYSICALDISKS[@]}
  for ((i=0; i < ${#PHYSICALDISKS[@]}; i++))
     do
 		DISK_NUM[$i]=$(( $i + 1 ))
-		DISK_SIZE[$i]=`smartctl -i /dev/${PHYSICALDISKS[$i]} | grep "User Capacity" | cut -d "[" -f2 | cut -d "]" -f1 | xargs`
-		DISK_SIZE_VAL[$i]=`smartctl -i /dev/${PHYSICALDISKS[$i]} | grep "User Capacity" | cut -d "[" -f2 | cut -d "]" -f1 | tr -dc '0-9' | xargs`
-		DISK_SIZE_MEAS[$i]=`smartctl -i /dev/${PHYSICALDISKS[$i]} | grep "User Capacity" | cut -d "[" -f2 | cut -d "]" -f1 |  tr -d '0-9' | xargs`
-		DISK_MODEL[$i]=`smartctl -i /dev/${PHYSICALDISKS[$i]} | grep "Device Model" | awk '{print $3,$4,$5,$6}' | xargs`
-		DISK_MODEL_FAMILY[$i]=`smartctl -i /dev/${PHYSICALDISKS[$i]} | grep "Model Family" | awk '{print $3,$4,$5,$6}' | xargs`
-		DISK_RPM[$i]=`smartctl -i /dev/${PHYSICALDISKS[$i]} | grep "Rotation Rate" | awk '{print $3,$4,$5,$6}' | xargs`
-		DISK_SERIAL[$i]=`smartctl -i /dev/${PHYSICALDISKS[$i]} | grep "Serial Number" | awk '{print $3,$4,$5,$6}' | xargs`
-		DISK_SMART[$i]=`smartctl -a /dev/${PHYSICALDISKS[$i]} | grep "SMART overall-health self-assessment test result" | awk '{print $6}'`
-		DISK_IS_SSD[$i]=``
+		DISK_SIZE[$i]=$(smartctl -i /dev/${PHYSICALDISKS[$i]} | grep "User Capacity" | cut -d "[" -f2 | cut -d "]" -f1 | xargs)
+		DISK_SIZE_VAL[$i]=$(smartctl -i /dev/${PHYSICALDISKS[$i]} | grep "User Capacity" | cut -d "[" -f2 | cut -d "]" -f1 | tr -dc '0-9' | xargs)
+		DISK_SIZE_MEAS[$i]=$(smartctl -i /dev/${PHYSICALDISKS[$i]} | grep "User Capacity" | cut -d "[" -f2 | cut -d "]" -f1 |  tr -d '0-9' | xargs)
+		DISK_MODEL[$i]=$(smartctl -i /dev/${PHYSICALDISKS[$i]} | grep "Device Model" | awk '{print $3,$4,$5,$6}' | xargs)
+		DISK_MODEL_FAMILY[$i]=$(smartctl -i /dev/${PHYSICALDISKS[$i]} | grep "Model Family" | awk '{print $3,$4,$5,$6}' | xargs)
+		DISK_RPM[$i]=$(smartctl -i /dev/${PHYSICALDISKS[$i]} | grep "Rotation Rate" | awk '{print $3,$4,$5,$6}' | xargs)
+		DISK_SERIAL[$i]=$(smartctl -i /dev/${PHYSICALDISKS[$i]} | grep "Serial Number" | awk '{print $3,$4,$5,$6}' | xargs)
+		DISK_SMART[$i]=$(smartctl -a /dev/${PHYSICALDISKS[$i]} | grep "SMART overall-health self-assessment test result" | awk '{print $6}')
+		DISK_IS_SSD[$i]=""
 
 	# write seperate for LSI 3ware / Areca / HighPoint, HP CCISS, LSI MegaRAID, Intel Matrix/Rapid, Adaptec SAS
 

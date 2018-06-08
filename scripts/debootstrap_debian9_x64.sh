@@ -123,6 +123,9 @@ apt-get install nfs-common -y
 
 apt-get install smartmontools -y
 
+# Install less
+apt-get install smartmontools -y
+
 # Clone Repository
 git clone git://github.com/anydeploy-com/anydeploy /anydeploy
 
