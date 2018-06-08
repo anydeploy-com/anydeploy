@@ -20,10 +20,16 @@
   selected_disk=$(dialog --backtitle "anydeploy ${devtype} - Capture - Select Disk" \
                       --menu "Select Disk" 30 100 10 ${DISK_DIALOG[@]} 2>&1 >/dev/tty)
 
+  echo "Selected Disk: ${selected_disk}"
+
 
       IFS=$SAVEIFS
 
   # Mount + detect OS / Version / Codename / Revision / Architecture / Boot Type
+
+  echo "Listing Parts on ${selected_disk}"
+
+sfdisk -l /dev/sda | grep "/dev/" | grep -v "Disk"
 
   # Generate name and prompt if okay
 
