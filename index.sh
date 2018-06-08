@@ -28,6 +28,15 @@
 
 SAVEIFS=$IFS
 
+# Detect if client or server
+rootmount_type_nfs=$(mount | grep "on / " | grep "nfs")
+
+if [ ! -z "${rootmount_type_nfs}" ]; then
+devtype="client"
+else
+devtype="server"
+fi
+
 
 
 # Template Filenames Array
@@ -88,7 +97,7 @@ TASKS () {
 }
 
 OPTIONS () {
-  dialog --backtitle "anydeploy - Settings Menu" --menu "Settings Menu - select task:" 20 55 15 \
+  dialog --backtitle "anydeploy ${devtype} - Settings Menu" --menu "Settings Menu - select task:" 20 55 15 \
     INTERFACE "Select Interface" \
     IPADDRESS "Setup Networking" \
     DHCPSERVER "DHCP Server Setup" \
@@ -135,7 +144,7 @@ MAIN_MENU () {
 
 IFS=$'\n'
 
-        dialog --backtitle "anydeploy - Main Menu" --menu "Main Menu - select task:" 20 55 15 \
+        dialog --backtitle "anydeploy ${devtype} - Main Menu" --menu "Main Menu - select task:" 20 55 15 \
           ${template_list[@]} \
           DEPLOY "Deploy OS" \
           CAPTURE "Capture OS" \
@@ -165,6 +174,7 @@ cleanup () {
 #echo "Template filenames: ${template_filenames[0]}"
 #echo "Template names: ${template_names[0]}"
 #echo "Template List: ${template_list[1]}"
+
 
 MAIN_MENU
 cleanup

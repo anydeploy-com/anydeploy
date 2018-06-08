@@ -115,6 +115,10 @@ apt-get install net-tools -y
 
 apt-get install partclone -y
 
+# Install NFS common
+
+apt-get install nfs-common -y
+
 # Clone Repository
 git clone git://github.com/anydeploy-com/anydeploy /anydeploy
 
