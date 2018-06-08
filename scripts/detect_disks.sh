@@ -28,7 +28,7 @@ echo Physical Disk Devices found: ${#PHYSICALDISKS[@]}
     echo "3"
     DISK_SIZE_MEAS[$i]=$(smartctl -i /dev/${PHYSICALDISKS[$i]} | grep "User Capacity" | cut -d "[" -f2 | cut -d "]" -f1 |  tr -d '0-9' | xargs)
     echo "4"
-    DISK_MODEL[$i]=$(smartctl -i /dev/${PHYSICALDISKS[$i]} | grep "Device Model" | awk '{print $3,$4,$5,$6}' | xargs)
+    DISK_MODEL[$i]=$(smartctl -i /dev/${PHYSICALDISKS[$i]} | grep "Device Model" | awk '{print $3,$4,$5,$6}')
     echo "5"
     DISK_MODEL_FAMILY[$i]=$(smartctl -i /dev/${PHYSICALDISKS[$i]} | grep "Model Family" | awk '{print $3,$4,$5,$6}' | xargs)
     echo "6"
