@@ -59,11 +59,11 @@ EOF
 
 
           # Copy Kernel
-          cp /anydeploy/nfs/anynetlive_amd64/vmlinuz /anydeploy/tftp/bios/vmlinuz
+          cp /nfs/any64/vmlinuz /anydeploy/tftp/bios/vmlinuz
           chmod 777 /anydeploy/tftp/bios/vmlinuz
 
           # Copy init
-          cp /anydeploy/nfs/anynetlive_amd64/initrd.img /anydeploy/tftp/bios/initrd.img
+          cp /nfs/any64/initrd.img /anydeploy/tftp/bios/initrd.img
           chmod 777 /anydeploy/tftp/bios/vmlinuz
 
           # Add config
@@ -111,11 +111,11 @@ EOF
 
 
           # Copy Kernel
-          cp /anydeploy/nfs/anynetlive_amd64/vmlinuz /anydeploy/tftp/efi64/vmlinuz
+          cp /nfs/anyd64/vmlinuz /anydeploy/tftp/efi64/vmlinuz
           chmod 777 /anydeploy/tftp/efi64/vmlinuz
 
           # Copy init
-          cp /anydeploy/nfs/anynetlive_amd64/initrd.img /anydeploy/tftp/efi64/initrd.img
+          cp /nfs/any64/initrd.img /anydeploy/tftp/efi64/initrd.img
           chmod 777 /anydeploy/tftp/efi64/vmlinuz
 
 

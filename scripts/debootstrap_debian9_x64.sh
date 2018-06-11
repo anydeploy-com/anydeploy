@@ -211,13 +211,6 @@ mkdir /anydeploy
 
 EOF
 
-
-
-
-
-
-
-
 # Enable Autologin (root)
 
 startexec="-\/sbin\/agetty --skip-login --login-options \"-f root\" %I 38400 linux"
