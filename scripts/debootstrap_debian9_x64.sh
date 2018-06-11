@@ -177,6 +177,10 @@ apt-get install less -y
 
 apt-get install pciutils usbutils -y
 
+# Install ntfs-3g
+
+apt-get install ntfs-3g -y
+
 
 # Install gdisk
 
