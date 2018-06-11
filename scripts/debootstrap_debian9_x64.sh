@@ -351,7 +351,12 @@ dpkg-reconfigure --frontend=noninteractive console-setup
 # Mount NFS exports (fstab)
 
 mkdir /nfs
+mkdir /nfs/images
 mkdir /anydeploy
+
+echo "192.168.1.254:/anydeploy /anydeploy  nfs defaults  0 0" >> /etc/fstab
+echo "192.168.1.254:/nfs/images /nfs/images   nfs defaults  0 0" >> /etc/fstab
+
 
 
 

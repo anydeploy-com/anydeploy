@@ -99,12 +99,54 @@ else
   #echo "selected disk partitions array name: ${SELECTED_DISK_PARTITIONS_NAME[@]}"
 
 
-echo "SAMPLE PARTITION MAKING"
+# Identify Type
 
-# DO NOT RUN IF YOU DONT KNOW WHAT ARE YOU DOING
+# lsblk -f | grep sda2 | awk '{print $2}'
+
+
+# SAMPLE OUTPUT:
+
+# root@anydeploy:/nfs/images# lsblk -f | grep sda2 | awk '{print $2}'
+# ext4
+
+
+###### BIOS ######
+
+
+## TODO write for each function to detect each partition type and use
+## appropriate partclone version otherwise use partclone.dd
+
+# partclone.btrfs        # partclone.ext4dev      # partclone.hfs+         # partclone.ntfs
+# partclone.chkimg       # partclone.extfs        # partclone.hfsp         # partclone.ntfsfixboot
+# partclone.dd           # partclone.f2fs         # partclone.hfsplus      # partclone.ntfsreloc
+# partclone.exfat        # partclone.fat          # partclone.imager       # partclone.reiser4
+# partclone.ext2         # partclone.fat12        # partclone.info         # partclone.restore
+# partclone.ext3         # partclone.fat16        # partclone.minix        # partclone.vfat
+# partclone.ext4         # partclone.fat32        # partclone.nilfs2       # partclone.xfs
 
 
 
+
+# Capture
+mkdir /nfs/images/test_win10_kvm
+sfdisk -d /dev/sda > /nfs/images/test_win10_kvm/partition_table
+dd if=/dev/sda1 of=/nfs/images/test_win10_kvm/sda1.img status=progresss
+dd if=/dev/sda2 of=/nfs/images/test_win10_kvm/sda2.img status=progress
+dd if=/dev/sda of=/nfs/images/test_win10_kvm/mbr.img bs=512 count=1 status=progress
+
+# partclone.ntfs -c -s /dev/sda4 -o /nfs/images/test_win10_kvm/sda4_partclone.img
+
+# Restore
+# sfdisk /dev/sda < /nfs/images/test_win10_kvm/partition_table
+# dd if=/nfs/images/test_win10_kvm/sda1.img of=/dev/sda1 status=progress
+# dd if=/nfs/images/test_win10_kvm/sda2.img of=/dev/sda2 status=progress
+# dd if=/nfs/images/test_win10_kvm/mbr.img of=/dev/sda bs=446 count=1
+#
+
+# partclone.restore -d -s /nfs/images/test_win10_kvm/sda4_partclone.img -o /dev/sda4
+
+
+###### UEFI ######
 
 
 
