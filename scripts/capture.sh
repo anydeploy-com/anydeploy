@@ -48,31 +48,88 @@ else
 
   if [ ! -z "$selected_disk" ]; then
     echo "Selected Disk: ${selected_disk}"
+
     sleep 2
-
+  SELECTED_DISK_SECTORCOUNT=$(fdisk -l /dev/${selected_disk} | grep "Disk /dev/${selected_disk}" | awk '{print $7}')
+  SELECTED_DISK_PART_TYPE=$(udevadm info -q property -n sda | grep "ID_PART_TABLE_TYPE" | awk -F'=' '{print $2}')
   SELECTED_DISK_PARTITIONS=($(sfdisk -l /dev/${selected_disk} | grep "/dev/" | grep -v "Disk" | awk '{print $1}'))
-
-
   SELECTED_DISK_PARTITIONS_STARTSECTOR=($(sfdisk -l /dev/${selected_disk} | grep "/dev/" | grep -v "Disk" | awk '{print $2}'))
   SELECTED_DISK_PARTITIONS_ENDSECTOR=($(sfdisk -l /dev/${selected_disk} | grep "/dev/" | grep -v "Disk" | awk '{print $3}'))
   SELECTED_DISK_PARTITIONS_SECTORCOUNT=($(sfdisk -l /dev/${selected_disk} | grep "/dev/" | grep -v "Disk" | awk '{print $4}'))
   SELECTED_DISK_PARTITIONS_SIZE=($(sfdisk -l /dev/${selected_disk} | grep "/dev/" | grep -v "Disk" | awk '{print $5}'))
+  SELECTED_DISK_PARTITIONS_SIZEUNIT=($(sfdisk -l /dev/${selected_disk} | grep "/dev/" | grep -v "Disk" | awk '{print $5}' | sed 's/[0-9]*//g' | tr -d "."))
   SELECTED_DISK_PARTITIONS_NAME=($(sfdisk -l /dev/${selected_disk} | grep "/dev/" | grep -v "Disk" | awk '{$1=$2=$3=$4=$5=""; print $0}' | sed 's/^ *//'))
-
-# Detect System Partitions
-  for i in "${SELECTED_DISK_PARTITIONS_NAME[@]}"; do
-    echo ${i}
-    if [ "${i}" = "Microsoft basic data" ]; then
-    echo "system partition - ${i}"
-    fi
-  done
-
 
   IFS=$SAVEIFS
 
-
+  echo "Selected Disk Sectorcount: ${SELECTED_DISK_SECTORCOUNT}"
+  echo "Partition Table Type is: ${SELECTED_DISK_PART_TYPE}"
   echo "Partitions found on ${selected_disk}: ${#SELECTED_DISK_PARTITIONS[@]}"
+  echo "Partitions to Clone:"
+  echo ""
+  # Detect Filesystems
+    for i in "${!SELECTED_DISK_PARTITIONS[@]}"; do
+      SELECTED_DISK_PARTITIONS_SIZEVALUE[${i}]=$(echo ${SELECTED_DISK_PARTITIONS_SIZE[${i}]} | cut -f1 -d"." | tr -dc '0-9' )
+      SELECTED_DISK_PARTITIONS_DEVNAME[${i}]=$(echo ${SELECTED_DISK_PARTITIONS[${i}]} | sed 's/dev//' | tr -d "/")
+      SELECTED_DISK_PARTITIONS_FSTYPE[${i}]=$(lsblk -f | grep ${SELECTED_DISK_PARTITIONS_DEVNAME[${i}]} | awk '{print $2}')
+      # TODO IF FSTYPE HAS NO VALUE THEN CALL UNKNOWN OR SOMETHING
+  # Decide on resizing / generate cloning command
+      if [ "${SELECTED_DISK_PARTITIONS_FSTYPE[${i}]}" = "vfat" ]; then
+        SELECTED_DISK_PARTITIONS_CLONECMD[${i}]="partclone.dd" # might use dd because otherwise efi isn't hidden 
+        SELECTED_DISK_PARTITIONS_RESIZE[${i}]="no"
+        SELECTED_DISK_PARTITIONS_RESIZE_REASON[${i}]="filesystem type not setup to be resized (${SELECTED_DISK_PARTITIONS_FSTYPE[${i}]})"
+      elif [ "${SELECTED_DISK_PARTITIONS_FSTYPE[${i}]}" = "ext4" ]; then
+        SELECTED_DISK_PARTITIONS_CLONECMD[${i}]="partclone.ext4"
+        SELECTED_DISK_PARTITIONS_RESIZE[${i}]="no"
+        SELECTED_DISK_PARTITIONS_RESIZE_REASON[${i}]="Linux resizing not implemeneted yet"
+      elif [ "${SELECTED_DISK_PARTITIONS_FSTYPE[${i}]}" = "ntfs" ]; then
+        SELECTED_DISK_PARTITIONS_CLONECMD[${i}]="partclone.ntfs"
+              if [ "${SELECTED_DISK_PARTITIONS_SIZEUNIT[${i}]}" = "M" ]; then
+              SELECTED_DISK_PARTITIONS_RESIZE[${i}]="no"
+              SELECTED_DISK_PARTITIONS_RESIZE_REASON[${i}]="partition size unit to small - MiB (Megabytes)"
+              elif [ "${SELECTED_DISK_PARTITIONS_SIZEUNIT[${i}]}" = "T" ]; then
+              SELECTED_DISK_PARTITIONS_RESIZE[${i}]="yes"
+              SELECTED_DISK_PARTITIONS_RESIZE_REASON[${i}]="large drive - partition size unit in TiB (Terabytes)"
+              elif [ "${SELECTED_DISK_PARTITIONS_SIZEUNIT[${i}]}" = "G" ]; then
+                  # Decide on resize based on size - loaded from global config
+                  # minimum_resizable_ntfs="15"
+                  if [ ${SELECTED_DISK_PARTITIONS_SIZEVALUE[${i}]} -gt ${minimum_resizable_ntfs} ]; then
+                  SELECTED_DISK_PARTITIONS_RESIZE[${i}]="yes"
+                  SELECTED_DISK_PARTITIONS_RESIZE_REASON[${i}]="partition size in gb is greater than defined (${minimum_resizable_ntfs} GiB)"
+                  else
+                  SELECTED_DISK_PARTITIONS_RESIZE[${i}]="no"
+                  SELECTED_DISK_PARTITIONS_RESIZE_REASON[${i}]="size is less than defined (${minimum_resizable_ntfs} GiB)"
+                  fi
+              else
+                echo "Unknown Size"
+              fi
+      else
+        SELECTED_DISK_PARTITIONS_CLONECMD[${i}]="partclone.dd"
+        SELECTED_DISK_PARTITIONS_RESIZE[${i}]="no"
+        SELECTED_DISK_PARTITIONS_RESIZE_REASON[${i}]="filesystem type not setup to be resized (${SELECTED_DISK_PARTITIONS_FSTYPE[${i}]})"
+      fi
+  # Echo Partitions for cloning
+      echo "Cloning Partition: ${SELECTED_DISK_PARTITIONS_DEVNAME[${i}]} / ${SELECTED_DISK_PARTITIONS_FSTYPE[${i}]} / ${SELECTED_DISK_PARTITIONS_NAME[${i}]}"
+      echo "Command is: ${SELECTED_DISK_PARTITIONS_CLONECMD[${i}]}"
+      echo "Size: ${SELECTED_DISK_PARTITIONS_SIZE[${i}]}"
+      echo "Size (Value): ${SELECTED_DISK_PARTITIONS_SIZEVALUE[${i}]}"
+      echo "Unit of Volume (Size): ${SELECTED_DISK_PARTITIONS_SIZEUNIT[${i}]}"
+      echo "Resize: ${SELECTED_DISK_PARTITIONS_RESIZE[${i}]} - ${SELECTED_DISK_PARTITIONS_RESIZE_REASON[${i}]}"
+      echo "" # empty echo for readability
+      sleep 10
+    done
 
+
+    # Run Resizing
+
+
+
+
+
+    # Run Cloning
+
+
+    sleep 10
 
 # Windows Recovery
 
@@ -128,11 +185,11 @@ else
 
 
 # Capture
-mkdir /nfs/images/test_win10_kvm
-sfdisk -d /dev/sda > /nfs/images/test_win10_kvm/partition_table
-dd if=/dev/sda1 of=/nfs/images/test_win10_kvm/sda1.img status=progresss
-dd if=/dev/sda2 of=/nfs/images/test_win10_kvm/sda2.img status=progress
-dd if=/dev/sda of=/nfs/images/test_win10_kvm/mbr.img bs=512 count=1 status=progress
+#mkdir /nfs/images/test_win10_kvm
+#sfdisk -d /dev/sda > /nfs/images/test_win10_kvm/partition_table
+#dd if=/dev/sda1 of=/nfs/images/test_win10_kvm/sda1.img status=progresss
+#dd if=/dev/sda2 of=/nfs/images/test_win10_kvm/sda2.img status=progress
+#dd if=/dev/sda of=/nfs/images/test_win10_kvm/mbr.img bs=512 count=1 status=progress
 
 # partclone.ntfs -c -s /dev/sda4 -o /nfs/images/test_win10_kvm/sda4_partclone.img
 
@@ -150,7 +207,7 @@ dd if=/dev/sda of=/nfs/images/test_win10_kvm/mbr.img bs=512 count=1 status=progr
 
 # Resize NTFS Partition  (max size)
 
- 
+
 
 
 
