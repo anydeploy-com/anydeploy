@@ -8,6 +8,9 @@ sfdisk --json /dev/sda > /nfs/images/test_win10_kvm/partition_table_json
 
 resize_start_sector=$(cat /nfs/images/test_win10_kvm/partition_table | grep "/dev/sda4" | awk '{print $4}' | tr -d ",")
 
+
+# TODO MODIFY TO USE GDISK FOR GPT AND FDISK FOR MBR (PROBLEMS WITH PARTITIONS NOT HIDDEN ETC)
+
 # root@anylive_x64:~# sfdisk /dev/sda -l >
 # Disk /dev/sda: 465.8 GiB, 500107862016 bytes, 976773168 sectors
 # Units: sectors of 1 * 512 = 512 bytes
