@@ -76,7 +76,7 @@ new_ntfs_size_m="${new_ntfs_size}M"
 
   # $current_volume_size / 512 + (1024 * 3) = 24983537
 
-  new_sector_size = $current_volume_size / 512 + (1024 * 3) = 24983537
+  #new_sector_size = $current_volume_size / 512 + (1024 * 3) = 24983537
 
 
 
@@ -85,7 +85,6 @@ new_ntfs_size_m="${new_ntfs_size}M"
 
 
 # Resizeup
-
 
 # Run sfdisk to resize up (delete + resize partition back with maximum size)
 

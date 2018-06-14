@@ -217,7 +217,7 @@ sh /anydeploy/scripts/render_template.sh /anydeploy/systems/Windows/unattend_fil
 ##############################################################################
 
 rm /anydeploy/iso/autounattend.iso
-mkisofs -o /anydeploy/iso/autounattend.iso -joliet-long -relaxed-filenames /anydeploy/tmp/extracted/.
+genisoimage -o /anydeploy/iso/autounattend.iso -joliet-long -relaxed-filenames /anydeploy/tmp/extracted/.
 
 
 ##############################################################################
@@ -242,7 +242,7 @@ virt-install \
 --disk /anydeploy/iso/autounattend.iso,device=cdrom --check path_in_use=off \
 --disk /anydeploy/iso/virtio-win.iso,device=cdrom --check path_in_use=off \
 --disk "/var/lib/libvirt/images/win10home_mbr$$.qcow2",format=qcow2,bus=virtio,cache=none \
---network=bridge:br0,model=virtio \
+--network=bridge:anybr0,model=virtio \
 --events "on_poweroff=preserve" \
 --os-variant "win10" \
 --vcpus 2 \
