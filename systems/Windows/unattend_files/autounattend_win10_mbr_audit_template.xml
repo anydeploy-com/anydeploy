@@ -138,9 +138,15 @@
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action=\"add\">
-                    <CommandLine>@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"</CommandLine>
+                    <CommandLine>cmd.exe /c powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command \"iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))\"</CommandLine>
                     <Description>Install Chocolatey</Description>
                     <Order>4</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action=\"add\">
+                    <CommandLine>REG ADD HKLM\Software\Microsoft\Windows\CurrentVersion\Run /v Setup /t REG_SZ /d \"cmd.exe /C E:\postinstall.cmd\" /f</CommandLine>
+                    <Description>Run Postinstall Script</Description>
+                    <Order>5</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
               <!--  <SynchronousCommand wcm:action=\"add\">

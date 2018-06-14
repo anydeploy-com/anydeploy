@@ -209,6 +209,77 @@ echo "chosen edition key: $chosen_edition_key"
 sh /anydeploy/scripts/render_template.sh /anydeploy/systems/Windows/unattend_files/autounattend_win10_mbr_audit_template.xml >> /anydeploy/tmp/extracted/autounattend.xml
 
 
+# Add postinstall script
+
+echo "Taskkill /IM MicrosoftEdge.exe /F" >> /anydeploy/tmp/extracted/postinstall_unix.cmd
+echo "choco install googlechrome adobereader flashplayerplugin flashplayeractivex jre8 sdio -y --force" >> /anydeploy/tmp/extracted/postinstall_unix.cmd
+echo "REG DELETE HKLM\Software\Microsoft\Windows\CurrentVersion\Run /v Setup /f" >> /anydeploy/tmp/extracted/postinstall_unix.cmd
+
+## Convert generated batch file to DOS format
+echo " * Converting Generated Script to DOS compatible format"
+cat /anydeploy/tmp/extracted/postinstall_unix.cmd | awk 'sub("$", "\r")' > /anydeploy/tmp/extracted/postinstall.cmd
+sleep 1
+
+
+
+cat >"/anydeploy/tmp/extracted/anydeploy_sdio_unix.bat" << EOF
+:: Create DUMMY files
+
+@copy /y NUL drivers\DP_LAN_Intel_17062.7z
+@copy /y NUL drivers\DP_LAN_Others_17075.7z
+@copy /y NUL drivers\DP_LAN_Realtek-NT_17075.7z
+@copy /y NUL drivers\DP_LAN_Realtek-XP_17023.7z
+
+:: Create update app script
+
+@copy /y NUL scripts\anydeploy-update-app.txt
+@echo activetorrent 1 > scripts\anydeploy-update-app.txt
+@echo checkupdates >> scripts\anydeploy-update-app.txt
+@echo get indexes >> scripts\anydeploy-update-app.txt
+@echo end >> scripts\anydeploy-update-app.txt
+
+:: Create update indexes script
+
+@copy /y NUL scripts\anydeploy-update-indexes.txt
+@echo activetorrent 1 > scripts\anydeploy-update-app.txt
+@echo checkupdates >> scripts\anydeploy-update-app.txt
+@echo get indexes >> scripts\anydeploy-update-app.txt
+@echo end >> scripts\anydeploy-update-app.txt
+
+:: Create update drivers script
+
+@copy /y NUL scripts\anydeploy-update-drivers.txt
+@echo init > scripts\anydeploy-update-drivers.txt
+@echo activetorrent 2 >> scripts\anydeploy-update-drivers.txt
+@echo checkupdates >> scripts\anydeploy-update-drivers.txt
+@echo get driverpacks updates >> scripts\anydeploy-update-drivers.txt
+@echo end >> scripts\anydeploy-update-drivers.txt
+
+:: Execute Scripts
+
+@echo ==============================
+@echo Snappy Driver Installer Origin
+@echo       updating app
+@echo ==============================
+@SDIO_x64_R667.exe -script:scripts\anydeploy-update-app.txt
+@echo ==============================
+@echo Snappy Driver Installer Origin
+@echo       updating indexes
+@echo ==============================
+@SDIO_x64_R667.exe -script:scripts\anydeploy-update-indexes.txt
+@echo ==============================
+@echo Snappy Driver Installer Origin
+@echo       updating drivers
+@echo ==============================
+@SDIO_x64_R667.exe -script:scripts\anydeploy-update-drivers.txt
+sleep 10
+EOF
+
+
+## Convert generated batch file to DOS format
+echo " * Converting Generated Script to DOS compatible format"
+cat /anydeploy/tmp/extracted/anydeploy_sdio_unix.bat | awk 'sub("$", "\r")' > /anydeploy/tmp/extracted/anydeploy_sdio.bat
+sleep 1
 
 
 
