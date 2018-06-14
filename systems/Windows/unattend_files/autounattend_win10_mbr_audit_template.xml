@@ -137,6 +137,12 @@
                     <Order>3</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
+                <SynchronousCommand wcm:action=\"add\">
+                    <CommandLine>@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"</CommandLine>
+                    <Description>Install Chocolatey</Description>
+                    <Order>4</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
               <!--  <SynchronousCommand wcm:action=\"add\">
                     <CommandLine>REG ADD \"HKCU\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\Main\" /v DisallowDefaultBrowserPrompt /T REG_SZ /D \"\" /F</CommandLine>
                     <Description>Disable Microsoft Edge First Run Page</Description>
