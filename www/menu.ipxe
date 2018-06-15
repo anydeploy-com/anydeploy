@@ -1,7 +1,10 @@
 #!ipxe
 menu anyDeploy PXE menu
 item anydeploy Anydeploy
+item anydeploy-bridge Anydeploy Bridge
 item win10 Win10
+item bootmod Bootmod
+item custom_winpe Custom WIN_PE
 
 choose --default anydeploy --timeout 5000 target && goto ${target}
 #choose os && goto ${os}
@@ -12,11 +15,31 @@ kernel http://192.168.1.254/vmlinuz initrd=initrd.img nfsroot=192.168.1.254:/nfs
 initrd http://192.168.1.254/initrd.img
 boot
 
+:anydeploy-bridge
+
+kernel http://192.168.1.254/vmlinuz initrd=initrd.img nfsroot=192.168.1.254:/nfs/any64 rw bridge=anybr0:eth0 ip=dhcp net.ifnames=0
+initrd http://192.168.1.254/initrd.img
+boot
+
 :win10
 
 kernel http://192.168.1.254/win10/wimboot
   initrd http://192.168.1.254/win10/bcd         BCD
   initrd http://192.168.1.254/win10/boot.sdi    boot.sdi
   initrd http://192.168.1.254/win10/boot.wim boot.wim
+  boot
+
+:bootmod
+
+kernel memdisk
+initrd http://192.168.1.254/winpe.iso
+imgargs memdisk iso raw 
+boot
+
+:custom_winpe
+  kernel http://192.168.1.254/wimboot
+  initrd http://192.168.1.254/custom_winpe/bcd         BCD
+  initrd http://192.168.1.254/custom_winpe/boot.sdi    boot.sdi
+  initrd http://192.168.1.254/custom_winpe/boot.wim boot.wim
   boot
 
