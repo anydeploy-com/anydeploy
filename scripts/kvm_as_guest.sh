@@ -10,6 +10,11 @@ mount -t tmpfs -o size=10m tmpfs /etc/network/interfaces.d
 
 # /etc/network/interfaces.d/anybr0
 
+auto lo
+iface lo inet loopback
+
+iface eno0 inet manual
+
 auto anybr0
 iface anybr0 inet static
 	address 192.168.1.128        ## set up/netmask/broadcast/gateway as per your setup
