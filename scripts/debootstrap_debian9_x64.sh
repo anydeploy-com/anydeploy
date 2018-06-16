@@ -1,9 +1,25 @@
 #!/bin/bash
 
+# Include Functions + Global Conf
 . /anydeploy/scripts/includes/functions.sh
 . /anydeploy/global.conf
 
-anynet_amd64="/nfs/any64"
+# Define folders
+    nfs_dir="/nfs"
+    anynet_x86="/nfs/any"
+    anynet_amd64="/nfs/any64"
+
+# Check Deps
+    deps=(debootstrap nfs-kernel-server nfs-common)
+    check_deps
+
+# Checking if anynet already exists"
+    if [ -d "${anynet_amd64}" ]; then
+      echo "anydeploy amd64 already exists"
+      # TODO prompt what to do
+    else
+      echo "anydeploy amd64 doesnt exist, continuing"
+    fi
 
 # Create NFS share dir
 mkdir "/nfs"
@@ -11,6 +27,9 @@ mkdir "/nfs"
 mkdir "/nfs/any64"
 # Add Working Dir variable
 
+start_spinner 'Deboostrapping Debian 9'
+sleep 2
+stop_spinner $?
 
 debootstrap --components=main,non-free --include=linux-image-amd64,openssh-server,nano,python,initramfs-tools,syslinux-common,firmware-linux,firmware-realtek,firmware-bnx2,firmware-atheros,firmware-iwlwifi,firmware-intelwimax,firmware-qlogic,firmware-netxen,locales \
 stretch /nfs/any64 http://deb.debian.org/debian/
@@ -31,8 +50,6 @@ EOF
 echo "BOOT=nfs" >> ${anynet_amd64}/etc/initramfs-tools/initramfs.conf
 
 echo "setting up nfs"
-
-apt-get install nfs-kernel-server nfs-common -y
 
 
 touch /etc/exports
