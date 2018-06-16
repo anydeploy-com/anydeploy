@@ -4,7 +4,7 @@
           . /anydeploy/scripts/includes/functions.sh
 
           # Include global config
-          . /anydeploy/settings/global.sh
+          . /anydeploy/global.conf
 
           # Clear for readability
           clear
