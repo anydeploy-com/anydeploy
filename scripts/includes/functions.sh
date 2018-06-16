@@ -35,28 +35,29 @@ fi
 
 
 
-function check_deps {
+function check_deps
+# Define dependencies and verify them
+{
+# Update packages list first
+echo "updating with apt-get" > /anydeploy/logs/log.txt
+apt-get update &>> /anydeploy/logs/log.txt
 for i in "${deps[@]}"
 do
-if which $i >/dev/null; then
-echo_pass "Dependency $i is installed"
-elif which cupsd >/dev/null; then # cups exception
-echo_pass "Dependency $i is installed" # cups exception
-elif which netstat >/dev/null; then
-echo_pass "Dependency $i is installed" # netstat exception
-elif which ifconfig >/dev/null; then
-echo_pass "Dependency $i is installed" # ifconfig exception
+dpkg_query=$(dpkg -l 2>/dev/null $i | grep $i | awk '{print $2}' )
+dpkg_version=$(dpkg -l 2>/dev/null $i | grep $i | awk '{print $3}')
+if [ "$dpkg_query" = $i ]; then
+echo_pass "Dependency $i is installed - version: ${dpkg_version}"
+echo "Dependency $i is installed - version: ${dpkg_version}" >> /anydeploy/logs/log.txt
 else
 echo_warn "Dependency $i is not installed"
-  read -p " Do you want me to install $i (y/n)? " CONT
-  if [ "$CONT" = "y" ]; then
-  echo_warn "Installing $i";
-  apt-update &>> log.txt
-  apt install $i &>> log.txt
-  else
-  echo_fail "Cancelled script due to depencency missing ($i)";
-  exit 1
-  fi
+	read -p " Do you want me to install $i (y/n)? " CONT
+	if [ "$CONT" = "y" ]; then
+	echo_warn "Installing $i";
+	apt install $i &>> /anydeploy/logs/log.txt
+	else
+	echo_fail "Cancelled script due to depencency missing ($i)";
+	exit 1
+	fi
 fi
 done
 }
