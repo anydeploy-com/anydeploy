@@ -1,7 +1,7 @@
 #!/bin/bash
 
 . /anydeploy/scripts/includes/functions.sh
-. /anydeploy/settings/global.conf
+. /anydeploy/global.conf
 
 anynet_amd64="/nfs/any64"
 
