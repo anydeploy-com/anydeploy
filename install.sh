@@ -1,69 +1,12 @@
 #!/bin/bash
 
+# Include functions
+. /anydeploy/settings/functions.sh
 
-# Clear input
-#exec /usr/bin/fbterm "$@"
-clear
+# Include global config
+. /anydeploy/global.conf
 
-# Basic installer functions
 
-          # Formatting functions
-          # special characters: ✔/▰/✘
-
-          function echo_pass {
-          echo "$(tput setaf 2) ✔$(tput sgr0) - $1"
-          }
-
-          function echo_warn {
-          echo "$(tput setaf 3) ▰$(tput sgr0) - $1"
-          }
-
-          function echo_fail {
-          echo "$(tput setaf 1) ✘$(tput sgr0) - $1"
-          }
-
-          function install_font {
-
-            # /lib/systemd/system/getty@.service
-            # cp /lib/systemd/system/getty@.service /anydeploy/
-
-            # Show fonts
-
-            #showconsolefont
-
-            # Install font apt
-            apt install -y xfonts-terminus
-            # Setup as main font
-            #apt install fbterm
-            #/etc/default/console-setup
-
-            #List of all fonts
-            #ls /usr/share/consolefonts/
-
-            #Add /root/.bash_profile
-
-            #dpkg-reconfigure console-setup
-
-#          #
-#          # ~/.bash_profile
-#          #
-#
-#          [[ -f ~/.bashrc ]] && . ~/.bashrc
-#          fbterm --font-size 18
-#
-          }
-
-          function check_root {
-
-          # Detect if run as root and do so if not
-
-          if [[ $EUID -ne 0 ]]; then
-             echo_fail " * - This script must be run as root"
-             exit 1
-          else
-            echo_pass " * - Running as root / sudo"
-          fi
-          }
 
           function check_log {
             # if log exists then rename to current date one
@@ -73,15 +16,7 @@ clear
 
 
 
-          function os_update {
-          echo_warn "Updating OS"
-          apt update -y
-          }
 
-          function os_upgrade {
-          echo_warn "Upgrading OS"
-          apt upgrade -y
-          }
 
           function install_git {
           echo_warn "Installing git"
@@ -100,35 +35,6 @@ clear
 
           # Exists - prompt to replace / update
 
-          }
-
-          function check_deps
-
-          # Define dependencies and verify them
-          {
-          for i in "${deps[@]}"
-          do
-          if which $i >/dev/null; then
-          echo_pass "Dependency $i is installed"
-          elif which cupsd >/dev/null; then # cups exception
-          echo_pass "Dependency $i is installed" # cups exception
-          elif which netstat >/dev/null; then
-          echo_pass "Dependency $i is installed" # netstat exception
-          elif which ifconfig >/dev/null; then
-          echo_pass "Dependency $i is installed" # ifconfig exception
-          else
-          echo_warn "Dependency $i is not installed"
-            read -p " Do you want me to install $i (y/n)? " CONT
-            if [ "$CONT" = "y" ]; then
-            echo_warn "Installing $i";
-            apt-update &>> log.txt
-            apt install $i &>> log.txt
-            else
-            echo_fail "Cancelled script due to depencency missing ($i)";
-            exit 1
-            fi
-          fi
-          done
           }
 
           # Verify Internet connection
@@ -153,14 +59,16 @@ clear
           case "$choice" in
             y|Y )
             echo_warn "OS Update chosen - updating"
-            os_update
+            echo_warn "Updating Packages (apt update)"
+            apt-get update -y
             sleep 5
             os_upgrade
             sleep 5
             ;;
             n|N )
             echo_warn "Skipping upgrades - updating packages list only"
-            os_update
+            echo_warn "Updating OS"
+            apt-get upgrade -y
             sleep 5
             ;;
             * )
@@ -170,11 +78,7 @@ clear
 
 
           function git_postclone {
-            # Include functions
-            . /anydeploy/settings/functions.sh
 
-            # Include global config
-            . /anydeploy/settings/global.sh
 
             # Add gitignore files
 
@@ -240,7 +144,7 @@ clear
 
 # Declare dependencies
 
-      deps=( dialog debootstrap sudo dmidecode lspci cups net-tools bridge-utils dhcpcd5 )
+      deps=( dialog debootstrap sudo dmidecode lsusb lspci cups net-tools dhcpcd5 qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils libguestfs-tools genisoimage virtinst libosinfo-bin )
 
 # Check dependencies
 
