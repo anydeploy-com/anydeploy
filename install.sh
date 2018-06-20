@@ -4,8 +4,8 @@
 #                            Include functions                               #
 ##############################################################################
 
-  source global.conf                        # Include Global Configuration File
-  source scripts/includes/functions.sh                      # Include Functions
+  source global.conf                          # Include Global Conf
+  source scripts/includes/functions.sh        # Include Functions
 
 ##############################################################################
 #                               Ask Questions                                #
@@ -83,7 +83,23 @@ echo ""
   check_deps
 
   ##############################################################################
-  #                              Start Dialog                                  #
+  #                               Check Conflicts                              #
   ##############################################################################
 
-  
+
+  # TODO Remove netplan, network-manager (check if installed - dpkg -l and remove using apt purge)
+
+
+  echo "##############################################################################"
+  echo "#                        Starting Dialog Setup                               #"
+  echo "##############################################################################"
+  echo ""
+
+  # Select Interface for networking
+  . ${install_path}/scripts/setup/select_interface.sh
+  . ${install_path}/scripts/setup/detect_dhcp.sh
+
+
+
+
+  # TODO - add updatepciids script
