@@ -7,11 +7,6 @@
   source ../../global.conf                              # Include Global Conf
   source ${install_path}/scripts/includes/functions.sh  # Include Functions
 
-
-
-
-
-
 ##############################################################################
 #                  Verify if interface is selected                           #
 ##############################################################################
@@ -30,8 +25,30 @@
           sleep 5
         fi
     else
-      echo "no interface selected"
-      ${install_path}/scripts/setup/select_interface.sh
+      if [ "${debugging}" = "yes" ]; then
+      echo "DEBUG: no interface selected"
+      echo "DEBUG: running dialog window to prompt user if he want to select interface"
+      echo "DEBUG: sleeping 5 sec"
+      sleep 5
+      fi
+      dialog --title "Reconfigure Interface" \
+      --backtitle "Anydeploy - Reconfigure Interface" \
+      --yesno "No interface has been selected yet. Would you like to select one now?" 7 60
+
+      response=$?
+      case $response in
+         0) if [ "${debugging}" = "yes" ]; then
+           echo "DEBUG: Going to interface selection"
+           echo "DEBUG: sleeping 5 sec"
+           sleep 5
+           fi
+         ${install_path}/scripts/setup/select_interface.sh;;
+         1) echo "DEBUG: Don't select interface selected - exiting script"
+         exit 1
+         ;;
+         255) echo "[ESC] key pressed.";;
+      esac
+
       exit 1
     fi
 
@@ -39,7 +56,29 @@
     #                  Detect Bridge on ${selected_interface}                    #
     ##############################################################################
 
+    selected_interface_bridge=$(brctl show | grep "${selected_interface}" | awk '{print $1}')
 
+    if [ ! -z "${selected_interface_bridge}" ] ; then
+    bridge_desc="Bridge has been detected on selected interface. Using bridge settings detection"
+    selected_interface_old_ip=$(ifconfig ${selected_interface_bridge} | grep "inet " | awk '{print $2}')
+    else
+    selected_interface_old_ip=$(ifconfig ${selected_interface} | grep "inet " | awk '{print $2}')
+    bridge_desc=""
+    fi
+
+
+    if [ ! -z "${selected_interface_old_ip}" ]; then
+    #  echo "old ip has value"
+      proposed_ip="${selected_interface_old_ip}"
+    #  echo "Proposed ip = ${proposed_ip}"
+      ipaddr_desc="Your system had IP address attached on selected interface, using same IP as default"
+    else
+    #  echo "no ip found - usin/etc/default/isc-dhcp-serverg default as proposed ip"
+      proposed_ip="192.168.1.254"
+    #  proposed_dhcp_start="192.168.1.10"
+    #  proposed_dhcp_end="192.168.1.200"
+      ipaddr_desc="Your system didn't have any IP address attached on selected interface, using defaults"
+    fi
 
 
 
@@ -50,31 +89,13 @@ setup_ip () {
 # Detect Current IP address and add message.
 
   # Define Bridge interface if it's configured
-  selected_interface_bridge=$(brctl show | grep "${selected_interface}" | awk '{print $1}')
 
-if [ ! -z "${selected_interface_bridge}" ] ; then
-bridge_desc="Bridge has been detected on selected interface. Using bridge settings detection"
-selected_interface_old_ip=$(ifconfig ${selected_interface_bridge} | grep "inet " | awk '{print $2}')
-else
-selected_interface_old_ip=$(ifconfig ${selected_interface} | grep "inet " | awk '{print $2}')
-bridge_desc=""
-fi
+
+
 
 #echo "Selected interface old ip : ${selected_interface_old_ip}"
 
 
-if [ ! -z "${selected_interface_old_ip}" ]; then
-#  echo "old ip has value"
-  proposed_ip="${selected_interface_old_ip}"
-#  echo "Proposed ip = ${proposed_ip}"
-  ipaddr_desc="Your system had IP address attached on selected interface, using same IP as default"
-else
-#  echo "no ip found - usin/etc/default/isc-dhcp-serverg default as proposed ip"
-  proposed_ip="192.168.1.254"
-#  proposed_dhcp_start="192.168.1.10"
-#  proposed_dhcp_end="192.168.1.200"
-  ipaddr_desc="Your system didn't have any IP address attached on selected interface, using defaults"
-fi
 
 
 # Detect running dhcp server and setup gateway ip if current exists - run as seperate process (&)
