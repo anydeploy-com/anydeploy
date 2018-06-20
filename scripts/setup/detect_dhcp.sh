@@ -21,7 +21,6 @@
           echo "DEBUG: interface is selected"
           echo "DEBUG: selected interface: ${selected_interface}"
           echo "DEBUG: Calling detect_bridge function"
-          echo "DEBUG: sleeping 5 sec"
           sleep 5
         fi
         detect_bridge
@@ -29,7 +28,6 @@
       if [ "${debugging}" = "yes" ]; then
       echo "DEBUG: no interface selected"
       echo "DEBUG: running dialog window to prompt user if he want to select interface"
-      echo "DEBUG: sleeping 5 sec"
       sleep 5
       fi
       dialog --title "Reconfigure Interface" \
@@ -40,13 +38,11 @@
       case $response in
          0) if [ "${debugging}" = "yes" ]; then
            echo "DEBUG: Going to interface selection"
-           echo "DEBUG: sleeping 5 sec"
            sleep 5
            fi
            ./select_interface.sh
            if [ "${debugging}" = "yes" ]; then
              echo "DEBUG: Re-running self since interface was re-selected"
-             echo "DEBUG: sleeping 5 sec"
              sleep 5
              fi
            ${install_path}/scripts/setup/detect_dhcp.sh;;
@@ -66,7 +62,6 @@
     detect_bridge () {
       if [ "${debugging}" = "yes" ]; then
         echo "DEBUG: Running bridge detection"
-        echo "DEBUG: sleeping 5 sec"
         sleep 5
         fi
     selected_interface_bridge=$(brctl show | grep "${selected_interface}" | awk '{print $1}')
@@ -78,13 +73,11 @@
         if [ "${debugging}" = "yes" ]; then
             echo "DEBUG: Bridge has been detected on selected interface. Bridge name = ${selected_interface_bridge}"
             echo "DEBUG: Bridge detected ip is ${selected_interface_old_ip}"
-            echo "DEBUG: sleeping 5 sec"
             sleep 5
         fi
     else
           if [ "${debugging}" = "yes" ]; then
               echo "DEBUG: No bridge has been found"
-              echo "DEBUG: sleeping 5 sec"
               sleep 5
           fi
         selected_interface_old_ip=$(ifconfig ${selected_interface} | grep "inet " | awk '{print $2}')
@@ -130,6 +123,18 @@ setup_ip () {
 
 
 # Detect running dhcp server and setup gateway ip if current exists - run as seperate process (&)
+
+if [ "${debugging}" = "yes" ]; then
+    echo "DEBUG: Gonna killall dhcpcd to ensure no dummy processes are running"
+    sleep 5
+fi
+killall dhcpcd
+
+
+if [ "${debugging}" = "yes" ]; then
+    echo "DEBUG: Going to use dhcpcd to detect dhcp settings running on selected interface/bridge"
+    sleep 5
+fi
 
 if [ ! -z "${selected_interface_bridge}" ] ; then
 dhcpcd -T ${selected_interface_bridge} &> /anydeploy/tmp/dhcp_discover.$$ &
