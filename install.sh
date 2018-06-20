@@ -19,6 +19,7 @@
   echo ""
   read -p " * - Do you want to update your operating system first - recommended (Y/n)? " update_upgrade
   read -p " * - Do you want to install dependencies automatically - recommended (Y/n)? " autoinstall_deps
+  read -p " * - Do you want to restore default config ? (y/n)? " restore_config
   echo ""
 
 ##############################################################################
@@ -90,12 +91,25 @@ echo ""
   # TODO Remove netplan, network-manager (check if installed - dpkg -l and remove using apt purge)
 
 
+
+
+  # Clear global.conf to default
+
+  start_spinner "Restoring default global.conf config file."
+  cp ${install_path}/assets/defaults/global.conf ${install_path}/global.conf
+  sleep 5
+  stop_spinner $?
+
+
   echo "##############################################################################"
   echo "#                        Starting Dialog Setup                               #"
   echo "##############################################################################"
   echo ""
 
+
+
   # Select Interface for networking
+  cd ${install_path}/scripts/setup/
   . ${install_path}/scripts/setup/select_interface.sh
   . ${install_path}/scripts/setup/detect_dhcp.sh
 

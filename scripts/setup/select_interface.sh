@@ -21,7 +21,7 @@ cleanup () {
 
 SAVEIFS=$IFS
 # Array of physical interfaces
-interfaces=($(ls /sys/class/net/*/device | grep "sys/class" | cut -d / -f 5))
+interfaces=($(ls -d /sys/class/net/*/device | grep "sys/class" | cut -d / -f 5))
 # Interfaces Devpaths
 for interface in "${interfaces[@]}" ; do interfaces_devpath+=($(readlink -f /sys/class/net/${interface})) ; done
 
