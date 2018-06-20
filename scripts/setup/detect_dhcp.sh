@@ -11,19 +11,20 @@
 #                  Verify if interface is selected                           #
 ##############################################################################
 
-# Display Selected Interface (debugging)
-
-
+      verify_interface_selection () {
 
 # If no interface is selected display warning (5 secs) and prompt to go to interface selection + call script
+
 
     if [ ! -z "${selected_interface}" ]; then
         if [ "${debugging}" = "yes" ]; then
           echo "DEBUG: interface is selected"
           echo "DEBUG: selected interface: ${selected_interface}"
+          echo "DEBUG: Calling detect_bridge function"
           echo "DEBUG: sleeping 5 sec"
           sleep 5
         fi
+        detect_bridge
     else
       if [ "${debugging}" = "yes" ]; then
       echo "DEBUG: no interface selected"
@@ -42,29 +43,58 @@
            echo "DEBUG: sleeping 5 sec"
            sleep 5
            fi
-         ${install_path}/scripts/setup/select_interface.sh;;
+           ./select_interface.sh
+           if [ "${debugging}" = "yes" ]; then
+             echo "DEBUG: Re-running self since interface was re-selected"
+             echo "DEBUG: sleeping 5 sec"
+             sleep 5
+             fi
+           ${install_path}/scripts/setup/detect_dhcp.sh;;
          1) echo "DEBUG: Don't select interface selected - exiting script"
+         sleep 5
          exit 1
          ;;
          255) echo "[ESC] key pressed.";;
       esac
-
-      exit 1
     fi
+    }
 
     ##############################################################################
-    #                  Detect Bridge on ${selected_interface}                    #
+    #          Detect Bridge on ${selected_interface} + bridge ip                #
     ##############################################################################
 
+    detect_bridge () {
+      if [ "${debugging}" = "yes" ]; then
+        echo "DEBUG: Running bridge detection"
+        echo "DEBUG: sleeping 5 sec"
+        sleep 5
+        fi
     selected_interface_bridge=$(brctl show | grep "${selected_interface}" | awk '{print $1}')
 
     if [ ! -z "${selected_interface_bridge}" ] ; then
-    bridge_desc="Bridge has been detected on selected interface. Using bridge settings detection"
-    selected_interface_old_ip=$(ifconfig ${selected_interface_bridge} | grep "inet " | awk '{print $2}')
+
+        bridge_desc="Bridge has been detected on selected interface. Using bridge settings detection"
+        selected_interface_old_ip=$(ifconfig ${selected_interface_bridge} | grep "inet " | awk '{print $2}')
+        if [ "${debugging}" = "yes" ]; then
+            echo "DEBUG: Bridge has been detected on selected interface. Bridge name = ${selected_interface_bridge}"
+            echo "DEBUG: Bridge detected ip is ${selected_interface_old_ip}"
+            echo "DEBUG: sleeping 5 sec"
+            sleep 5
+        fi
     else
-    selected_interface_old_ip=$(ifconfig ${selected_interface} | grep "inet " | awk '{print $2}')
-    bridge_desc=""
+          if [ "${debugging}" = "yes" ]; then
+              echo "DEBUG: No bridge has been found"
+              echo "DEBUG: sleeping 5 sec"
+              sleep 5
+          fi
+        selected_interface_old_ip=$(ifconfig ${selected_interface} | grep "inet " | awk '{print $2}')
+        bridge_desc=""
     fi
+
+    ##############################################################################
+    #                  Detect IP                                                 #
+    ##############################################################################
+
 
 
     if [ ! -z "${selected_interface_old_ip}" ]; then
@@ -80,7 +110,7 @@
       ipaddr_desc="Your system didn't have any IP address attached on selected interface, using defaults"
     fi
 
-
+}
 
 setup_ip () {
 
@@ -377,3 +407,6 @@ cleanup () {
   rm /anydeploy/tmp/dhcp_discover.$$
 #  rm /anydeploy/tmp/ip_settings_form.$$
 }
+
+
+verify_interface_selection
