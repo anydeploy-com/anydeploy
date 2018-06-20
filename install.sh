@@ -37,8 +37,53 @@ echo ""
 
   update_upgrade_os
 
-  # Install Dependencies
+  ##############################################################################
+  #                               Install Dependencies                         #
+  ##############################################################################
 
-  deps=( dialog debootstrap sudo dmidecode usbutils pciutils cups net-tools dhcpcd5 qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils libguestfs-tools genisoimage virtinst libosinfo-bin git )
+  deps=( \
+    # Dialog - Foundation of server management
+    dialog \
+    # Debootstrap - Used to create net version of anydeploy (netboot)
+    debootstrap \
+    # Sudo - might be used in some scripts
+    sudo \
+    # Dmidecode - Used in Specs Scripts
+    dmidecode \
+    # USBUtils - Used in Specs Scripts
+    usbutils \
+    # PCIUtils - Used in Specs Scripts
+    pciutils \
+    # CUPS - Used in Specs Scripts (Print)
+    cups \
+    # Net-Utils - Networking
+    net-tools \
+    # DHCPD - Networking
+    dhcpcd5 \
+    # Qemu - Virtualisation
+    qemu-kvm \
+    # Virtualisation Dependency
+    libvirt-clients \
+    # Virtualisation Dependency
+    libvirt-daemon-system \
+    # Virtualisation Dependency
+    bridge-utils \
+    # Virtualisation Dependency
+    libguestfs-tools \
+    # Virtualisation Dependency
+    virtinst \
+    # Virtualisation Dependency
+    libosinfo-bin \
+    # GenISO - used to generate iso for autounattend + combined iso's + anydeploy CD
+    genisoimage \
+    # Used for updates / cloning etc.
+    git \
+    )
 
   check_deps
+
+  ##############################################################################
+  #                              Start Dialog                                  #
+  ##############################################################################
+
+  

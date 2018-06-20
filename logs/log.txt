@@ -1,13 +1,13 @@
 updating with apt-get
-Ign:1 http://ftp.uk.debian.org/debian stretch InRelease
-Hit:2 http://security.debian.org/debian-security stretch/updates InRelease
-Hit:3 http://linux.teamviewer.com/deb stable InRelease
-Ign:4 http://dl.google.com/linux/chrome/deb stable InRelease
-Hit:5 http://repository.spotify.com stable InRelease
-Hit:6 http://ftp.uk.debian.org/debian stretch-updates InRelease
-Hit:7 http://linux.teamviewer.com/deb preview InRelease
-Hit:8 http://ftp.uk.debian.org/debian stretch Release
-Hit:9 http://dl.google.com/linux/chrome/deb stable Release
+Hit:1 http://security.debian.org/debian-security stretch/updates InRelease
+Hit:2 http://linux.teamviewer.com/deb stable InRelease
+Ign:3 http://dl.google.com/linux/chrome/deb stable InRelease
+Ign:4 http://ftp.uk.debian.org/debian stretch InRelease
+Hit:5 http://linux.teamviewer.com/deb preview InRelease
+Hit:6 http://repository.spotify.com stable InRelease
+Hit:7 http://ftp.uk.debian.org/debian stretch-updates InRelease
+Hit:8 http://dl.google.com/linux/chrome/deb stable Release
+Hit:9 http://ftp.uk.debian.org/debian stretch Release
 Reading package lists...
 Dependency dialog is installed - version: 1.3-20160828-2
 Dependency debootstrap is installed - version: 1.0.89
@@ -22,59 +22,8 @@ Dependency qemu-kvm is installed - version: 1:2.8+dfsg-6+deb9u4
 Dependency libvirt-clients is installed - version: 3.0.0-4+deb9u3
 Dependency libvirt-daemon-system is installed - version: 3.0.0-4+deb9u3
 Dependency bridge-utils is installed - version: 1.5-13+deb9u1
-Reading package lists...
-Building dependency tree...
-Reading state information...
-The following packages were automatically installed and are no longer required:
-  dvdauthor gir1.2-gtk-vnc-2.0 gir1.2-libvirt-glib-1.0
-  gir1.2-spice-client-glib-2.0 gir1.2-spice-client-gtk-3.0 growisofs libcue1
-  python-dbus
-Use 'apt autoremove' to remove them.
-The following additional packages will be installed:
-  genisoimage libguestfs-hfsplus libguestfs-perl libguestfs-reiserfs
-  libguestfs-xfs libguestfs0
-Suggested packages:
-  cdrkit-doc libguestfs-gfs2 libguestfs-jfs libguestfs-nilfs libguestfs-rescue
-  libguestfs-rsync libguestfs-zfs
-The following NEW packages will be installed:
-  genisoimage libguestfs-hfsplus libguestfs-perl libguestfs-reiserfs
-  libguestfs-tools libguestfs-xfs libguestfs0
-0 upgraded, 7 newly installed, 0 to remove and 0 not upgraded.
-Need to get 0 B/12.7 MB of archives.
-After this operation, 40.6 MB of additional disk space will be used.
-Selecting previously unselected package genisoimage.
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 267456 files and directories currently installed.)
-Preparing to unpack .../0-genisoimage_9%3a1.1.11-3+b2_amd64.deb ...
-Unpacking genisoimage (9:1.1.11-3+b2) ...
-Selecting previously unselected package libguestfs0:amd64.
-Preparing to unpack .../1-libguestfs0_1%3a1.34.6-2_amd64.deb ...
-Unpacking libguestfs0:amd64 (1:1.34.6-2) ...
-Selecting previously unselected package libguestfs-hfsplus:amd64.
-Preparing to unpack .../2-libguestfs-hfsplus_1%3a1.34.6-2_amd64.deb ...
-Unpacking libguestfs-hfsplus:amd64 (1:1.34.6-2) ...
-Selecting previously unselected package libguestfs-perl.
-Preparing to unpack .../3-libguestfs-perl_1%3a1.34.6-2_amd64.deb ...
-Unpacking libguestfs-perl (1:1.34.6-2) ...
-Selecting previously unselected package libguestfs-reiserfs:amd64.
-Preparing to unpack .../4-libguestfs-reiserfs_1%3a1.34.6-2_amd64.deb ...
-Unpacking libguestfs-reiserfs:amd64 (1:1.34.6-2) ...
-Selecting previously unselected package libguestfs-tools.
-Preparing to unpack .../5-libguestfs-tools_1%3a1.34.6-2_amd64.deb ...
-Unpacking libguestfs-tools (1:1.34.6-2) ...
-Selecting previously unselected package libguestfs-xfs:amd64.
-Preparing to unpack .../6-libguestfs-xfs_1%3a1.34.6-2_amd64.deb ...
-Unpacking libguestfs-xfs:amd64 (1:1.34.6-2) ...
-Setting up genisoimage (9:1.1.11-3+b2) ...
-Processing triggers for libc-bin (2.24-11+deb9u3) ...
-Processing triggers for man-db (2.7.6.1-2) ...
-Setting up libguestfs0:amd64 (1:1.34.6-2) ...
-Setting up libguestfs-reiserfs:amd64 (1:1.34.6-2) ...
-Setting up libguestfs-perl (1:1.34.6-2) ...
-Setting up libguestfs-hfsplus:amd64 (1:1.34.6-2) ...
-Setting up libguestfs-tools (1:1.34.6-2) ...
-Setting up libguestfs-xfs:amd64 (1:1.34.6-2) ...
-Processing triggers for libc-bin (2.24-11+deb9u3) ...
-Dependency genisoimage is installed - version: 9:1.1.11-3+b2
+Dependency libguestfs-tools is installed - version: 1:1.34.6-2
 Dependency virtinst is installed - version: 1:1.4.0-5
 Dependency libosinfo-bin is installed - version: 1.0.0-2
+Dependency genisoimage is installed - version: 9:1.1.11-3+b2
 Dependency git is installed - version: 1:2.11.0-3+deb9u3
