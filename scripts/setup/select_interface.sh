@@ -57,9 +57,6 @@ for iface_index in "${!interface_bus[@]}"; do
   fi
 done
 
-
-
-
 # Combine Arrays for dialog display
 for i in "${!interfaces[@]}"; do
   # Interface Dialog Name
