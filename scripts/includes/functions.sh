@@ -127,33 +127,47 @@ echo "updating with apt-get" > /anydeploy/logs/log.txt
 apt-get update &>> /anydeploy/logs/log.txt
 for i in "${deps[@]}"
 do
-dpkg_query=$(dpkg -l 2>/dev/null $i | grep $i | awk '{print $2}' )
+dpkg_status=$(dpkg -l 2>/dev/null $i | grep $i | awk '{print $1}')
+dpkg_query=$(dpkg -l 2>/dev/null $i | grep $i | awk '{print $2}')
 dpkg_version=$(dpkg -l 2>/dev/null $i | grep $i | awk '{print $3}')
 if [ "$dpkg_query" = $i ]; then
-            if [ "$dpkg_version" = "<none>" ]; then
-                    echo_warn "Dependency $i is not installed"
-                    	read -p " Do you want me to install $i (y/n)? " CONT
-                    	if [ "$CONT" = "y" ]; then
-                    	echo_warn "Installing $i";
-                    	apt install $i &>> /anydeploy/logs/log.txt
-                    	else
-                    	echo_fail "Cancelled script due to depencency missing ($i)";
-                    	exit 1
-                    	fi
+            if [ "${dpkg_status}" != "ii" ]; then
+                    #echo_warn "Dependency $i is not installed"
+                      if [ ${autoinstall_deps} = "Y" ] || [ ${autoinstall_deps} = "y" ] ; then
+                          start_spinner "Installing $i"
+                          apt-get install -y $i &>> /anydeploy/logs/log.txt
+                          sleep 0.3
+                          stop_spinner $?
+                      else
+                        	read -p " Do you want me to install $i (y/n)? " CONT
+                            	if [ "$CONT" = "y" ]; then
+                            	apt-get install -y $i &>> /anydeploy/logs/log.txt
+                              else
+                            	echo_fail "Cancelled script due to depencency missing ($i)";
+                            	exit 1
+                            	fi
+                      fi
             else
-              echo_pass "Dependency $i is installed - version: ${dpkg_version}"
+              start_spinner "Dependency $i is installed - version: ${dpkg_version}"
               echo "Dependency $i is installed - version: ${dpkg_version}" >> /anydeploy/logs/log.txt
+              sleep 0.3
+              stop_spinner $?
             fi
 else
-echo_warn "Dependency $i is not installed"
-	read -p " Do you want me to install $i (y/n)? " CONT
-	if [ "$CONT" = "y" ]; then
-	echo_warn "Installing $i";
-	apt install $i &>> /anydeploy/logs/log.txt
-	else
-	echo_fail "Cancelled script due to depencency missing ($i)";
-	exit 1
-	fi
+    if [ ${autoinstall_deps} = "Y" ] || [ ${autoinstall_deps} = "y" ] ; then
+        start_spinner "Installing $i"
+        apt-get install -y $i &>> /anydeploy/logs/log.txt
+        sleep 0.3
+        stop_spinner $?
+    else
+        read -p " Do you want me to install $i (y/n)? " CONT
+            if [ "$CONT" = "y" ]; then
+            apt-get install -y $i &>> /anydeploy/logs/log.txt
+            else
+            echo_fail "Cancelled script due to depencency missing ($i)";
+            exit 1
+            fi
+    fi
 fi
 done
 }

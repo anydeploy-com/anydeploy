@@ -18,8 +18,8 @@
 
   echo ""
   read -p " * - Do you want to update your operating system first - recommended (Y/n)? " update_upgrade
+  read -p " * - Do you want to install dependencies automatically - recommended (Y/n)? " autoinstall_deps
   echo ""
-
 
 ##############################################################################
 #                               Run Functions                                #
@@ -36,3 +36,9 @@ echo ""
   # Update / Upgrade Operating System
 
   update_upgrade_os
+
+  # Install Dependencies
+
+  deps=( dialog debootstrap sudo dmidecode usbutils pciutils cups net-tools dhcpcd5 qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils libguestfs-tools genisoimage virtinst libosinfo-bin git )
+
+  check_deps
