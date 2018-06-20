@@ -92,7 +92,7 @@
     fi
 
     ##############################################################################
-    #                  Detect IP                                                 #
+    #                               Detect IP                                    #
     ##############################################################################
 
 
@@ -110,6 +110,7 @@
       ipaddr_desc="Your system didn't have any IP address attached on selected interface, using defaults"
     fi
 
+    setup_ip
 }
 
 setup_ip () {
