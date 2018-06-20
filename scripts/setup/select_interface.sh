@@ -13,7 +13,7 @@
 
 cleanup () {
   if [ "${debugging}" = "yes" ]; then
-  echo "cleaning up"
+  echo "DEBUG: cleaning up"
   fi
   # Reset in case of re-run
   interface_dialog_name=()
@@ -78,10 +78,10 @@ selected_bridge="anybr0"
 # TODO FIX - ALWAYS THINKS THAT OK WAS PRESSED
                     if test $? -eq 0
                     then
-                       if [ "${debugging}" = "yes" ]; then echo "ok pressed"; fi
+                       if [ "${debugging}" = "yes" ]; then echo "DEBUG: ok pressed"; fi
                        # save to global config
                        if [ "${debugging}" = "yes" ]; then
-                       start_spinner "Editing ${install_path}/global.conf with selected_interface=${selected_interface}; selected_bridge=${selected_bridge}"
+                       start_spinner "DEBUG: Editing ${install_path}/global.conf with selected_interface=${selected_interface}; selected_bridge=${selected_bridge}"
                         fi
                        sed -i "/selected_interface=/ s/=.*/=\"${selected_interface}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
                        sed -i "/selected_bridge=/ s/=.*/=\"${selected_bridge}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
@@ -91,7 +91,7 @@ selected_bridge="anybr0"
                        fi
                     else
                        if [ "${debugging}" = "yes" ]; then
-                       echo "cancel pressed"
+                       echo "DEBUG: cancel pressed"
                        fi
                        cleanup
                        exit 1;

@@ -4,13 +4,43 @@
 #                            Include functions                               #
 ##############################################################################
 
-  source global.conf                          # Include Global Conf
-  source scripts/includes/functions.sh        # Include Functions
+  source ../../global.conf                              # Include Global Conf
+  source ${install_path}/scripts/includes/functions.sh  # Include Functions
 
 
-  ##############################################################################
-  #                  Detect Bridge on ${selected_interface}                    #
-  ##############################################################################
+
+
+
+
+##############################################################################
+#                  Verify if interface is selected                           #
+##############################################################################
+
+# Display Selected Interface (debugging)
+
+
+
+# If no interface is selected display warning (5 secs) and prompt to go to interface selection + call script
+
+    if [ ! -z "${selected_interface}" ]; then
+        if [ "${debugging}" = "yes" ]; then
+          echo "DEBUG: interface is selected"
+          echo "DEBUG: selected interface: ${selected_interface}"
+          echo "DEBUG: sleeping 5 sec"
+          sleep 5
+        fi
+    else
+      echo "no interface selected"
+      ${install_path}/scripts/setup/select_interface.sh
+      exit 1
+    fi
+
+    ##############################################################################
+    #                  Detect Bridge on ${selected_interface}                    #
+    ##############################################################################
+
+
+
 
 
 setup_ip () {
