@@ -248,7 +248,6 @@ if [ -z "${proposed_gateway}" ]; then
 
 
 
-      apt-get install iptables-persistent -y
       rm /etc/iptables/rules.v4
       touch /etc/iptables/rules.v4
 cat >"/etc/iptables/rules.v4" << EOF

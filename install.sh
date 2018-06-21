@@ -89,6 +89,18 @@ echo ""
     pxelinux \
     # Hosting PXE boot files (iPXE)
     tftpd-hpa
+    # Building Sources (ie. iPXE)
+    build-essential \
+    # Building Sources (ie. iPXE)
+    mtools \
+    # Perl
+    perl \
+    # Building Sources (ie. iPXE)
+    binutils \
+    # Building Sources (ie. iPXE)
+    liblzma-dev \
+    # Iptables Persistent for Postrouting
+    iptables-persistent
     )
 
   check_deps
@@ -125,6 +137,10 @@ echo ""
   cd ${install_path}/scripts/setup/
   . ${install_path}/scripts/setup/1_select_interface.sh
   . ${install_path}/scripts/setup/2_setup_interface.sh
+  clear
+  . ${install_path}/scripts/setup/3_setup_tftp.sh
+  . ${install_path}/scripts/setup/4_setup_ipxe.sh
+
 
 
 
