@@ -3,8 +3,8 @@ Hit:1 http://security.debian.org/debian-security stretch/updates InRelease
 Ign:2 http://ftp.uk.debian.org/debian stretch InRelease
 Hit:3 http://ftp.uk.debian.org/debian stretch-updates InRelease
 Hit:4 http://ftp.uk.debian.org/debian stretch Release
-Ign:5 http://dl.google.com/linux/chrome/deb stable InRelease
-Hit:6 http://repository.spotify.com stable InRelease
+Hit:5 http://repository.spotify.com stable InRelease
+Ign:6 http://dl.google.com/linux/chrome/deb stable InRelease
 Hit:7 http://dl.google.com/linux/chrome/deb stable Release
 Reading package lists...
 Dependency dialog is installed - version: 1.3-20160828-2
@@ -26,256 +26,12 @@ Dependency libosinfo-bin is installed - version: 1.0.0-2
 Dependency genisoimage is installed - version: 9:1.1.11-3+b2
 Dependency git is installed - version: 1:2.11.0-3+deb9u3
 Dependency syslinux is installed - version: 3:6.03+dfsg-14.1+deb9u1
-Reading package lists...
-Building dependency tree...
-Reading state information...
-The following package was automatically installed and is no longer required:
-  libvulkan1
-Use 'sudo apt autoremove' to remove it.
-The following NEW packages will be installed:
-  syslinux-efi
-0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
-Need to get 190 kB of archives.
-After this operation, 428 kB of additional disk space will be used.
-Get:1 http://ftp.uk.debian.org/debian stretch/main amd64 syslinux-efi all 3:6.03+dfsg-14.1+deb9u1 [190 kB]
-Fetched 190 kB in 0s (751 kB/s)
-Selecting previously unselected package syslinux-efi.
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 241039 files and directories currently installed.)
-Preparing to unpack .../syslinux-efi_3%3a6.03+dfsg-14.1+deb9u1_all.deb ...
-Unpacking syslinux-efi (3:6.03+dfsg-14.1+deb9u1) ...
-Setting up syslinux-efi (3:6.03+dfsg-14.1+deb9u1) ...
-Reading package lists...
-Building dependency tree...
-Reading state information...
-The following package was automatically installed and is no longer required:
-  libvulkan1
-Use 'sudo apt autoremove' to remove it.
-Suggested packages:
-  tftpd-hpa
-The following NEW packages will be installed:
-  pxelinux
-0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
-Need to get 236 kB of archives.
-After this operation, 308 kB of additional disk space will be used.
-Get:1 http://ftp.uk.debian.org/debian stretch/main amd64 pxelinux all 3:6.03+dfsg-14.1+deb9u1 [236 kB]
-Fetched 236 kB in 0s (1,723 kB/s)
-Selecting previously unselected package pxelinux.
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 241048 files and directories currently installed.)
-Preparing to unpack .../pxelinux_3%3a6.03+dfsg-14.1+deb9u1_all.deb ...
-Unpacking pxelinux (3:6.03+dfsg-14.1+deb9u1) ...
-Setting up pxelinux (3:6.03+dfsg-14.1+deb9u1) ...
-Reading package lists...
-Building dependency tree...
-Reading state information...
-The following package was automatically installed and is no longer required:
-  libvulkan1
-Use 'sudo apt autoremove' to remove it.
-The following NEW packages will be installed:
-  tftpd-hpa
-0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
-Need to get 50.2 kB of archives.
-After this operation, 121 kB of additional disk space will be used.
-Get:1 http://ftp.uk.debian.org/debian stretch/main amd64 tftpd-hpa amd64 5.2+20150808-1+b1 [50.2 kB]
-Preconfiguring packages ...
-Fetched 50.2 kB in 0s (658 kB/s)
-Selecting previously unselected package tftpd-hpa.
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 241057 files and directories currently installed.)
-Preparing to unpack .../tftpd-hpa_5.2+20150808-1+b1_amd64.deb ...
-Unpacking tftpd-hpa (5.2+20150808-1+b1) ...
-Setting up tftpd-hpa (5.2+20150808-1+b1) ...
-Processing triggers for systemd (232-25+deb9u3) ...
-Processing triggers for man-db (2.7.6.1-2) ...
-Reading package lists...
-Building dependency tree...
-Reading state information...
-The following package was automatically installed and is no longer required:
-  libvulkan1
-Use 'sudo apt autoremove' to remove it.
-The following additional packages will be installed:
-  dpkg-dev g++ g++-6 libalgorithm-diff-perl libalgorithm-diff-xs-perl
-  libalgorithm-merge-perl libdpkg-perl libfile-fcntllock-perl libstdc++-6-dev
-Suggested packages:
-  debian-keyring g++-multilib g++-6-multilib gcc-6-doc libstdc++6-6-dbg
-  libstdc++-6-doc
-The following NEW packages will be installed:
-  build-essential dpkg-dev g++ g++-6 libalgorithm-diff-perl
-  libalgorithm-diff-xs-perl libalgorithm-merge-perl libdpkg-perl
-  libfile-fcntllock-perl libstdc++-6-dev
-0 upgraded, 10 newly installed, 0 to remove and 0 not upgraded.
-Need to get 11.5 MB of archives.
-After this operation, 44.4 MB of additional disk space will be used.
-Get:1 http://ftp.uk.debian.org/debian stretch/main amd64 libstdc++-6-dev amd64 6.3.0-18+deb9u1 [1,420 kB]
-Get:2 http://ftp.uk.debian.org/debian stretch/main amd64 g++-6 amd64 6.3.0-18+deb9u1 [7,094 kB]
-Get:3 http://ftp.uk.debian.org/debian stretch/main amd64 g++ amd64 4:6.3.0-4 [1,546 B]
-Get:4 http://ftp.uk.debian.org/debian stretch/main amd64 libdpkg-perl all 1.18.24 [1,283 kB]
-Get:5 http://ftp.uk.debian.org/debian stretch/main amd64 dpkg-dev all 1.18.24 [1,592 kB]
-Get:6 http://ftp.uk.debian.org/debian stretch/main amd64 build-essential amd64 12.3 [7,346 B]
-Get:7 http://ftp.uk.debian.org/debian stretch/main amd64 libalgorithm-diff-perl all 1.19.03-1 [48.7 kB]
-Get:8 http://ftp.uk.debian.org/debian stretch/main amd64 libalgorithm-diff-xs-perl amd64 0.04-4+b2 [11.6 kB]
-Get:9 http://ftp.uk.debian.org/debian stretch/main amd64 libalgorithm-merge-perl all 0.08-3 [12.7 kB]
-Get:10 http://ftp.uk.debian.org/debian stretch/main amd64 libfile-fcntllock-perl amd64 0.22-3+b2 [35.3 kB]
-Fetched 11.5 MB in 2s (4,277 kB/s)
-Selecting previously unselected package libstdc++-6-dev:amd64.
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 241072 files and directories currently installed.)
-Preparing to unpack .../0-libstdc++-6-dev_6.3.0-18+deb9u1_amd64.deb ...
-Unpacking libstdc++-6-dev:amd64 (6.3.0-18+deb9u1) ...
-Selecting previously unselected package g++-6.
-Preparing to unpack .../1-g++-6_6.3.0-18+deb9u1_amd64.deb ...
-Unpacking g++-6 (6.3.0-18+deb9u1) ...
-Selecting previously unselected package g++.
-Preparing to unpack .../2-g++_4%3a6.3.0-4_amd64.deb ...
-Unpacking g++ (4:6.3.0-4) ...
-Selecting previously unselected package libdpkg-perl.
-Preparing to unpack .../3-libdpkg-perl_1.18.24_all.deb ...
-Unpacking libdpkg-perl (1.18.24) ...
-Selecting previously unselected package dpkg-dev.
-Preparing to unpack .../4-dpkg-dev_1.18.24_all.deb ...
-Unpacking dpkg-dev (1.18.24) ...
-Selecting previously unselected package build-essential.
-Preparing to unpack .../5-build-essential_12.3_amd64.deb ...
-Unpacking build-essential (12.3) ...
-Selecting previously unselected package libalgorithm-diff-perl.
-Preparing to unpack .../6-libalgorithm-diff-perl_1.19.03-1_all.deb ...
-Unpacking libalgorithm-diff-perl (1.19.03-1) ...
-Selecting previously unselected package libalgorithm-diff-xs-perl.
-Preparing to unpack .../7-libalgorithm-diff-xs-perl_0.04-4+b2_amd64.deb ...
-Unpacking libalgorithm-diff-xs-perl (0.04-4+b2) ...
-Selecting previously unselected package libalgorithm-merge-perl.
-Preparing to unpack .../8-libalgorithm-merge-perl_0.08-3_all.deb ...
-Unpacking libalgorithm-merge-perl (0.08-3) ...
-Selecting previously unselected package libfile-fcntllock-perl.
-Preparing to unpack .../9-libfile-fcntllock-perl_0.22-3+b2_amd64.deb ...
-Unpacking libfile-fcntllock-perl (0.22-3+b2) ...
-Setting up libstdc++-6-dev:amd64 (6.3.0-18+deb9u1) ...
-Setting up libdpkg-perl (1.18.24) ...
-Setting up g++-6 (6.3.0-18+deb9u1) ...
-Setting up libfile-fcntllock-perl (0.22-3+b2) ...
-Setting up dpkg-dev (1.18.24) ...
-Setting up libalgorithm-diff-perl (1.19.03-1) ...
-Processing triggers for man-db (2.7.6.1-2) ...
-Setting up g++ (4:6.3.0-4) ...
-update-alternatives: using /usr/bin/g++ to provide /usr/bin/c++ (c++) in auto mode
-Setting up build-essential (12.3) ...
-Setting up libalgorithm-merge-perl (0.08-3) ...
-Setting up libalgorithm-diff-xs-perl (0.04-4+b2) ...
+Dependency syslinux-efi is installed - version: 3:6.03+dfsg-14.1+deb9u1
+Dependency pxelinux is installed - version: 3:6.03+dfsg-14.1+deb9u1
+Dependency tftpd-hpa is installed - version: 5.2+20150808-1+b1
+Dependency build-essential is installed - version: 12.3
 Dependency mtools is installed - version: 4.0.18-2+b1
 Dependency perl is installed - version: 5.24.1-3+deb9u4
 Dependency binutils is installed - version: 2.28-5
-Reading package lists...
-Building dependency tree...
-Reading state information...
-The following package was automatically installed and is no longer required:
-  libvulkan1
-Use 'sudo apt autoremove' to remove it.
-Suggested packages:
-  liblzma-doc
-The following NEW packages will be installed:
-  liblzma-dev
-0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
-Need to get 292 kB of archives.
-After this operation, 670 kB of additional disk space will be used.
-Get:1 http://ftp.uk.debian.org/debian stretch/main amd64 liblzma-dev amd64 5.2.2-1.2+b1 [292 kB]
-Fetched 292 kB in 0s (2,276 kB/s)
-Selecting previously unselected package liblzma-dev:amd64.
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 242321 files and directories currently installed.)
-Preparing to unpack .../liblzma-dev_5.2.2-1.2+b1_amd64.deb ...
-Unpacking liblzma-dev:amd64 (5.2.2-1.2+b1) ...
-Setting up liblzma-dev:amd64 (5.2.2-1.2+b1) ...
-Reading package lists...
-Building dependency tree...
-Reading state information...
-The following package was automatically installed and is no longer required:
-  libvulkan1
-Use 'sudo apt autoremove' to remove it.
-The following additional packages will be installed:
-  netfilter-persistent
-The following NEW packages will be installed:
-  iptables-persistent netfilter-persistent
-0 upgraded, 2 newly installed, 0 to remove and 0 not upgraded.
-Need to get 19.5 kB of archives.
-After this operation, 79.9 kB of additional disk space will be used.
-Get:1 http://ftp.uk.debian.org/debian stretch/main amd64 netfilter-persistent all 1.0.4+nmu2 [8,792 B]
-Get:2 http://ftp.uk.debian.org/debian stretch/main amd64 iptables-persistent all 1.0.4+nmu2 [10.7 kB]
-Preconfiguring packages ...
-[?1049h[1;35r[4l[?25l(B[m[37m[40m[1;35r[H[2J[1;1H[97m[44m[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K[1;1H[37mPackage configuration[12;2H[30m[47m┌──────────────────────────────┤ [31mConfiguring iptables-persistent[30m ├──────────────────────────────┐[13;2H│                                                                                               │[97m[40m [14;2H[30m[47m│ Current iptables rules can be saved to the configuration file /etc/iptables/rules.v4. These   │[97m[40m [15;2H[30m[47m│ rules will then be loaded automatically during system startup.                                │[97m[40m [16;2H[30m[47m│                                                                                               │[97m[40m [17;2H[30m[47m│ Rules are only saved automatically during package installation. See the manual page of        │[97m[40m [18;2H[30m[47m│ iptables-save(8) for instructions on keeping the rules file up-to-date.                       │[97m[40m [19;2H[30m[47m│                                                                                               │[97m[40m [20;2H[30m[47m│ Save current IPv4 rules?                                                                      │[97m[40m [21;2H[30m[47m│                                                                                               │[97m[40m [22;2H[30m[47m│                           [37m[41m<Yes>[30m[47m                              <No>                             │[97m[40m [23;2H[30m[47m│                                                                                               │[97m[40m [24;2H[30m[47m└───────────────────────────────────────────────────────────────────────────────────────────────┘[97m[40m [25;3H                                                                                                 [22;31H[?12l[?25h[35;1H[37m(B[m[39;49m[K[?1049l[?1049h[1;35r[4l[?25l(B[m[37m[40m[1;35r[H[2J[1;1H[97m[44m[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K
-[K[1;1H[37mPackage configuration[12;2H[30m[47m┌──────────────────────────────┤ [31mConfiguring iptables-persistent[30m ├──────────────────────────────┐[13;2H│                                                                                               │[97m[40m [14;2H[30m[47m│ Current iptables rules can be saved to the configuration file /etc/iptables/rules.v6. These   │[97m[40m [15;2H[30m[47m│ rules will then be loaded automatically during system startup.                                │[97m[40m [16;2H[30m[47m│                                                                                               │[97m[40m [17;2H[30m[47m│ Rules are only saved automatically during package installation. See the manual page of        │[97m[40m [18;2H[30m[47m│ ip6tables-save(8) for instructions on keeping the rules file up-to-date.                      │[97m[40m [19;2H[30m[47m│                                                                                               │[97m[40m [20;2H[30m[47m│ Save current IPv6 rules?                                                                      │[97m[40m [21;2H[30m[47m│                                                                                               │[97m[40m [22;2H[30m[47m│                           [37m[41m<Yes>[30m[47m                              <No>                             │[97m[40m [23;2H[30m[47m│                                                                                               │[97m[40m [24;2H[30m[47m└───────────────────────────────────────────────────────────────────────────────────────────────┘[97m[40m [25;3H                                                                                                 [22;31H[?12l[?25h[35;1H[37m(B[m[39;49m[K[?1049lFetched 19.5 kB in 0s (200 kB/s)
-Selecting previously unselected package netfilter-persistent.
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 242363 files and directories currently installed.)
-Preparing to unpack .../netfilter-persistent_1.0.4+nmu2_all.deb ...
-Unpacking netfilter-persistent (1.0.4+nmu2) ...
-Selecting previously unselected package iptables-persistent.
-Preparing to unpack .../iptables-persistent_1.0.4+nmu2_all.deb ...
-Unpacking iptables-persistent (1.0.4+nmu2) ...
-Setting up netfilter-persistent (1.0.4+nmu2) ...
-Created symlink /etc/systemd/system/multi-user.target.wants/netfilter-persistent.service → /lib/systemd/system/netfilter-persistent.service.
-update-rc.d: warning: start and stop actions are no longer supported; falling back to defaults
-Processing triggers for systemd (232-25+deb9u3) ...
-Processing triggers for man-db (2.7.6.1-2) ...
-Setting up iptables-persistent (1.0.4+nmu2) ...
+Dependency liblzma-dev is installed - version: 5.2.2-1.2+b1
+Dependency iptables-persistent is installed - version: 1.0.4+nmu2
