@@ -121,6 +121,8 @@ echo ""
   if [ ${restore_config} = "Y" ] || [ ${restore_config} = "y" ] ; then
   start_spinner "Restoring default global.conf config file"
   cp ${install_path}/assets/defaults/global.conf ${install_path}/global.conf
+  rm -rf /nfs/
+  rm -rf ${install_path}/sources/ipxe
   sleep 5
   stop_spinner $?
   fi
@@ -140,6 +142,7 @@ echo ""
   clear
   . ${install_path}/scripts/setup/3_setup_tftp.sh
   . ${install_path}/scripts/setup/4_setup_ipxe.sh
+  . ${install_path}/scripts/setup/5_debootstrap.sh
 
 
 
