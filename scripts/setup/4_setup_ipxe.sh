@@ -51,7 +51,10 @@ EOF
       sleep 1
 stop_spinner $?
 
-# build ipxe
+##############################################################################
+#                          Build iPXE                                        #
+##############################################################################
+
 start_spinner "Building iPXE (UEFI)"
       make bin/undionly.kpxe EMBED=anydeploy.ipxe >/dev/null 2>&1
 stop_spinner $?
