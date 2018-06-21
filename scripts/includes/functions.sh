@@ -130,7 +130,7 @@ do
 dpkg_status=$(dpkg -l 2>/dev/null $i | grep $i | awk '{print $1}')
 dpkg_query=$(dpkg -l 2>/dev/null $i | grep $i | awk '{print $2}')
 dpkg_version=$(dpkg -l 2>/dev/null $i | grep $i | awk '{print $3}')
-if [ "$dpkg_query" = $i ]; then
+if [ "$dpkg_query" = ${i} ] || [ "$dpkg_query" = ${i}:amd64 ] ; then
             if [ "${dpkg_status}" != "ii" ]; then
                     #echo_warn "Dependency $i is not installed"
                       if [ ${autoinstall_deps} = "Y" ] || [ ${autoinstall_deps} = "y" ] ; then

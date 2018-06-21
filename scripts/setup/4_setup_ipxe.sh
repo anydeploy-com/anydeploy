@@ -35,6 +35,9 @@ stop_spinner $?
 start_spinner "Creating iPXE script"
       # go into ipxe folder
 
+# Save directory to go back later
+SAVE_DIR=$(pwd)
+
       cd ${install_path}/sources/ipxe/src
 
 
@@ -56,6 +59,9 @@ stop_spinner $?
 start_spinner "Building iPXE (BIOS)"
       make bin-x86_64-efi/ipxe.efi EMBED=anydeploy.ipxe >/dev/null 2>&1
 stop_spinner $?
+
+# Go back to previous directory after building
+cd ${install_path}/scripts/setup
 
 
 # TODO  verify if done succesfully

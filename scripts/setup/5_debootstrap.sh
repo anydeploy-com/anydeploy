@@ -169,11 +169,13 @@ stop_spinner $?
 
 }
 
+echo ${anynet_amd64}
+sleep 5
 
 
 debootstrap_debian_amd64
 
-if [ -d "$anynet_amd64" ]; then
+if [ -d "${anynet_amd64}" ]; then
 debootstrap_debian_amd64_postconfigure
 else
 echo "anynet directory not defined"
