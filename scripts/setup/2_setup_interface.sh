@@ -386,6 +386,7 @@ configure_interface () {
       echo "${TAB}bridge_fd 0" >> /etc/network/interfaces
 
       # TODO - remove uncecessary spaces
+      sed -i '/^$/{N;/^\n$/d;}' /etc/network/interfaces/interfaces
 
       # restart networking
 
