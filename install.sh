@@ -124,7 +124,7 @@ echo ""
   # Select Interface for networking
   cd ${install_path}/scripts/setup/
   . ${install_path}/scripts/setup/1_select_interface.sh
-  . ${install_path}/scripts/setup/2_setup_ip.sh
+  . ${install_path}/scripts/setup/2_setup_interface.sh
 
 
 
