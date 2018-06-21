@@ -281,8 +281,8 @@ COMMIT
 :OUTPUT ACCEPT [28299:3566120]
 COMMIT
 EOF
-      # Apply iptables rules
-      iptables-apply /etc/iptables/rules.v4
+      # Apply iptables rules (non interactive)
+      echo "y" | iptables-apply /etc/iptables/rules.v4
 
       ;;
      1) echo "Postrouting not enabled - skipping";;
