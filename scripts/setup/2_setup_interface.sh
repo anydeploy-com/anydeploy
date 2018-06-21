@@ -379,14 +379,14 @@ configure_interface () {
       echo "${TAB}address ${ip_address}" >> /etc/network/interfaces
       echo "${TAB}netmask ${subnet_mask}" >> /etc/network/interfaces
       if [ ! -z "${gateway}" ]; then
-      echo "${TAB}${gateway}" >> /etc/network/interfaces
+      echo "${TAB}gateway ${gateway}" >> /etc/network/interfaces
       fi
       echo "${TAB}bridge_ports ${selected_interface}" >> /etc/network/interfaces
       echo "${TAB}bridge_stp off" >> /etc/network/interfaces
       echo "${TAB}bridge_fd 0" >> /etc/network/interfaces
 
       # TODO - remove uncecessary spaces
-      sed -i '/^$/{N;/^\n$/d;}' /etc/network/interfaces/interfaces
+      sed -i '/^$/{N;/^\n$/d;}' /etc/network/interfaces
 
       # restart networking
 
