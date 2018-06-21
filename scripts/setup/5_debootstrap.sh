@@ -165,12 +165,11 @@ stop_spinner $?
 start_spinner 'AnyLive amd64 Postinstall - Cleaning up'
 rm ${anynet_amd64}/fixlocales.sh
 rm ${anynet_amd64}/postinstall.sh
+sleep 1
 stop_spinner $?
-
 }
 
-echo ${anynet_amd64}
-sleep 5
+
 
 
 debootstrap_debian_amd64
