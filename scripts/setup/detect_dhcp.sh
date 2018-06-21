@@ -108,11 +108,27 @@
 
 setup_ip () {
 
+# TODO - if on ubuntu detect if using netplan and remove it + install ifupdown
+
+# Detect Current IP address and add message.
+
+  # Define Bridge interface if it's configured
+
+
+
+
+#echo "Selected interface old ip : ${selected_interface_old_ip}"
+
+
+
+
+# Detect running dhcp server and setup gateway ip if current exists - run as seperate process (&)
+
 if [ "${debugging}" = "yes" ]; then
     echo "DEBUG: Gonna killall dhcpcd to ensure no dummy processes are running"
     sleep 5
 fi
-killall dhcpcd > /dev/null
+killall dhcpcd
 
 
 if [ "${debugging}" = "yes" ]; then
@@ -248,6 +264,7 @@ if [ -z "${proposed_gateway}" ]; then
 
 
 
+      apt-get install iptables-persistent -y
       rm /etc/iptables/rules.v4
       touch /etc/iptables/rules.v4
 cat >"/etc/iptables/rules.v4" << EOF
@@ -264,8 +281,8 @@ COMMIT
 :OUTPUT ACCEPT [28299:3566120]
 COMMIT
 EOF
-      # Apply iptables rules (non interactive)
-      echo "y" | iptables-apply /etc/iptables/rules.v4
+      # Apply iptables rules
+      iptables-apply /etc/iptables/rules.v4
 
       ;;
      1) echo "Postrouting not enabled - skipping";;
@@ -273,6 +290,19 @@ EOF
   esac
 fi
 
+
+
+
+#dialog --backtitle "DHCP Setup - IP Settings for ${selected_interface}" --title "Dialog - IP settings for ${selected_interface}" \
+#--form "\n${bridge_desc}\n${ipaddr_desc}\n${gateway_desc}:" 25 60 16 \
+#"Server IP Address:" 1 1 "${proposed_ip}" 1 25 25 30 \
+#"Subnet Mask:" 2 1 "${proposed_subnet}" 2 25 25 30 \
+#"Gateway:" 3 1 "${proposed_gateway}" 3 25 25 30 \
+#"DNS1:" 5 1 "${dns_server1}" 5 25 25 30 \
+#"DNS2:" 6 1 "${dns_server2}" 6 25 25 30 \
+#"DNS3:" 7 1 "${dns_server3}" 7 25 25 30 \
+#"Domain:" 9 1 "${domain}" 9 25 25 30 \
+#2>/anydeploy/tmp/ip_settings_form.$$
 
 if test $? -eq 0
 then
@@ -283,6 +313,28 @@ else
    exit 1;
 fi
 
+
+# Get values after form is processed
+
+#ip_address=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 1)
+#subnet_mask=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 2 | tail -n 1)
+#dhcp_startip=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 3 | tail -n 1)
+#dhcp_endip=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 4 | tail -n 1)
+#gateway=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 5 | tail -n 1)
+#dns_server1="$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 6 | tail -n 1)"
+#dns_server2="$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 7 | tail -n 1)"
+#dns_server3="$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 8 | tail -n 1)"
+#domain="$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 9 | tail -n 1)"
+
+    # TODO prompt to enable postrouting if gateway empty
+
+
+
+#echo "${selected_interface} old IP address: ${selected_interface_old_ip}"
+#echo "IP Address: ${ip_address}"
+#echo "DHCP Start IP: ${dhcp_startip}"
+#echo "DHCP End IP: ${dhcp_endip}"
+#echo "Gateway IP: ${gateway}"
 
 configure_interface
 # Fix back IFS
@@ -305,6 +357,7 @@ configure_interface () {
       # remove interface and bridges
 
       remove_interface ${selected_interface}
+      echo "removing interface"
       sleep 2
 
 
@@ -315,7 +368,7 @@ configure_interface () {
       echo "adding interfaces"
       sleep 2
 
-      echo " " >> /etc/network/interfaces
+      echo "" >> /etc/network/interfaces
       echo "iface ${selected_interface} inet manual" >> /etc/network/interfaces
 
       # add bridge (vmbr0) lines (don't overwrite)
@@ -324,20 +377,15 @@ configure_interface () {
       echo "" >> /etc/network/interfaces
       echo "auto anybr0" >> /etc/network/interfaces
       echo "iface anybr0 inet static" >> /etc/network/interfaces # TODO i5 replace vmbr1 with dynamic interface
-      echo "${TAB}address ${ip_address}" >> /etc/network/interfaces
-      echo "${TAB}netmask ${subnet_mask}" >> /etc/network/interfaces
-      if [ ! -z "${gateway}" ]; then
-      echo "${TAB}gateway ${gateway}" >> /etc/network/interfaces
-      echo "${TAB}dns-nameservers ${dns_server1} ${dns_server2}" >> /etc/network/interfaces
+      echo "${TAB}address ${proposed_ip}" >> /etc/network/interfaces
+      echo "${TAB}netmask ${proposed_subnet}" >> /etc/network/interfaces
+      if [ ! -z "${proposed_gateway}" ]; then
+      echo "${TAB}${proposed_gateway}" >> /etc/network/interfaces
       fi
       echo "${TAB}bridge_ports ${selected_interface}" >> /etc/network/interfaces
       echo "${TAB}bridge_stp off" >> /etc/network/interfaces
       echo "${TAB}bridge_fd 0" >> /etc/network/interfaces
 
-      # Remove uneccesary spaces (cleanup interfaces file)
-      sed -i '/^$/{N;/^\n$/d;}' /etc/network/interfaces
-
-      apt remove --purge -y network-manager netplan
 
       # restart networking
 
@@ -352,6 +400,7 @@ configure_interface () {
 
 # TODO Verify if interface is up and running otherwise print error and prompt what to do
 
+# TODO Add interface and bridge name to global config file
 
 
 
