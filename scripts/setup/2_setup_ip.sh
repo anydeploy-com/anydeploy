@@ -128,7 +128,7 @@ if [ "${debugging}" = "yes" ]; then
     echo "DEBUG: Gonna killall dhcpcd to ensure no dummy processes are running"
     sleep 5
 fi
-killall dhcpcd
+killall dhcpcd > /dev/null
 
 
 if [ "${debugging}" = "yes" ]; then
@@ -357,7 +357,6 @@ configure_interface () {
       # remove interface and bridges
 
       remove_interface ${selected_interface}
-      echo "removing interface"
       sleep 2
 
 
@@ -377,15 +376,16 @@ configure_interface () {
       echo "" >> /etc/network/interfaces
       echo "auto anybr0" >> /etc/network/interfaces
       echo "iface anybr0 inet static" >> /etc/network/interfaces # TODO i5 replace vmbr1 with dynamic interface
-      echo "${TAB}address ${proposed_ip}" >> /etc/network/interfaces
-      echo "${TAB}netmask ${proposed_subnet}" >> /etc/network/interfaces
-      if [ ! -z "${proposed_gateway}" ]; then
-      echo "${TAB}${proposed_gateway}" >> /etc/network/interfaces
+      echo "${TAB}address ${ip_address}" >> /etc/network/interfaces
+      echo "${TAB}netmask ${subnet_mask}" >> /etc/network/interfaces
+      if [ ! -z "${gateway}" ]; then
+      echo "${TAB}${gateway}" >> /etc/network/interfaces
       fi
       echo "${TAB}bridge_ports ${selected_interface}" >> /etc/network/interfaces
       echo "${TAB}bridge_stp off" >> /etc/network/interfaces
       echo "${TAB}bridge_fd 0" >> /etc/network/interfaces
 
+      # TODO - remove uncecessary spaces
 
       # restart networking
 

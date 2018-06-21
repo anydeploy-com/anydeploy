@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO - verify if run as root (attach script)
+
 ##############################################################################
 #                            Include functions                               #
 ##############################################################################
@@ -79,6 +81,14 @@ echo ""
     genisoimage \
     # Used for updates / cloning etc.
     git \
+    # Used to create USB Sticks / DVD
+    syslinux \
+    # Used to create USB Sticks / DVD / Legacy PXE boot (non iPXE EFI)
+    syslinux-efi \
+    #  Legacy PXE boot (non iPXE)
+    pxelinux \
+    # Hosting PXE boot files (iPXE)
+    tftpd-hpa
     )
 
   check_deps
@@ -87,18 +97,21 @@ echo ""
   #                               Check Conflicts                              #
   ##############################################################################
 
+  # TODO - find if they exists first (dpkg -l) and then run remove
 
-  # TODO Remove netplan, network-manager (check if installed - dpkg -l and remove using apt purge)
-
+  start_spinner "Removing conflicting packages"
+  apt-get remove netplan network-manager -y > /dev/null
+  stop_spinner $?
 
 
 
   # Clear global.conf to default
-
-  start_spinner "Restoring default global.conf config file."
+  if [ ${restore_config} = "Y" ] || [ ${restore_config} = "y" ] ; then
+  start_spinner "Restoring default global.conf config file"
   cp ${install_path}/assets/defaults/global.conf ${install_path}/global.conf
   sleep 5
   stop_spinner $?
+  fi
 
 
   echo "##############################################################################"
@@ -110,8 +123,8 @@ echo ""
 
   # Select Interface for networking
   cd ${install_path}/scripts/setup/
-  . ${install_path}/scripts/setup/select_interface.sh
-  . ${install_path}/scripts/setup/detect_dhcp.sh
+  . ${install_path}/scripts/setup/1_select_interface.sh
+  . ${install_path}/scripts/setup/2_setup_ip.sh
 
 
 

@@ -1,11 +1,13 @@
 updating with apt-get
-Hit:1 http://security.debian.org/debian-security stretch/updates InRelease
-Ign:2 http://ftp.uk.debian.org/debian stretch InRelease
-Hit:3 http://repository.spotify.com stable InRelease
-Ign:4 http://dl.google.com/linux/chrome/deb stable InRelease
+Ign:1 http://ftp.uk.debian.org/debian stretch InRelease
+Hit:2 http://security.debian.org/debian-security stretch/updates InRelease
+Ign:3 http://dl.google.com/linux/chrome/deb stable InRelease
+Hit:4 http://linux.teamviewer.com/deb stable InRelease
 Hit:5 http://ftp.uk.debian.org/debian stretch-updates InRelease
-Hit:6 http://ftp.uk.debian.org/debian stretch Release
-Hit:7 http://dl.google.com/linux/chrome/deb stable Release
+Hit:6 http://linux.teamviewer.com/deb preview InRelease
+Hit:7 http://ftp.uk.debian.org/debian stretch Release
+Hit:8 http://repository.spotify.com stable InRelease
+Hit:9 http://dl.google.com/linux/chrome/deb stable Release
 Reading package lists...
 Dependency dialog is installed - version: 1.3-20160828-2
 Dependency debootstrap is installed - version: 1.0.89
@@ -25,3 +27,7 @@ Dependency virtinst is installed - version: 1:1.4.0-5
 Dependency libosinfo-bin is installed - version: 1.0.0-2
 Dependency genisoimage is installed - version: 9:1.1.11-3+b2
 Dependency git is installed - version: 1:2.11.0-3+deb9u3
+Dependency syslinux is installed - version: 3:6.03+dfsg-14.1+deb9u1
+Dependency syslinux-efi is installed - version: 3:6.03+dfsg-14.1+deb9u1
+Dependency pxelinux is installed - version: 3:6.03+dfsg-14.1+deb9u1
+Dependency tftpd-hpa is installed - version: 5.2+20150808-1+b1
