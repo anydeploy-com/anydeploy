@@ -108,22 +108,6 @@
 
 setup_ip () {
 
-# TODO - if on ubuntu detect if using netplan and remove it + install ifupdown
-
-# Detect Current IP address and add message.
-
-  # Define Bridge interface if it's configured
-
-
-
-
-#echo "Selected interface old ip : ${selected_interface_old_ip}"
-
-
-
-
-# Detect running dhcp server and setup gateway ip if current exists - run as seperate process (&)
-
 if [ "${debugging}" = "yes" ]; then
     echo "DEBUG: Gonna killall dhcpcd to ensure no dummy processes are running"
     sleep 5
