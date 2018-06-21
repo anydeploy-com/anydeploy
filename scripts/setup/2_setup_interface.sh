@@ -291,19 +291,6 @@ EOF
 fi
 
 
-
-
-#dialog --backtitle "DHCP Setup - IP Settings for ${selected_interface}" --title "Dialog - IP settings for ${selected_interface}" \
-#--form "\n${bridge_desc}\n${ipaddr_desc}\n${gateway_desc}:" 25 60 16 \
-#"Server IP Address:" 1 1 "${proposed_ip}" 1 25 25 30 \
-#"Subnet Mask:" 2 1 "${proposed_subnet}" 2 25 25 30 \
-#"Gateway:" 3 1 "${proposed_gateway}" 3 25 25 30 \
-#"DNS1:" 5 1 "${dns_server1}" 5 25 25 30 \
-#"DNS2:" 6 1 "${dns_server2}" 6 25 25 30 \
-#"DNS3:" 7 1 "${dns_server3}" 7 25 25 30 \
-#"Domain:" 9 1 "${domain}" 9 25 25 30 \
-#2>/anydeploy/tmp/ip_settings_form.$$
-
 if test $? -eq 0
 then
    echo "ok pressed"
@@ -313,28 +300,6 @@ else
    exit 1;
 fi
 
-
-# Get values after form is processed
-
-#ip_address=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 1)
-#subnet_mask=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 2 | tail -n 1)
-#dhcp_startip=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 3 | tail -n 1)
-#dhcp_endip=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 4 | tail -n 1)
-#gateway=$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 5 | tail -n 1)
-#dns_server1="$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 6 | tail -n 1)"
-#dns_server2="$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 7 | tail -n 1)"
-#dns_server3="$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 8 | tail -n 1)"
-#domain="$(cat /anydeploy/tmp/ip_settings_form.$$ | head -n 9 | tail -n 1)"
-
-    # TODO prompt to enable postrouting if gateway empty
-
-
-
-#echo "${selected_interface} old IP address: ${selected_interface_old_ip}"
-#echo "IP Address: ${ip_address}"
-#echo "DHCP Start IP: ${dhcp_startip}"
-#echo "DHCP End IP: ${dhcp_endip}"
-#echo "Gateway IP: ${gateway}"
 
 configure_interface
 # Fix back IFS
@@ -385,7 +350,7 @@ configure_interface () {
       echo "${TAB}bridge_stp off" >> /etc/network/interfaces
       echo "${TAB}bridge_fd 0" >> /etc/network/interfaces
 
-      # TODO - remove uncecessary spaces
+      # Remove uneccesary spaces (cleanup interfaces file)
       sed -i '/^$/{N;/^\n$/d;}' /etc/network/interfaces
 
       # restart networking
@@ -401,7 +366,6 @@ configure_interface () {
 
 # TODO Verify if interface is up and running otherwise print error and prompt what to do
 
-# TODO Add interface and bridge name to global config file
 
 
 
