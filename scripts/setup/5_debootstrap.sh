@@ -169,9 +169,6 @@ sleep 1
 stop_spinner $?
 }
 
-
-
-
 debootstrap_debian_amd64
 
 if [ -d "${anynet_amd64}" ]; then

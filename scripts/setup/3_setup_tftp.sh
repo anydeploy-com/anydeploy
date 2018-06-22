@@ -22,6 +22,7 @@ echo "*" > /anydeploy/tftp/.gitignore
 fi
 sleep 1
 stop_spinner $?
+
 ##############################################################################
 #                          Replace Default Config                            #
 ##############################################################################
@@ -37,9 +38,11 @@ TFTP_OPTIONS="-s"
 EOF
 sleep 1
 stop_spinner $?
+
 ##############################################################################
 #                          Restart Service                                   #
 ##############################################################################
+
 start_spinner "Restarting TFTP Server"
 service tftpd-hpa restart
 sleep 1
