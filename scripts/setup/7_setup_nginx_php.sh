@@ -20,18 +20,23 @@
 if [ ${restore_config} = "Y" ] || [ ${restore_config} = "y" ]; then
 # Clear default config
 start_spinner "Removing anydeploy config files"
+
 if [ -f /etc/nginx/sites-enabled/anydeploy ]; then
 rm /etc/nginx/sites-enabled/anydeploy
 fi
+
 if [ -f /etc/nginx/sites-available/anydeploy ]; then
 rm /etc/nginx/sites-available/anydeploy
 fi
+
 if [ -d /anydeploy/www ]; then
 rm -rf /anydeploy/www
 fi
+
 if [ ! -d /anydeploy/www ]; then
 mkdir /anydeploy/www
 fi
+
 sleep 1
 stop_spinner $?
 fi
