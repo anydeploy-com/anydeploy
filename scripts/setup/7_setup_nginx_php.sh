@@ -6,25 +6,32 @@
 
   source ../../global.conf                              # Include Global Conf
   source ${install_path}/scripts/includes/functions.sh  # Include Functions
-  restore_config="y"
+
+  if [ -z "${restore_config}" ]; then
+    echo "restore config doesnt have value, using this file var"
+    restore_config="y"
+  fi
 ##############################################################################
 #                          Setup   Nginx                                     #
 ##############################################################################
 
-# Clear default config
-start_spinner "Removing default nginx config files"
 
-rm /etc/nginx/sites-enabled/default
-rm /etc/nginx/sites-available/default
-
-stop_spinner $?
 
 if [ ${restore_config} = "Y" ] || [ ${restore_config} = "y" ]; then
+# Clear default config
 start_spinner "Removing anydeploy config files"
+if [ -f /etc/nginx/sites-enabled/anydeploy ]; then
 rm /etc/nginx/sites-enabled/anydeploy
+fi
+if [ -f /etc/nginx/sites-available/anydeploy ]; then
 rm /etc/nginx/sites-available/anydeploy
+fi
+if [ -d /anydeploy/www ]; then
 rm -rf /anydeploy/www
+fi
+if [ ! -d /anydeploy/www ]; then
 mkdir /anydeploy/www
+fi
 sleep 1
 stop_spinner $?
 fi
@@ -54,7 +61,7 @@ server {
 	}
 }
 EOF
-
+sleep 1
 stop_spinner $?
 
 start_spinner "Creating sample index"
@@ -66,7 +73,7 @@ cat >"/anydeploy/www/index.php" << EOF
  phpinfo();
 ?>
 EOF
-
+sleep 1
 stop_spinner $?
 
 
@@ -86,15 +93,22 @@ kernel http://192.168.1.254/vmlinuz initrd=initrd.img nfsroot=192.168.1.254:/nfs
 initrd http://192.168.1.254/initrd.img
 boot
 EOF
-
+sleep 1
 stop_spinner $?
 
+start_spinner "Copying Kernel file"
+sleep 0.3
 # Copy kernel (ln doesnt work well)
-cp /nfs/any64/vmlinuz /anydeploy/www/vmlinuz
+cp /nfs/any64/vmlinuz /anydeploy/www/vmlinuz > /dev/null 2>&1
+sleep 0.3
+stop_spinner $?
 
+start_spinner "Copying init file"
+sleep 0.3
 # Copy init (ln doesnt work well)
-cp /nfs/any64/initrd.img /anydeploy/www/initrd.img
-
+cp /nfs/any64/initrd.img /anydeploy/www/initrd.img > /dev/null 2>&1
+sleep 0.3
+stop_spinner $?
 # Restart nginx
 
 service nginx restart
