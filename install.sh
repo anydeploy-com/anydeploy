@@ -100,7 +100,11 @@ echo ""
     # Building Sources (ie. iPXE)
     liblzma-dev \
     # Iptables Persistent for Postrouting
-    iptables-persistent
+    iptables-persistent \
+    # Webserver (nginx)
+    nginx \
+    # PHP parser for Webserver (nginx)
+    php-fpm
     )
 
   check_deps
@@ -118,7 +122,7 @@ echo ""
 
 
   # Clear global.conf to default
-  if [ ${restore_config} = "Y" ] || [ ${restore_config} = "y" ] ; then
+  if [ ${restore_config} = "Y" ] || [ ${restore_config} = "y" ]; then
   start_spinner "Restoring default global.conf config file"
   cp ${install_path}/assets/defaults/global.conf ${install_path}/global.conf
   rm -rf /nfs/
@@ -143,7 +147,7 @@ echo ""
   . ${install_path}/scripts/setup/3_setup_tftp.sh
   . ${install_path}/scripts/setup/4_setup_ipxe.sh
   . ${install_path}/scripts/setup/5_debootstrap.sh
-
+  . ${install_path}/scripts/setup/6_setup_nfs.sh
 
 
 

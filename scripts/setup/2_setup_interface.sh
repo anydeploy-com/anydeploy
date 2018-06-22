@@ -217,6 +217,13 @@ dns_server2=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 
 dns_server3=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 10 60 2 "DNS Server 3:" 1 1 "${dns_server3}" 1 25 25 15 2>&1 >/dev/tty)
 domain=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 10 60 2 "Domain:" 1 1 "${domain}" 1 25 25 15 2>&1 >/dev/tty)
 
+sed -i "/ip_address=/ s/=.*/=\"${ip_address}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
+sed -i "/subnet_mask=/ s/=.*/=\"${subnet_mask}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
+sed -i "/gateway=/ s/=.*/=\"${gateway}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
+sed -i "/dns_server1=/ s/=.*/=\"${dns_server1}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
+sed -i "/dns_server2=/ s/=.*/=\"${dns_server2}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
+sed -i "/dns_server3=/ s/=.*/=\"${dns_server3}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
+sed -i "/domain=/ s/=.*/=\"${domain}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
 
 if [ -z "${proposed_gateway}" ]; then
   dialog --title "Postrouting" \

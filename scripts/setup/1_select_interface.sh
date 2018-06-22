@@ -70,7 +70,7 @@ done
 
 selected_interface=$(dialog --backtitle "DHCP Setup - Interface Selection" \
                     --menu "please pick interfaces for anydeploy clients to use" 30 100 10 ${interface_dialog_name[@]} 2>&1 >/dev/tty)
-selected_bridge="anybr0"
+selected_interface_bridge="anybr0"
 
 # TODO FIX - ALWAYS THINKS THAT OK WAS PRESSED
                     if test $? -eq 0
@@ -81,7 +81,7 @@ selected_bridge="anybr0"
                        start_spinner "DEBUG: Editing ${install_path}/global.conf with selected_interface=${selected_interface}; selected_bridge=${selected_bridge}"
                         fi
                        sed -i "/selected_interface=/ s/=.*/=\"${selected_interface}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
-                       sed -i "/selected_bridge=/ s/=.*/=\"${selected_bridge}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
+                       sed -i "/selected_interface_bridge=/ s/=.*/=\"${selected_bridge}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
                        sleep 0.3
                        if [ "${debugging}" = "yes" ]; then
                        stop_spinner $?
