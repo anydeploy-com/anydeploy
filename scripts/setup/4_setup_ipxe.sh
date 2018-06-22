@@ -55,11 +55,15 @@ stop_spinner $?
 #                          Build iPXE                                        #
 ##############################################################################
 
-start_spinner "Building iPXE (UEFI)"
+
+# TODO BUild efi32/syslinux32.efi
+# TODO Build ipxe 32 bit
+
+start_spinner "Building iPXE 64 bit (UEFI)"
       make bin/undionly.kpxe EMBED=anydeploy.ipxe >/dev/null 2>&1
 stop_spinner $?
 
-start_spinner "Building iPXE (BIOS)"
+start_spinner "Building iPXE 64 bit (BIOS)"
       make bin-x86_64-efi/ipxe.efi EMBED=anydeploy.ipxe >/dev/null 2>&1
 stop_spinner $?
 
