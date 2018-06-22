@@ -328,6 +328,7 @@ configure_interface () {
       echo "${TAB}netmask ${subnet_mask}" >> /etc/network/interfaces
       if [ ! -z "${gateway}" ]; then
       echo "${TAB}gateway ${gateway}" >> /etc/network/interfaces
+      echo "${TAB}dns-nameservers ${dns_server1} ${dns_server2}" >> /etc/network/interfaces
       fi
       echo "${TAB}bridge_ports ${selected_interface}" >> /etc/network/interfaces
       echo "${TAB}bridge_stp off" >> /etc/network/interfaces
@@ -335,6 +336,8 @@ configure_interface () {
 
       # Remove uneccesary spaces (cleanup interfaces file)
       sed -i '/^$/{N;/^\n$/d;}' /etc/network/interfaces
+
+      apt remove --purge -y network-manager netplan
 
       # restart networking
 
