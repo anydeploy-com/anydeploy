@@ -8,8 +8,10 @@
   source ${install_path}/scripts/includes/functions.sh  # Include Functions
 
   if [ -z "${restore_config}" ]; then
-    echo "restore config doesnt have value, using this file var"
+    if [ "${debugging}" = "yes" ]; then
+    echo "DEBUG: Restore config doesnt have value, using this file var"
     restore_config="y"
+    fi
   fi
 ##############################################################################
 #                          Setup   Nginx                                     #
