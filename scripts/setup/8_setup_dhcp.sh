@@ -26,16 +26,61 @@ dhcp_type=$(dialog --backtitle "DHCP Setup - Type" \
 # TODO - ADD HELP
 
 
+
       if test $? -eq 0
       then
-         echo "ok pressed"
-      else
-dialog --backtitle "DHCP Setup - Help" --msgbox \
-" dnsmasq - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacinia urna sed lobortis cursus. Curabitur mauris augue, faucibus quis fringilla vitae, tempus sed lorem. Vivamus a bibendum ex. Ut ante ligula, posuere vel enim nec, hendrerit efficitur purus. Sed pulvinar quis arcu ut tristique. \n\n \
-isc-dhcp - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacinia urna sed lobortis cursus. Curabitur mauris augue, faucibus quis fringilla vitae, tempus sed lorem. Vivamus a bibendum ex. Ut ante ligula, posuere vel enim nec, hendrerit efficitur purus. Sed pulvinar quis arcu ut tristique. \n\n \
-none - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacinia urna sed lobortis cursus. Curabitur mauris augue, faucibus quis fringilla vitae, tempus sed lorem. Vivamus a bibendum ex. Ut ante ligula, posuere vel enim nec, hendrerit efficitur purus. Sed pulvinar quis arcu ut tristique." \
-          30 100
-         . ${install_path}/scripts/setup/8_setup_dhcp.sh
-      fi
+        # Selected OK
+        if [ "$dhcp_type" = "dnsmasq" ]; then
+            echo "running dnsmasq script"
+            apt-get install -y dnsmasq
 
-echo ${dhcp_type}
+            touch /etc/dnsmasq/ltsp.conf
+
+
+cat >"/etc/dnsmasq/ltsp.conf" << EOF
+# Don't function as a DNS server:
+port=0
+
+# Log lots of extra information about DHCP transactions.
+log-dhcp
+
+# Set the root directory for files available via FTP.
+tftp-root=/anydeploy/tftp
+
+# The boot filename, Server name, Server Ip Address
+dhcp-boot=undionly.kpxe,,${ip_address}
+
+# Disable re-use of the DHCP servername and filename fields as extra
+# option space. That's to avoid confusing some old or broken DHCP clients.
+dhcp-no-override
+
+# PXE menu.  The first part is the text displayed to the user.  The second is the timeout, in seconds.
+pxe-prompt="Booting anyDeploy", 1
+
+# The known types are x86PC, PC98, IA64_EFI, Alpha, Arc_x86,
+# Intel_Lean_Client, IA32_EFI, BC_EFI, Xscale_EFI and X86-64_EFI
+# This option is first and will be the default if there is no input from the user.
+
+pxe-service=X86PC, "Boot BIOS", undionly
+pxe-service=X86-64_EFI, "Boot UEFI", ipxe
+pxe-service=BC_EFI, "BOOT UEFI PXE-BC", ipxe
+
+dhcp-range=${ip_address},proxy
+EOF
+
+service dnsmasq restart
+
+
+
+        elif [ "$dhcp_type" = "isc-dhcp" ]; then
+            echo "running isc-dhcp script"
+        elif [ "$dhcp_type" = "none" ]; then
+              echo "selected none - exiting"
+        else
+            echo "nothing"
+        fi
+      else
+        # Selected Help (cancel)
+      dhcp_type=()
+      . ${install_path}/scripts/setup/8_setup_dhcp_help.sh
+      fi

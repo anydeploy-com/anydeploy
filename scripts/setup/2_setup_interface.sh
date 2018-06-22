@@ -322,7 +322,7 @@ configure_interface () {
       echo "adding interfaces"
       sleep 2
 
-      echo " " >> /etc/network/interfaces
+      echo -e "\n" >> /etc/network/interfaces
       echo "iface ${selected_interface} inet manual" >> /etc/network/interfaces
 
       # add bridge (vmbr0) lines (don't overwrite)
