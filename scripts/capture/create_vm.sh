@@ -1,37 +1,6 @@
 #!/bin/bash
 
 ##############################################################################
-#                            User Variables                                  #
-##############################################################################
-
-dependencies=( genisoimage dialog )
-
-# TODO - add must run as root / sudo suggestion
-
-# TODO - add all the formatting functions
-
-# List dependencies
-
-# TODO - actually ask to install + format nicer
-
-
-##############################################################################
-#                            Dependencies                                    #
-##############################################################################
-
-# TODO - add all the formatting functions
-
-# List dependencies
-
-# TODO - actually ask to install + format nicer
-
-echo "Dependencies listed below:"
- for ((i=0; i < ${#dependencies[@]}; i++))
-    do
-		echo " - ${dependencies[i]}"
-    done
-
-##############################################################################
 #                            Prepare                                         #
 ##############################################################################
 
