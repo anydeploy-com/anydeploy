@@ -81,7 +81,7 @@ selected_interface_bridge="anybr0"
                        start_spinner "DEBUG: Editing ${install_path}/global.conf with selected_interface=${selected_interface}; selected_bridge=${selected_bridge}"
                         fi
                        sed -i "/selected_interface=/ s/=.*/=\"${selected_interface}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
-                       sed -i "/selected_interface_bridge=/ s/=.*/=\"${selected_bridge}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
+                       sed -i "/selected_interface_bridge=/ s/=.*/=\"${selected_interface_bridge}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
                        sleep 0.3
                        if [ "${debugging}" = "yes" ]; then
                        stop_spinner $?

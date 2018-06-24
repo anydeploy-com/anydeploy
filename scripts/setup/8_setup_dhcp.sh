@@ -34,10 +34,10 @@ dhcp_type=$(dialog --backtitle "DHCP Setup - Type" \
             echo "running dnsmasq script"
             apt-get install -y dnsmasq
 
-            touch /etc/dnsmasq/ltsp.conf
+            touch /etc/dnsmasq.d/ltsp.conf
 
 
-cat >"/etc/dnsmasq/ltsp.conf" << EOF
+cat >"/etc/dnsmasq.d/ltsp.conf" << EOF
 # Don't function as a DNS server:
 port=0
 
@@ -45,7 +45,7 @@ port=0
 log-dhcp
 
 # Set the root directory for files available via FTP.
-tftp-root=/anydeploy/tftp
+tftp-root=/tftp
 
 # The boot filename, Server name, Server Ip Address
 dhcp-boot=undionly.kpxe,,${ip_address}
@@ -67,6 +67,11 @@ pxe-service=BC_EFI, "BOOT UEFI PXE-BC", ipxe
 
 dhcp-range=${ip_address},proxy
 EOF
+
+
+# TODO ECHO DNS TO RESOLVCONF
+# TODO ENABLE RESOLVCONF SERVICE
+
 
 service dnsmasq restart
 

@@ -120,12 +120,12 @@ cat >"${anynet_amd64}/postinstall.sh" <<EOF
   # TODO
 # Install Apps
 
-DEBIAN_FRONTEND=noninteractive apt-get install -y git dialog net-tools partclone nfs-common smartmontools less pciutils usbutils gdisk keyboard-configuration console-setup
+DEBIAN_FRONTEND=noninteractive apt-get install -y git man dialog lpr cups-bsd net-tools partclone nfs-common smartmontools less pciutils usbutils gdisk keyboard-configuration console-setup
 
 # Permit Root Login over ssh (temporary)
 echo "PermitRootLogin yes" >> "/etc/ssh/sshd_config"
 # Enable autorun
-echo "sleep 2" >> /root/.bashrc
+echo "sleep 10" >> /root/.bashrc
 echo "cd /anydeploy" >> /root/.bashrc
 echo "./index.sh" >> /root/.bashrc
 # Setup Keyboard
@@ -135,8 +135,8 @@ dpkg-reconfigure --frontend=noninteractive console-setup
 mkdir /nfs
 mkdir /nfs/images
 mkdir /anydeploy
-echo "192.168.1.254:/anydeploy /anydeploy  nfs defaults  0 0" >> /etc/fstab
-echo "192.168.1.254:/nfs/images /nfs/images   nfs defaults  0 0" >> /etc/fstab
+echo "${ip_address}:/anydeploy /anydeploy  nfs defaults  0 0" >> /etc/fstab
+echo "${ip_address}:/nfs/images /nfs/images   nfs defaults  0 0" >> /etc/fstab
 EOF
 sleep 0.5
 stop_spinner $?

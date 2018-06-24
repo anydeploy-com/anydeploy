@@ -46,7 +46,7 @@ SAVE_DIR=$(pwd)
 cat >"anydeploy.ipxe" << EOF
 #!ipxe
 dhcp
-chain http://192.168.1.254/menu.ipxe
+chain http://${ip_address}/menu.ipxe
 EOF
       sleep 1
 stop_spinner $?
@@ -77,7 +77,14 @@ cd ${install_path}/scripts/setup
 
 # copy undionly file
 start_spinner "Copying iPXE binaries to TFTP location"
-      cp ${install_path}/sources/ipxe/src/bin/undionly.kpxe ${install_path}/tftp/
-      cp ${install_path}/sources/ipxe/src/bin-x86_64-efi/ipxe.efi ${install_path}/tftp/
+      cp ${install_path}/sources/ipxe/src/bin/undionly.kpxe /tftp/
+      cp ${install_path}/sources/ipxe/src/bin-x86_64-efi/ipxe.efi /tftp/
+      # must be linked within local directory since tftp deamon runs in chrooted dir
+      cd /tftp
+      ln -s undionly.kpxe undionly.0
+      ln -s ipxe.efi ipxe.0
+      # Go back to previous directory
+      cd ${install_path}/scripts/setup
+      chmod -R 777 /tftp/*
       sleep 1
 stop_spinner $?

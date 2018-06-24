@@ -17,6 +17,13 @@
 #                          Setup   Nginx                                     #
 ##############################################################################
 
+# REMOVE DEFAULT NGINX CONFIG
+if [ -f /etc/nginx/sites-enabled/default ]; then
+rm /etc/nginx/sites-enabled/default
+fi
+if [ -f /etc/nginx/sites-enabled/default ]; then
+rm /etc/nginx/sites-available/default
+fi
 
 
 if [ ${restore_config} = "Y" ] || [ ${restore_config} = "y" ]; then
@@ -93,12 +100,19 @@ cat >"/anydeploy/www/menu.ipxe" << EOF
 #!ipxe
 menu anyDeploy PXE menu
 item anydeploy Anydeploy
-choose --default anydeploy --timeout 5000 target && goto ${target}
-#choose os && goto ${os}
+item boothdd Boot HDD
+
+choose --default anydeploy --timeout 5000 target && goto \${target}
+#choose os && goto \${os}
+
 :anydeploy
-kernel http://192.168.1.254/vmlinuz initrd=initrd.img nfsroot=192.168.1.254:/nfs/any64 rw ip=dhcp net.ifnames=0
-initrd http://192.168.1.254/initrd.img
+kernel http://${ip_address}/vmlinuz initrd=initrd.img nfsroot=${ip_address}:/nfs/any64 rw ip=dhcp net.ifnames=0
+initrd http://${ip_address}/initrd.img
 boot
+
+:boothdd
+ sanboot --no-describe --drive 0x80
+
 EOF
 sleep 1
 stop_spinner $?

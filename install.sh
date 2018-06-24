@@ -104,7 +104,11 @@ echo ""
     # Webserver (nginx)
     nginx \
     # PHP parser for Webserver (nginx)
-    php-fpm
+    php-fpm \
+    # DNS Management
+    resolvconf \
+    # NFS Server
+    nfs-kernel-server
     )
 
   check_deps

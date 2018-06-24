@@ -115,27 +115,23 @@ fi
 killall dhcpcd > /dev/null
 
 
+if [ -d "/anydeploy/tmp" ]; then
+  mkdir "/anydeploy/tmp"
+fi
+
+
 if [ "${debugging}" = "yes" ]; then
     echo "DEBUG: Going to use dhcpcd to detect dhcp settings running on selected interface/bridge"
+    echo "DEBUG: selected_interface_bridge = ${selected_interface_bridge}"
     sleep 5
 fi
 
 if [ ! -z "${selected_interface_bridge}" ] ; then
-dhcpcd -T ${selected_interface_bridge} &> /anydeploy/tmp/dhcp_discover.$$ &
+dhcpcd -T ${selected_interface_bridge} --ipv4only &> /anydeploy/tmp/dhcp_discover.$$
 else
-dhcpcd -T ${selected_interface} &> /anydeploy/tmp/dhcp_discover.$$ &
+dhcpcd -T ${selected_interface} --ipv4only &> /anydeploy/tmp/dhcp_discover.$$
 fi
 
-pid=$(ps aux | grep dhcpcd -T | grep -v grep | awk '{print $2}')
-
-
-i=0
-while kill -0 $pid 2>/dev/null
-do
-  i=$(( (i+1) %4 ))
-  #printf " - Detecting Current DHCP Settings\r${spin:$i:1}"
-  for i in $(seq 0 1 100) ; do sleep 0.05; echo $i | dialog --backtitle "DHCP Setup - Detecting Current DHCP settings on ${selected_interface}" --gauge "Detecting your current dhcp settings (ip address, subnet, gateway etc.)" 10 70 0; done
-done
 
 
 
@@ -217,13 +213,15 @@ dns_server2=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 
 dns_server3=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 10 60 2 "DNS Server 3:" 1 1 "${dns_server3}" 1 25 25 15 2>&1 >/dev/tty)
 domain=$(dialog --backtitle "DHCP Setup - Interface Selection" --form " x" 10 60 2 "Domain:" 1 1 "${domain}" 1 25 25 15 2>&1 >/dev/tty)
 
-sed -i "/ip_address=/ s/=.*/=\"${ip_address}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
-sed -i "/subnet_mask=/ s/=.*/=\"${subnet_mask}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
-sed -i "/gateway=/ s/=.*/=\"${gateway}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
-sed -i "/dns_server1=/ s/=.*/=\"${dns_server1}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
-sed -i "/dns_server2=/ s/=.*/=\"${dns_server2}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
-sed -i "/dns_server3=/ s/=.*/=\"${dns_server3}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
-sed -i "/domain=/ s/=.*/=\"${domain}\" \# Configured with select_interface.sh/" ${install_path}/global.conf
+# Save values to global.conf
+
+sed -i "/ip_address=/ s/=.*/=\"${ip_address}\" \# Configured with setup_interface.sh/" ${install_path}/global.conf
+sed -i "/subnet_mask=/ s/=.*/=\"${subnet_mask}\" \# Configured with setup_interface.sh/" ${install_path}/global.conf
+sed -i "/gateway=/ s/=.*/=\"${gateway}\" \# Configured with setup_interface.sh/" ${install_path}/global.conf
+sed -i "/dns_server1=/ s/=.*/=\"${dns_server1}\" \# Configured with setup_interface.sh/" ${install_path}/global.conf
+sed -i "/dns_server2=/ s/=.*/=\"${dns_server2}\" \# Configured with setup_interface.sh/" ${install_path}/global.conf
+sed -i "/dns_server3=/ s/=.*/=\"${dns_server3}\" \# Configured with setup_interface.sh/" ${install_path}/global.conf
+sed -i "/domain=/ s/=.*/=\"${domain}\" \# Configured with setup_interface.sh/" ${install_path}/global.conf
 
 if [ -z "${proposed_gateway}" ]; then
   dialog --title "Postrouting" \
@@ -322,7 +320,7 @@ configure_interface () {
       echo "adding interfaces"
       sleep 2
 
-      echo -e "\n" >> /etc/network/interfaces
+      echo " " >> /etc/network/interfaces
       echo "iface ${selected_interface} inet manual" >> /etc/network/interfaces
 
       # add bridge (vmbr0) lines (don't overwrite)
