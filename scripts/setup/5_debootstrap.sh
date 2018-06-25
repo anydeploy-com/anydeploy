@@ -78,12 +78,10 @@ cat >"${anynet_amd64}/fixlocales.sh" <<EOF
     echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen
     locale-gen
     TZ='Europe/London'; export TZ
-EOFAdding postinstall
-sleep 0.5
+EOF
 stop_spinner $?
 
 start_spinner 'AnyLive amd64 Postinstall - Configuring Keyboard'
-sleep 0.5
 # Setup Keyboard Layout
 cat >"${anynet_amd64}/etc/default/keyboard" <<EOF
 # KEYBOARD CONFIGURATION FILE
@@ -102,7 +100,7 @@ sleep 0.5
 cat >"${anynet_amd64}/postinstall.sh" <<EOF
 # Setup Hostname
     echo "anylive_x64" > "/etc/hostname"
-    hostnamectl set-hostname anylive64
+    #hostnamectl set-hostname anylive64
 # Fix Nameservers (resolv.conf)
     echo "nameserver 8.8.8.8" > "/etc/resolv.conf"
     echo "nameserver 8.8.4.4" >> "/etc/resolv.conf"
@@ -120,8 +118,8 @@ cat >"${anynet_amd64}/postinstall.sh" <<EOF
   # TODO
 # Install Apps
 
-DEBIAN_FRONTEND=noninteractive apt-get install keyboard-configuration console-setup -y
-apt-get install dialog git man lpr cups cups-bsd net-tools partclone nfs-common smartmontools less pciutils usbutils gdisk nfs-common -y
+DEBIAN_FRONTEND=noninteractive apt-get install -y keyboard-configuration
+apt-get install -y console-setup dialog git man cups cups-bsd net-tools partclone nfs-common smartmontools less pciutils usbutils gdisk nfs-common
 # Permit Root Login over ssh (temporary)
 echo "PermitRootLogin yes" >> "/etc/ssh/sshd_config"
 # Enable autorun
@@ -158,9 +156,9 @@ stop_spinner $?
 start_spinner 'AnyLive amd64 Postinstall - Running Postinstall Script'
 LANG=en_GB.UTF-8 chroot /nfs/any64 /bin/bash -c "./postinstall.sh" >/dev/null 2>&1
 stop_spinner $?
-start_spinner 'AnyLive amd64 Postinstall - Updating Initramfs'
-LANG=en_GB.UTF-8 chroot /nfs/any64 /bin/bash -c "update-initramfs -u" >/dev/null 2>&1
-stop_spinner $?
+#start_spinner 'AnyLive amd64 Postinstall - Updating Initramfs'
+#LANG=en_GB.UTF-8 chroot /nfs/any64 /bin/bash -c "update-initramfs -u" >/dev/null 2>&1
+#stop_spinner $?
 start_spinner 'AnyLive amd64 Postinstall - Cleaning up'
 rm ${anynet_amd64}/fixlocales.sh
 rm ${anynet_amd64}/postinstall.sh
