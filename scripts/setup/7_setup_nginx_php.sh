@@ -106,8 +106,8 @@ choose --default anydeploy --timeout 5000 target && goto \${target}
 #choose os && goto \${os}
 
 :anydeploy
-kernel http://${ip_address}/vmlinuz initrd=initrd.img nfsroot=${ip_address}:/nfs/any64 rw ip=dhcp net.ifnames=0
-initrd http://${ip_address}/initrd.img
+kernel http://\${next-server}/vmlinuz initrd=initrd.img nfsroot=\${next-server}:/nfs/any64 rw ip=dhcp net.ifnames=0
+initrd http://\${next-server}/initrd.img
 boot
 
 :boothdd

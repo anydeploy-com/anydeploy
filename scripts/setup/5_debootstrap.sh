@@ -120,8 +120,8 @@ cat >"${anynet_amd64}/postinstall.sh" <<EOF
   # TODO
 # Install Apps
 
-DEBIAN_FRONTEND=noninteractive apt-get install -y git nfs-common man lpr cups-bsd net-tools partclone nfs-common smartmontools less pciutils usbutils gdisk keyboard-configuration console-setup
-apt install dialog -y
+DEBIAN_FRONTEND=noninteractive apt-get install keyboard-configuration console-setup -y
+apt-get install dialog git man lpr cups cups-bsd net-tools partclone nfs-common smartmontools less pciutils usbutils gdisk nfs-common -y
 # Permit Root Login over ssh (temporary)
 echo "PermitRootLogin yes" >> "/etc/ssh/sshd_config"
 # Enable autorun

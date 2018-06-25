@@ -46,7 +46,7 @@ SAVE_DIR=$(pwd)
 cat >"anydeploy.ipxe" << EOF
 #!ipxe
 dhcp
-chain http://${ip_address}/menu.ipxe
+chain http://\${next-server}/menu.ipxe
 EOF
       sleep 1
 stop_spinner $?
