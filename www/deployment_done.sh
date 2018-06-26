@@ -9,13 +9,16 @@ do
     VALUE=$(echo $ARGUMENT | cut -f2 -d=)
     case "$KEY" in
             vmid)              vmid=${VALUE} ;;
-            task)    task=${VALUE} ;;
+            task)              task=${VALUE} ;;
+            sucessful)              sucessful=${VALUE} ;;
             *)
     esac
 done
-
-echo "<h2> Task completed: ${task} </h2>"
-
+if [ $sucessful = "yes" ]; then
+echo "<h2> Task: ${task} : Operation Sucessful</h2>"
+else
+echo "<h2> Task: ${task} : Operation Failed</h2>"
+fi
 echo "<p>"
 echo "<strong>User</strong>=${user}</br>"
 echo "<strong>Path</strong>=${path}</br>"
@@ -29,9 +32,3 @@ listvars=$(printenv | grep "SUDO_COMMAND" | sed 's/SUDO_COMMAND=.\/deployment_do
 echo ${listvars}
 
 echo "<h2>Sample function</h2>";
-
-if [ $operating_system = "win7" ]; then
-  echo "Operating System is Crappy Windows 7"
-else
-  echo "Operating System isn't Crappy Windows 7"
-fi
