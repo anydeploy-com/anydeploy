@@ -12,20 +12,29 @@
   source ${install_path}/scripts/includes/functions.sh  # Include Functions
 
 
+
 ##############################################################################
-#                         Virtual Machine Specs                              #
+#                       Usage Warning if no path specified                   #
+##############################################################################
+
+# TODO
+
+##############################################################################
+#                         Virtual Machine Settings                           #
 ##############################################################################
 
 vm_isopath=$1
 vm_name=Windows7_x64
-vm_ram=
+vm_ramamount=
+vm_mem_model=
 vm_useballoon=
-vm_disktype=
-vm_disksize=30G
+vm_disk_bus=
+vm_disksize=32G
 vm_netmodel=
 vm_bridgename=
 vm_accelerate=
-vm_uefi=
+vm_uefi=#dialog
+vm_capture_resize="yes"
 
 
 echo "vm_isopath=$vm_isopath"
