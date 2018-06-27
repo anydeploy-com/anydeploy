@@ -15,9 +15,10 @@
 SAVEIFS=$IFS
 
 IFS=$'\n'
-
+iso_list=()
 iso_list=($(ls ${iso_path}/*.iso | grep -v "autounattend" | grep -v "virtio"))
 #iso_menu=$(ls ${iso_path}/*.iso | grep -v "autounattend" | grep -v "virtio" | awk '{print v++,$1}')
+iso_name=()
 iso_name=($(ls ${iso_path}/*.iso | grep -v "autounattend" | grep -v "virtio" | sed 's:.*/::'))
 
 
@@ -59,6 +60,11 @@ done
 #                           Get ISO's info                                   #
 ##############################################################################
 
+iso_system_name=()
+iso_architecture=()
+iso_system_editions=()
+iso_iswindows=()
+
 for i in ${!iso_list[@]}; do
   # Windows Operating Systems
   # Check if install.wim exists - if yes = Windows
@@ -85,6 +91,7 @@ for i in ${!iso_list[@]}; do
   echo
 done
 
+iso_dialog_name=()
 
 for i in "${!iso_list[@]}"; do
   # Interface Dialog Name
@@ -116,6 +123,7 @@ echo Chosen ISO InstallPath: ${iso_architecture[${chosen_iso_id}]}
 echo Chosen ISO Editions: ${iso_system_editions[@]}
 echo Install Script Path: ${iso_install_script_path[@]}
 bash "${iso_install_script_path[@]}" ${iso_list[${chosen_iso_id}]}
+sleep 10
 
 
 ##############################################################################

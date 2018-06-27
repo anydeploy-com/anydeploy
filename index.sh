@@ -1,5 +1,10 @@
 #!/bin/bash
 
+
+          # Go to script path
+          MY_PATH="`dirname \"$0\"`"
+          cd "${MY_PATH}"
+
           # Include functions
           . /anydeploy/scripts/includes/functions.sh
 
@@ -72,6 +77,12 @@ CAPTURE () {
   MAIN_MENU
 }
 
+CREATEVM () {
+  . /anydeploy/scripts/capture/create_vm_new.sh
+  MAIN_MENU
+}
+
+
 TESTS () {
   echo "TO BE DONE"
 }
@@ -137,9 +148,9 @@ MAIN_MENU () {
 IFS=$'\n'
 
         dialog --backtitle "anydeploy ${devtype} - Main Menu" --menu "Main Menu - select task:" 20 55 15 \
-          ${template_list[@]} \
           DEPLOY "Deploy OS" \
           CAPTURE "Capture OS" \
+          CREATEVM "Create VM" \
           TESTS "Run Tests" \
           SPECS "Display Specification" \
           PRINT "Print Specification" \

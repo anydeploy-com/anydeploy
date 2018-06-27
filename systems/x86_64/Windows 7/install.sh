@@ -4,36 +4,86 @@
 #                            Include functions                               #
 ##############################################################################
 
-  source ../../global.conf                              # Include Global Conf
+  # Go to script path
+  MY_PATH="`dirname \"$0\"`"
+  cd "${MY_PATH}"
+
+  source ../../../global.conf                           # Include Global Conf
   source ${install_path}/scripts/includes/functions.sh  # Include Functions
 
 
 ##############################################################################
-#                          Mount and get info                                #
+#                         Virtual Machine Specs                              #
 ##############################################################################
 
-isopath=$1
+vm_isopath=$1
+vm_name=Windows7_x64
+vm_ram=
+vm_useballoon=
+vm_disktype=
+vm_disksize=30G
+vm_netmodel=
+vm_bridgename=
+vm_accelerate=
+vm_uefi=
+
+
+echo "vm_isopath=$vm_isopath"
+
+
+##############################################################################
+#                            Create VM LibVirt                               #
+##############################################################################
 
 echo "running windows 7 amd 64 installer"
 
-echo "isopath=$isopath"
+# Create Raw Image
+
+dd if=/dev/zero of=/var/lib/libvirt/images/test.img bs=1 count=0 seek=30G
+
+# Format as GPT if UEFI
 
 
+# Create QCOW2 Image
 
-# Select Edition
+#qemu-img create -f qcow2 /var/lib/libvirt/images/win10home_mbr$$.qcow2 30G
+
+# Add VM to Libvirt
+
+virt-install \
+--name "${vm_name}" \
+--ram=2048 \
+--memballoon model=virtio \
+--disk ${vm_isopath},device=cdrom --check path_in_use=off \
+--disk "/var/lib/libvirt/images/test.img",format=raw,bus=sata,cache=none \
+--network=bridge:anybr0,model=virtio \
+--events "on_poweroff=preserve" \
+--os-variant "win7" \
+--vcpus 2 \
+--accelerate --noapic & > /dev/null
 
 
-# Generate Name
+# Get Status
+
+#virsh list | grep "Windows7_x64" | awk '{print $3}'
 
 
-# Create iso with autounattend, extra network drivers, virtio drivers etc.
+# When done
 
+# Losetup - check if exists and remove
 
-# Create Folder in /nfs/images to hold image
+losetup_dev=$(losetup | grep "/var/lib/libvirt/images/test.img" | awk '{print $1}')
 
+#if losetup_dev has value then
 
-# Start VM Capture Task
+losetup -d ${losetup_dev}
 
+# attach
 
+losetup -Pf /var/lib/libvirt/images/test.img
 
-# Wait for Machine to let us know what's the process (php script) and display progress bar?
+# get Device id
+
+losetup_dev=$(losetup | grep "/var/lib/libvirt/images/test.img" | awk '{print $1}')
+
+# Get partitions info and save

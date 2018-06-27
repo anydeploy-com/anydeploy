@@ -108,7 +108,11 @@ echo ""
     # DNS Management
     resolvconf \
     # NFS Server
-    nfs-kernel-server
+    nfs-kernel-server \
+    # Used to download SDIO torrent
+    aria2 \
+    # Synchronise / copy certain dirs (ie drivers)
+    rsync
     )
 
   check_deps
