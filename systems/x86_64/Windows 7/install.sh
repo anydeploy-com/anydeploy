@@ -47,6 +47,7 @@ echo "vm_isopath=$vm_isopath"
 echo "running windows 7 amd 64 installer"
 
 # Create Raw Image
+rm -rf /var/lib/libvirt/images/test.img
 
 dd if=/dev/zero of=/var/lib/libvirt/images/test.img bs=1 count=0 seek=30G
 
@@ -65,7 +66,7 @@ virt-install \
 --memballoon model=virtio \
 --disk ${vm_isopath},device=cdrom --check path_in_use=off \
 --disk "/var/lib/libvirt/images/test.img",format=raw,bus=sata,cache=none \
---network=bridge:anybr0,model=virtio \
+--network=bridge:anybr0,model=e1000 \
 --events "on_poweroff=preserve" \
 --os-variant "win7" \
 --vcpus 2 \
