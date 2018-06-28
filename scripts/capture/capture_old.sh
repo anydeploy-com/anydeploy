@@ -47,7 +47,7 @@ else
 
 
   if [ ! -z "$selected_disk" ]; then
-    echo "Selected Disk: ${selected_disk}"
+    echo "Selected Disk: ${source}"
 
     sleep 2
   SELECTED_DISK_SECTORCOUNT=$(fdisk -l /dev/${selected_disk} | grep "Disk /dev/${selected_disk}" | awk '{print $7}')
