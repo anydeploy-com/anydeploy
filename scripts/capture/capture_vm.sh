@@ -136,6 +136,9 @@ for i in "${!selected_disk_partition_ids[@]}"; do
   #Available columns (for -o):
   # gpt: Device Start End Sectors Size Type Type-UUID Attrs Name UUID
   # dos: Device Start End Sectors Cylinders Size Type Id Attrs Boot End-C/H/S Start-C/H/S
+
+  # TODO -rather use sfdisk --dump and use it's values since they're static and more useful for scripting
+
   selected_disk_partition_sizes[${i}]=$(fdisk -l -o Device,Size | grep "${selected_disk}" | grep "${selected_disk_partition_ids[${i}]}" | awk '{print $2}')
   selected_disk_partition_types[${i}]=$(fdisk -l -o Device,Type | grep "${selected_disk}" | grep "${selected_disk_partition_ids[${i}]}" | awk '{print $2}')
   echo "Partition Size: ${selected_disk_partition_sizes[${i}]}"
