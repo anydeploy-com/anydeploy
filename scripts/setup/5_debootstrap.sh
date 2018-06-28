@@ -122,10 +122,9 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y keyboard-configuration
 apt-get install -y console-setup dialog git man cups cups-bsd net-tools partclone nfs-common smartmontools less pciutils usbutils gdisk nfs-common
 # Permit Root Login over ssh (temporary)
 echo "PermitRootLogin yes" >> "/etc/ssh/sshd_config"
-# Enable autorun
-echo "sleep 10" >> /root/.bashrc
-echo "cd /anydeploy" >> /root/.bashrc
-echo "./index.sh" >> /root/.bashrc
+# Enable autorun on local machine only
+# TODO - run only if not running already
+echo "chvt 2 && bash /anydeploy/index.sh > /dev/tty2" >> /root/.bashrc
 # Setup Keyboard
 dpkg-reconfigure --frontend=noninteractive keyboard-configuration
 dpkg-reconfigure --frontend=noninteractive console-setup

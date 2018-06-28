@@ -146,7 +146,7 @@ MAIN_MENU () {
 
 
 IFS=$'\n'
-
+if [ "${devtype}" = "server" ]; then
         dialog --backtitle "anydeploy ${devtype} - Main Menu" --menu "Main Menu - select task:" 20 55 15 \
           DEPLOY "Deploy OS" \
           CAPTURE "Capture OS" \
@@ -158,7 +158,18 @@ IFS=$'\n'
           OPTIONS "Open Settings" \
           SHELL "Open Linux Shell" \
           POWEROFF "Shutdown System" 2> tmp/template_list.$$
-
+elif [ "${devtype}" = "client" ]; then
+        dialog --backtitle "anydeploy ${devtype} - Main Menu" --menu "Main Menu - select task:" 20 55 15 \
+          DEPLOY "Deploy OS" \
+          CAPTURE "Capture OS" \
+          TESTS "Run Tests" \
+          SPECS "Display Specification" \
+          PRINT "Print Specification" \
+          TASKS "Other Tasks" \
+          OPTIONS "Open Settings" \
+          SHELL "Open Linux Shell" \
+          POWEROFF "Shutdown System" 2> tmp/template_list.$$
+fi
 
 IFS=$SAVEIFS
 
