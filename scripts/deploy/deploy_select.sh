@@ -25,11 +25,11 @@ IFS=$'\n'
 
 if [ "$match_bios" = "yes" ]; then
   echo "showing only ${bios_mode} images"
-  menu_desc="please pick image to deploy - showing only compatible \"${bios_mode}\" images"
+  menu_desc_deploy="please pick image to deploy - showing only compatible \"${bios_mode}\" images"
   images=($(ls -lhd /nfs/images/*/${bios_mode} | awk '{print $9,$10,$11,$12,$13,$14,$15}' | sed "s/\/${bios_mode}//"))
 else
   echo "showing all images"
-  menu_desc="please pick image to deploy - showing all images (bios + efi)"
+  menu_desc_deploy="please pick image to deploy - showing all images (bios + efi)"
   images=($(ls -lhd /nfs/images/* | awk '{print $9,$10,$11,$12,$13,$14,$15}'))
 fi
 
@@ -54,7 +54,7 @@ echo ${images_dialog[@]}
 ##############################################################################
 
 selected_image_id=$(dialog --backtitle "anydeploy ${devtype} / ip: ${ip_address_dialog} / biosmode: ${bios_mode} - Deploy Menu" \
-                    --menu "${menu_desc}" 30 100 10 ${images_dialog[@]} 2>&1 >/dev/tty)
+                    --menu "${menu_desc_deploy}" 30 100 10 ${images_dialog[@]} 2>&1 >/dev/tty)
 
 selected_image_path=${images[$selected_image_id]}
 
@@ -95,14 +95,14 @@ if [ "${skip_menu_if_single_disk}" = "yes" ]; then
         else
         echo "DEBUG: multiple disks detected - displaying menu"
         selected_disk_id=$(dialog --backtitle "anydeploy ${devtype} / ip: ${ip_address_dialog} / biosmode: ${bios_mode} - Deploy Menu" \
-                            --menu "${menu_desc}" 30 100 10 ${disks_dialog[@]} 2>&1 >/dev/tty)
+                            --menu "Please Select Destination disk" 30 100 10 ${disks_dialog[@]} 2>&1 >/dev/tty)
         #Display Dialog
         sleep 1
         fi
 else
   echo "DEBUG: Displaying disk menu even with single disk - displaying menu"
   selected_disk_id=$(dialog --backtitle "anydeploy ${devtype} / ip: ${ip_address_dialog} / biosmode: ${bios_mode} - Deploy Menu" \
-                      --menu "${menu_desc}" 30 100 10 ${disks_dialog[@]} 2>&1 >/dev/tty)
+                      --menu "Please Select Destination disk" 30 100 10 ${disks_dialog[@]} 2>&1 >/dev/tty)
   # Display Dialog
   sleep 1
 fi

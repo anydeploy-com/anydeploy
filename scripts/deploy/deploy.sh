@@ -77,22 +77,46 @@ done
 #                               Run Deployment Script                        #
 ##############################################################################
 
+
+
+
 echo "Running Deployment Script"
 echo ""
 echo "Source: ${source}"
 echo "Destination: ${destination}"
 
+
+# Get Partition array for destination ( verify if partition table copied properly)
+
+partitions_destination=($(sfdisk -d /dev/sda | grep -v "device" | grep "/dev/sda" | awk '{print $1}'))
+
+# Unmount any if mounted - destination
+
+echo "Unmounting any partitions from ${destination}"
+
+for i in "${partitions_destination[@]}"; do
+  umount ${i}
+  sleep 5
+done
+
 sleep 2
 
 # TODO Verify if running bios mode matches image - if not prompt what to do
 
+# WipeFS first
+
+echo "Initially wiping filesystem at ${destination}"
+wipefs ${destination}
+sleep 5
+
 # Write MBR
 
-echo "Source mbr file: $source/mbr.img"
+echo "Source mbr file: ${source}/mbr.img"
 
 if [ -f "${source}/mbr.img" ]; then
 echo "DEBUG: mbr image exists - writing"
 dd if="${source}/mbr.img" of="${destination}" &>/dev/tty1
+sleep 1
 else
 echo "DEBUG: mbr image missing - cancelling"
 sleep 60
@@ -122,10 +146,6 @@ echo "DEBUG: Partition Source Amount: ${#partitions_source[@]}"
 echo "DEBUG: Partition Source Array: ${partitions_source[@]}"
 
 
-
-# Get Partition array for destination ( verify if partition table copied properly)
-
-partitions_destination=($(sfdisk -d /dev/sda | grep -v "device" | grep "/dev/sda" | awk '{print $1}'))
 
 echo "DEBUG: Partition Destination Amount: ${#partitions_destination[@]}"
 echo "DEBUG: Partition Destination Array: ${partitions_destination[@]}"
