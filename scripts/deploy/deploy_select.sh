@@ -6,11 +6,11 @@
 
   source ../../global.conf                              # Include Global Conf
   source ${install_path}/scripts/includes/functions.sh  # Include Functions
-
+  source ../specs/detect_disks.sh                       # Detect Disks
 
 
   ##############################################################################
-  #                            Get Images List                                 #
+  #                       Get Sources (images) List                            #
   ##############################################################################
 
 
@@ -50,20 +50,41 @@ done
 echo ${images_dialog[@]}
 
 ##############################################################################
-#                            Display Images (dialog)                         #
+#                    Display Sources (images) (dialog)                       #
 ##############################################################################
 
 selected_image_id=$(dialog --backtitle "anydeploy ${devtype} / ip: ${ip_address_dialog} / biosmode: ${bios_mode} - Deploy Menu" \
                     --menu "${menu_desc}" 30 100 10 ${images_dialog[@]} 2>&1 >/dev/tty)
 
-selected_image_path=${images[$selected_image]}
+selected_image_path=${images[$selected_image_id]}
+
+source=${selected_image_path}
+echo "Physical Disks: ${PHYSICALDISKS[@]}"
 
 
 echo "Selected image id: ${selected_image_id}"
-echo "Selected Image path" : ${selected_image_path}
+echo "Selected Image path": ${selected_image_path}
+echo "Source": ${source}
 sleep 2
 
+##############################################################################
+#                        Get Destination (disks) List                        #
+##############################################################################
 
+# Data included with detect_disks.sh script
+
+if [ "$skip_menu_if_single_disk" = "yes" ]; then
+  echo "DEBUG: Skipping menu if single disk enabled"
+  if [ "${#PHYSICALDISKS[@]}" = "1" ]; then
+  echo "DEBUG: single disk detected - skipping menu"
+  else
+  echo "DEBUG: multiple disks detected - displaying menu"
+  sleep 1
+  fi
+else
+  echo "DEBUG: Displaying disk menu even with single disk"
+
+fi
 
 
 
