@@ -58,7 +58,7 @@ selected_image_id=$(dialog --backtitle "anydeploy ${devtype} / ip: ${ip_address_
 
 selected_image_path=${images[$selected_image_id]}
 
-source=${selected_image_path}
+source=$(echo ${selected_image_path} | xargs)
 echo "Physical Disks: ${PHYSICALDISKS[@]}"
 
 
@@ -73,20 +73,50 @@ sleep 2
 
 # Data included with detect_disks.sh script
 
-if [ "$skip_menu_if_single_disk" = "yes" ]; then
-  echo "DEBUG: Skipping menu if single disk enabled"
-  if [ "${#PHYSICALDISKS[@]}" = "1" ]; then
-  echo "DEBUG: single disk detected - skipping menu"
-  else
-  echo "DEBUG: multiple disks detected - displaying menu"
-  sleep 1
-  fi
-else
-  echo "DEBUG: Displaying disk menu even with single disk"
 
+
+##############################################################################
+#                      Display Destination (disks) (dialog))                 #
+##############################################################################
+
+
+# Create Dialog Menu from array
+
+for i in "${!PHYSICALDISKS[@]}"; do
+  # Images Dialog Name
+disks_dialog+=("${PHYSICALDISKS[${i}]}" "${DISK_MODEL[$i]} / ${DISK_SIZE[$i]} / ${DISK_RPM[$i]}")
+done
+
+
+if [ "${skip_menu_if_single_disk}" = "yes" ]; then
+        echo "DEBUG: Skipping menu if single disk enabled"
+        if [ "${#PHYSICALDISKS[@]}" = "1" ]; then
+        echo "DEBUG: single disk detected - skipping menu"
+        else
+        echo "DEBUG: multiple disks detected - displaying menu"
+        selected_disk_id=$(dialog --backtitle "anydeploy ${devtype} / ip: ${ip_address_dialog} / biosmode: ${bios_mode} - Deploy Menu" \
+                            --menu "${menu_desc}" 30 100 10 ${disks_dialog[@]} 2>&1 >/dev/tty)
+        #Display Dialog
+        sleep 1
+        fi
+else
+  echo "DEBUG: Displaying disk menu even with single disk - displaying menu"
+  selected_disk_id=$(dialog --backtitle "anydeploy ${devtype} / ip: ${ip_address_dialog} / biosmode: ${bios_mode} - Deploy Menu" \
+                      --menu "${menu_desc}" 30 100 10 ${disks_dialog[@]} 2>&1 >/dev/tty)
+  # Display Dialog
+  sleep 1
 fi
 
 
+  destination=$(echo /dev/${selected_disk_id} | xargs)
+#  destination="/dev/${selected_disk_id}"
+
+
+##############################################################################
+#                      Call Deploy Script                                    #
+##############################################################################
+cd /anydeploy/scripts/deploy/
+. /anydeploy/scripts/deploy/deploy.sh --source ${source} --destination ${destination}
 
 
 # Fix back IFS

@@ -69,7 +69,8 @@ fi
 # Display Main Menu
 
 DEPLOY () {
-  echo "TO BE DONE"
+  cd /anydeploy/scripts/deploy/
+  . /anydeploy/scripts/deploy/deploy_select.sh
 }
 
 CAPTURE () {
@@ -124,7 +125,6 @@ IPADDRESS () {
   OPTIONS
 }
 
-07771808581 - Steve
 DHCPSERVER () {
   . /anydeploy/scripts/setup_dhcp_server.sh
   OPTIONS
@@ -148,7 +148,6 @@ MAIN_MENU () {
 IFS=$'\n'
 if [ "${devtype}" = "server" ]; then
         dialog --backtitle "anydeploy ${devtype} / ip: ${ip_address_dialog} / biosmode: ${bios_mode} - Main Menu" --menu "Main Menu - select task:" 20 55 15 \
-          DEPLOY "Deploy OS" \
           CAPTURE "Capture OS" \
           CREATEVM "Create VM" \
           TESTS "Run Tests" \
