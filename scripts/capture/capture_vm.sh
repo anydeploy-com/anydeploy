@@ -192,6 +192,15 @@ sleep 2
   dd if=${selected_disk} of="${destination}"/mbr.img bs=466 count=1
   sleep 2
 
+# Saving Bios Mode (bios or efi)
+  diskmode=$(fdisk -l ${selected_disk} | grep "Disklabel type:" | awk '{print $3}' | xargs)
+  if [ "${diskmode}" = "gpt" ]; then
+    vm_bios_mode="efi"
+  else
+    vm_bios_mode="bios"
+  fi
+  echo "Saving Bios mode type - ${vm_bios_mode}"
+  touch "${destination}"/${vm_bios_mode}
 # Create image dir if doesn't exists
 
 if [ -d "${destination}" ]; then
@@ -205,5 +214,5 @@ fi
 # Start Actual Cloning
 for i in "${!selected_disk_partition_ids[@]}"; do
   echo "Cloning Partition $i"
-  eval "${selected_disk_partition_command[${i}]}"
+#  eval "${selected_disk_partition_command[${i}]}"
 done

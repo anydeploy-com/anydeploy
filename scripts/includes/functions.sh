@@ -254,3 +254,11 @@ sed -i "/${iface_to_remove}/,/^$/d" /etc/network/interfaces
   fi
 
   ip_address_dialog=$(ifconfig | grep "inet " | grep -v "127.0.0.1" | grep -v "169*" | awk '{print $2}' | xargs)
+
+# Detect BIOS mode
+
+  if [ -d "/sys/firmware/efi" ]; then
+    bios_mode="efi"
+  else
+    bios_mode="bios"
+  fi

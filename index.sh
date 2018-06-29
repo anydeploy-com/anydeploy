@@ -100,7 +100,7 @@ TASKS () {
 }
 
 OPTIONS () {
-  dialog --backtitle "anydeploy ${devtype} - ip: ${ip_address_dialog} - Settings Menu" --menu "Settings Menu - select task:" 20 55 15 \
+  dialog --backtitle "anydeploy ${devtype} / ip: ${ip_address_dialog} / biosmode: ${bios_mode} - Settings Menu" --menu "Settings Menu - select task:" 20 55 15 \
     INTERFACE "Select Interface" \
     IPADDRESS "Setup Networking" \
     DHCPSERVER "DHCP Server Setup" \
@@ -147,7 +147,7 @@ MAIN_MENU () {
 
 IFS=$'\n'
 if [ "${devtype}" = "server" ]; then
-        dialog --backtitle "anydeploy ${devtype} - ip: ${ip_address_dialog} - Main Menu" --menu "Main Menu - select task:" 20 55 15 \
+        dialog --backtitle "anydeploy ${devtype} / ip: ${ip_address_dialog} / biosmode: ${bios_mode} - Main Menu" --menu "Main Menu - select task:" 20 55 15 \
           DEPLOY "Deploy OS" \
           CAPTURE "Capture OS" \
           CREATEVM "Create VM" \
@@ -159,7 +159,7 @@ if [ "${devtype}" = "server" ]; then
           SHELL "Open Linux Shell" \
           POWEROFF "Shutdown System" 2> tmp/template_list.$$
 elif [ "${devtype}" = "client" ]; then
-        dialog --backtitle "anydeploy ${devtype} - ip: ${ip_address_dialog} - Main Menu" --menu "Main Menu - select task:" 20 55 15 \
+        dialog --backtitle "anydeploy ${devtype} / ip: ${ip_address_dialog} / biosmode: ${bios_mode} - Main Menu" --menu "Main Menu - select task:" 20 55 15 \
           DEPLOY "Deploy OS" \
           CAPTURE "Capture OS" \
           TESTS "Run Tests" \
