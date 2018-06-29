@@ -252,3 +252,5 @@ sed -i "/${iface_to_remove}/,/^$/d" /etc/network/interfaces
   else
   devtype="server"
   fi
+
+  ip_address_dialog=$(ifconfig | grep "inet " | grep -v "127.0.0.1" | grep -v "169*" | awk '{print $2}' | xargs)
