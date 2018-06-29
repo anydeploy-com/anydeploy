@@ -72,10 +72,14 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+
+##############################################################################
+#                               Get Disk Info                                #
+##############################################################################
+
 # check if exists in losetup
 source_losetup_devname=$(losetup | grep "${source}" | grep -v "deleted" | awk '{print $1}')
 
-echo ${source_losetup_devname}
 
 if [ ! -z "source_losetup_devname" ]; then
 echo "exists in losetup, devname=\"${source_losetup_devname}\""
@@ -109,6 +113,11 @@ selected_disk_path=${source_losetup_devname}
 selected_disk_size=$(sfdisk -l ${selected_disk_path} | grep "${selected_disk_path}" | grep "Disk" | awk '{print $3,$4}' | cut -d "," -f 1 | xargs)
 # Disk Sector Count
 selected_disk_sectorcount=$(fdisk -l ${selected_disk_path} | grep "Disk ${selected_disk_path}" | awk '{print $7}')
+
+##############################################################################
+#                               Get Partitions Info                          #
+##############################################################################
+
 # Partitions_array_id
 selected_disk_partition_ids=($(sfdisk -l ${selected_disk_path} | grep "${selected_disk_path}" | grep -v "Disk" | awk '{print $1}'))
 # Partitions count <number>
@@ -122,7 +131,10 @@ selected_disk_partitions_count="${#selected_disk_partition_ids[@]}"
 
 ##############################################
 
+selected_disk_partition_ids_nodev=($(sfdisk -l ${selected_disk_path} | grep "${selected_disk_path}" | grep -v "Disk" | awk '{print $1}' | sed 's/\/dev\///'))
+
 echo "source=\"${source}\""
+echo "destination=\"${destination}\""
 echo "selected_disk=\"${selected_disk}\""
 echo "selected_disk_size=\"${selected_disk_size}\""
 echo "selected_disk_sectorcount=\"${selected_disk_sectorcount}\""
@@ -133,6 +145,7 @@ echo ""
 for i in "${!selected_disk_partition_ids[@]}"; do
   echo Partition ID: ${i}
   echo Partition DEV: ${selected_disk_partition_ids[${i}]}
+  echo Partition no_DEV: ${selected_disk_partition_ids_nodev[${i}]}
   #Available columns (for -o):
   # gpt: Device Start End Sectors Size Type Type-UUID Attrs Name UUID
   # dos: Device Start End Sectors Cylinders Size Type Id Attrs Boot End-C/H/S Start-C/H/S
@@ -141,15 +154,56 @@ for i in "${!selected_disk_partition_ids[@]}"; do
 
   selected_disk_partition_sizes[${i}]=$(fdisk -l -o Device,Size | grep "${selected_disk}" | grep "${selected_disk_partition_ids[${i}]}" | awk '{print $2}')
   selected_disk_partition_types[${i}]=$(fdisk -l -o Device,Type | grep "${selected_disk}" | grep "${selected_disk_partition_ids[${i}]}" | awk '{print $2}')
+  selected_disk_partition_fstypes[${i}]=$(lsblk -f | grep "${selected_disk_partition_ids_nodev[${i}]}" | awk '{print $2}' | xargs)
+  selected_disk_partition_save_filename[${i}]="$(echo "${selected_disk_partition_ids_nodev[${i}]}" | sed 's/loop1//').img"
+  if [ "${selected_disk_partition_fstypes[${i}]}" = "ntfs" ]; then
+  selected_disk_partition_command[${i}]="partclone.ntfs --ncurses -c -d -s \"${selected_disk_partition_ids[${i}]}\" -o \"${destination}/${selected_disk_partition_save_filename[${i}]}\" "
+else
+  selected_disk_partition_command[${i}]="partclone.dd"
+fi
   echo "Partition Size: ${selected_disk_partition_sizes[${i}]}"
   echo "Partition Type: ${selected_disk_partition_types[${i}]}"
+  echo "Partition FSType: ${selected_disk_partition_fstypes[${i}]}"
+  echo "Partition Save_Filename: ${selected_disk_partition_save_filename[${i}]}"
+  echo "Partition Command: ${selected_disk_partition_command[${i}]}"
   echo ""   # echoing empty line for readability
 
   # Sample Cloning
 
   #partclone.ntfs -c -d -s /dev/loop1p2 -o p2.img
-
 done
 
 
-# List partitions
+##############################################################################
+#                               Start Cloning                                #
+##############################################################################
+echo ""
+echo "Cloning Starting"
+echo ""
+sleep 2
+
+
+# Dump Partition Table
+  echo "backing up partition table"
+  sfdisk --dump "${selected_disk}" > "${destination}"/partition_table
+  sleep 2
+# Dump MBR
+  echo "backing up mbr"
+  dd if=${selected_disk} of="${destination}"/mbr.img bs=466 count=1
+  sleep 2
+
+# Create image dir if doesn't exists
+
+if [ -d "${destination}" ]; then
+  echo "destination dir exists"
+else
+  echo "destination dir doesnt exist, creating"
+  mkdir -p "${destination}"
+fi
+
+
+# Start Actual Cloning
+for i in "${!selected_disk_partition_ids[@]}"; do
+  echo "Cloning Partition $i"
+  eval "${selected_disk_partition_command[${i}]}"
+done
