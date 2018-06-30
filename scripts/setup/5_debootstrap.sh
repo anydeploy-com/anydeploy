@@ -102,8 +102,8 @@ cat >"${anynet_amd64}/postinstall.sh" <<EOF
     echo "anylive_x64" > "/etc/hostname"
     #hostnamectl set-hostname anylive64
 # Fix Nameservers (resolv.conf)
-    echo "nameserver 8.8.8.8" > "/etc/resolv.conf"
-    echo "nameserver 8.8.4.4" >> "/etc/resolv.conf"
+    echo "nameserver 1.1.1.1" > "/etc/resolv.conf"
+    echo "nameserver 1.0.0.1" >> "/etc/resolv.conf"
 # Update OS
             apt-get update -y && apt-get upgrade -y
 # Disable installation of recommended packages

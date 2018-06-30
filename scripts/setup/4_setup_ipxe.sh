@@ -81,6 +81,12 @@ start_spinner "Copying iPXE binaries to TFTP location"
       cp ${install_path}/sources/ipxe/src/bin-x86_64-efi/ipxe.efi /tftp/
       # must be linked within local directory since tftp deamon runs in chrooted dir
       cd /tftp
+      if [ -f "undionly.0" ]; then
+        rm "undionly.0"
+      fi
+      if [ -f "ipxe.0" ]; then
+        rm "ipxe.0"
+      fi 
       ln -s undionly.kpxe undionly.0
       ln -s ipxe.efi ipxe.0
       # Go back to previous directory

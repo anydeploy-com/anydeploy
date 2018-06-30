@@ -1,5 +1,5 @@
 #!ipxe
-menu anyDeploy PXE menu ${next-server}
+menu anyDeploy PXE menu
 item anydeploy Anydeploy
 item boothdd Boot HDD
 
