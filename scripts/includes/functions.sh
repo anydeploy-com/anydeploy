@@ -135,13 +135,13 @@ if [ "$dpkg_query" = ${i} ] || [ "$dpkg_query" = ${i}:amd64 ] ; then
                     #echo_warn "Dependency $i is not installed"
                       if [ ${autoinstall_deps} = "Y" ] || [ ${autoinstall_deps} = "y" ] ; then
                           start_spinner "Installing $i"
-                          apt-get install -y $i &>> /anydeploy/logs/log.txt
+                          DEBIAN_FRONTEND=noninteractive apt-get install -y $i &>> /anydeploy/logs/log.txt
                           sleep 0.3
                           stop_spinner $?
                       else
                         	read -p " Do you want me to install $i (y/n)? " CONT
                             	if [ "$CONT" = "y" ]; then
-                            	apt-get install -y $i &>> /anydeploy/logs/log.txt
+                            	DEBIAN_FRONTEND=noninteractive apt-get install -y $i &>> /anydeploy/logs/log.txt
                               else
                             	echo_fail "Cancelled script due to depencency missing ($i)";
                             	exit 1
@@ -156,13 +156,13 @@ if [ "$dpkg_query" = ${i} ] || [ "$dpkg_query" = ${i}:amd64 ] ; then
 else
     if [ ${autoinstall_deps} = "Y" ] || [ ${autoinstall_deps} = "y" ] ; then
         start_spinner "Installing $i"
-        apt-get install -y $i &>> /anydeploy/logs/log.txt
+        DEBIAN_FRONTEND=noninteractive apt-get install -y $i &>> /anydeploy/logs/log.txt
         sleep 0.3
         stop_spinner $?
     else
         read -p " Do you want me to install $i (y/n)? " CONT
             if [ "$CONT" = "y" ]; then
-            apt-get install -y $i &>> /anydeploy/logs/log.txt
+            DEBIAN_FRONTEND=noninteractive apt-get install -y $i &>> /anydeploy/logs/log.txt
             else
             echo_fail "Cancelled script due to depencency missing ($i)";
             exit 1
