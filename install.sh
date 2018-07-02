@@ -140,7 +140,7 @@ echo ""
   fi
   if [ ! -d "/nfs" ]; then
     mkdir /nfs
-  fi 
+  fi
 
   echo "##############################################################################"
   echo "#                        Starting Dialog Setup                               #"
