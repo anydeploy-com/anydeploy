@@ -39,14 +39,12 @@ start_spinner "Creating iPXE script"
 SAVE_DIR=$(pwd)
 
       cd ${install_path}/sources/ipxe/src
-
-
-      touch demo.ipxe
+      touch ${install_path}/sources/ipxe/src/anydeploy.ipxe
 
 cat >"anydeploy.ipxe" << EOF
 #!ipxe
 dhcp
-chain http://${ip-address}/menu.ipxe
+chain http://10.1.1.1/menu.ipxe
 EOF
       sleep 1
 stop_spinner $?
@@ -59,11 +57,11 @@ stop_spinner $?
 # TODO BUild efi32/syslinux32.efi
 # TODO Build ipxe 32 bit
 
-start_spinner "Building iPXE 64 bit (UEFI)"
+start_spinner "Building iPXE 64 bit (BIOS)"
       make bin/undionly.kpxe EMBED=anydeploy.ipxe >/dev/null 2>&1
 stop_spinner $?
 
-start_spinner "Building iPXE 64 bit (BIOS)"
+start_spinner "Building iPXE 64 bit (UEFI)"
       make bin-x86_64-efi/ipxe.efi EMBED=anydeploy.ipxe >/dev/null 2>&1
 stop_spinner $?
 
