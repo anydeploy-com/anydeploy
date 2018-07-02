@@ -41,7 +41,7 @@ SAVE_DIR=$(pwd)
       cd ${install_path}/sources/ipxe/src
 
 
-      touch demo.ipxe
+      touch anydeploy.ipxe
 
 cat >"anydeploy.ipxe" << EOF
 #!ipxe
