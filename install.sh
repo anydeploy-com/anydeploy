@@ -138,7 +138,9 @@ echo ""
   sleep 5
   stop_spinner $?
   fi
-
+  if [ ! -d "/nfs" ]; then
+    mkdir /nfs
+  fi 
 
   echo "##############################################################################"
   echo "#                        Starting Dialog Setup                               #"

@@ -1,14 +1,14 @@
 updating with apt-get
 Hit:1 http://security.debian.org/debian-security stretch/updates InRelease
-Ign:2 http://ftp.uk.debian.org/debian stretch InRelease
-Get:3 http://ppa.launchpad.net/webupd8team/java/ubuntu xenial InRelease [17.5 kB]
+Get:2 http://ppa.launchpad.net/webupd8team/java/ubuntu xenial InRelease [17.5 kB]
+Ign:3 http://ftp.uk.debian.org/debian stretch InRelease
 Hit:4 http://ftp.uk.debian.org/debian stretch-updates InRelease
-Ign:5 http://dl.google.com/linux/chrome/deb stable InRelease
-Hit:6 http://ftp.uk.debian.org/debian stretch Release
-Hit:7 http://dl.google.com/linux/chrome/deb stable Release
-Hit:8 http://repository.spotify.com stable InRelease
-Ign:3 http://ppa.launchpad.net/webupd8team/java/ubuntu xenial InRelease
-Fetched 17.5 kB in 0s (43.7 kB/s)
+Hit:5 http://ftp.uk.debian.org/debian stretch Release
+Ign:6 http://dl.google.com/linux/chrome/deb stable InRelease
+Hit:7 http://repository.spotify.com stable InRelease
+Hit:8 http://dl.google.com/linux/chrome/deb stable Release
+Ign:2 http://ppa.launchpad.net/webupd8team/java/ubuntu xenial InRelease
+Fetched 17.5 kB in 0s (42.2 kB/s)
 Reading package lists...
 W: GPG error: http://ppa.launchpad.net/webupd8team/java/ubuntu xenial InRelease: The following signatures couldn't be verified because the public key is not available: NO_PUBKEY C2518248EEA14886
 W: The repository 'http://ppa.launchpad.net/webupd8team/java/ubuntu xenial InRelease' is not signed.
