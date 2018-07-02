@@ -156,7 +156,7 @@ echo ""
   clear
   . ${install_path}/scripts/setup/3_setup_tftp.sh
   . ${install_path}/scripts/setup/4_setup_ipxe.sh
-#  . ${install_path}/scripts/setup/5_debootstrap.sh
+  . ${install_path}/scripts/setup/5_debootstrap.sh
   . ${install_path}/scripts/setup/6_setup_nfs.sh
   . ${install_path}/scripts/setup/7_setup_nginx_php.sh
   . ${install_path}/scripts/setup/8_setup_dhcp.sh

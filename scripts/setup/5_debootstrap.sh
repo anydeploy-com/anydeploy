@@ -21,6 +21,9 @@ fi
 # Create Dir for netboot anydeploy OS
 if [ ! -d "/nfs/any64" ]; then
 mkdir "/nfs/any64"
+else
+  rm -rf "/nfs/any64"
+  mkdir "/nfs/any64"
 fi
 # Add Working Dir variable
 
@@ -104,6 +107,8 @@ cat >"${anynet_amd64}/postinstall.sh" <<EOF
 # Fix Nameservers (resolv.conf)
     echo "nameserver 1.1.1.1" > "/etc/resolv.conf"
     echo "nameserver 1.0.0.1" >> "/etc/resolv.conf"
+# Set Timezone
+timedatectl set-timezone “Europe/London”
 # Update OS
             apt-get update -y && apt-get upgrade -y
 # Disable installation of recommended packages
