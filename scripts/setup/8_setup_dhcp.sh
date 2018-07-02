@@ -89,3 +89,5 @@ service dnsmasq restart
       dhcp_type=()
       . ${install_path}/scripts/setup/8_setup_dhcp_help.sh
       fi
+
+# Setup Resolv.conf
