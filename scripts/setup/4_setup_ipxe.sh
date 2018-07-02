@@ -44,10 +44,16 @@ SAVE_DIR=$(pwd)
 cat >"anydeploy.ipxe" << EOF
 #!ipxe
 dhcp
-chain http://${ip_adress}/menu.ipxe
+chain http://${ip_address}/menu.ipxe
 EOF
       sleep 1
 stop_spinner $?
+
+##############################################################################
+#                          Enable NFS Support                                #
+##############################################################################
+
+ echo "#define DOWNLOAD_PROTO_NFS" > config/local/general.h
 
 ##############################################################################
 #                          Build iPXE                                        #
