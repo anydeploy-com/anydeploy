@@ -114,7 +114,9 @@ echo ""
     # Synchronise / copy certain dirs (ie drivers)
     rsync \
     # Wimtools
-    wimtools
+    wimtools \
+    # OVMF - EFI/EUFI KVM
+    ovmf
     )
 
   check_deps
