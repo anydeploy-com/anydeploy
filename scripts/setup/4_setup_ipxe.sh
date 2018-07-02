@@ -46,7 +46,7 @@ SAVE_DIR=$(pwd)
 cat >"anydeploy.ipxe" << EOF
 #!ipxe
 dhcp
-chain http://\${next-server}/menu.ipxe
+chain http://${ip-address}/menu.ipxe
 EOF
       sleep 1
 stop_spinner $?
@@ -86,7 +86,7 @@ start_spinner "Copying iPXE binaries to TFTP location"
       fi
       if [ -f "ipxe.0" ]; then
         rm "ipxe.0"
-      fi 
+      fi
       ln -s undionly.kpxe undionly.0
       ln -s ipxe.efi ipxe.0
       # Go back to previous directory
