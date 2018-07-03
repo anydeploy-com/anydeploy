@@ -112,7 +112,11 @@ echo ""
     # Used to download SDIO torrent
     aria2 \
     # Synchronise / copy certain dirs (ie drivers)
-    rsync
+    rsync \
+    # Wimtools
+    wimtools \
+    # OVMF - EFI/EUFI KVM
+    ovmf
     )
 
   check_deps
