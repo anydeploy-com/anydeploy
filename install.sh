@@ -116,7 +116,9 @@ echo ""
     # Wimtools
     wimtools \
     # OVMF - EFI/EUFI KVM
-    ovmf
+    ovmf \
+    # Partclone
+    partclone
     )
 
   check_deps
