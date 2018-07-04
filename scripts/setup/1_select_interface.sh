@@ -18,7 +18,6 @@ cleanup () {
   # Reset in case of re-run
   interface_dialog_name=()
 }
-#test
 
 SAVEIFS=$IFS
 # Array of physical interfaces
