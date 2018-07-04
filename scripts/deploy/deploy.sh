@@ -166,11 +166,9 @@ if [ ${#partitions_source[@]} = ${#partitions_destination[@]} ]; then
   # Run Partclone
   echo "DEBUG: Running Partclone Tasks"
   for i in "${!partitions_source[@]}"; do
-    echo "echoing i: ${partitions_source[${i}]}"
-    sleep 1
+    isdd=$(echo ${partitions_source[${i}]} | grep "dd")
     if [ ! -z "${isdd}" ]; then
       echo "Partition ${partitions_source[${i}]} - type is dd"
-      sleep 1
       partclone.dd --ncurses -s "${partitions_source[${i}]}" -o "${partitions_destination[${i}]}"
     else
       echo "Partition ${partitions_source[${i}]} - type is partclone"
