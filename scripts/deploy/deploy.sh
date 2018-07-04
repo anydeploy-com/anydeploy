@@ -96,7 +96,7 @@ echo "Unmounting any partitions from ${destination}"
 
 for i in "${partitions_destination[@]}"; do
   umount ${i}
-  sleep 5
+  sleep 1
 done
 
 sleep 2
@@ -107,7 +107,7 @@ sleep 2
 
 echo "Initially wiping filesystem at ${destination}"
 wipefs ${destination}
-sleep 5
+sleep 2
 
 # Write MBR
 
@@ -156,6 +156,7 @@ echo "DEBUG: Partition Source Array: ${partitions_source[@]}"
 echo "DEBUG: Partition Destination Amount: ${#partitions_destination[@]}"
 echo "DEBUG: Partition Destination Array: ${partitions_destination[@]}"
 
+sleep 1
 # Verify if partition array source NO matches partition array destination NO
 
 
@@ -165,7 +166,17 @@ if [ ${#partitions_source[@]} = ${#partitions_destination[@]} ]; then
   # Run Partclone
   echo "DEBUG: Running Partclone Tasks"
   for i in "${!partitions_source[@]}"; do
-    partclone.restore --ncurses --source "${partitions_source[${i}]}" --output "${partitions_destination[${i}]}"
+    echo "echoing i: ${partitions_source[${i}]}"
+    sleep 1
+    if [ ! -z "${isdd}" ]; then
+      echo "Partition ${partitions_source[${i}]} - type is dd"
+      sleep 1
+      partclone.dd --ncurses -s "${partitions_source[${i}]}" -o "${partitions_destination[${i}]}"
+    else
+      echo "Partition ${partitions_source[${i}]} - type is partclone"
+      sleep 1
+      partclone.restore --ncurses --source "${partitions_source[${i}]}" --output "${partitions_destination[${i}]}"
+  fi
   done
 
 
