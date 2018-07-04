@@ -159,6 +159,7 @@ for i in "${!selected_disk_partition_ids[@]}"; do
   if [ "${selected_disk_partition_fstypes[${i}]}" = "ntfs" ]; then
   selected_disk_partition_command[${i}]="partclone.ntfs --ncurses -c -d -s \"${selected_disk_partition_ids[${i}]}\" -o \"${destination}/${selected_disk_partition_save_filename[${i}]}\" "
 else
+  #partclone.dd -d -s /dev/loop1p3 -o /nfs/images/win10_efi/p3.img
   selected_disk_partition_command[${i}]="partclone.dd"
 fi
   echo "Partition Size: ${selected_disk_partition_sizes[${i}]}"
@@ -182,6 +183,15 @@ echo "Cloning Starting"
 echo ""
 sleep 2
 
+# Create image dir if doesn't exists
+
+if [ -d "${destination}" ]; then
+  echo "destination dir exists"
+else
+  echo "destination dir doesnt exist, creating"
+  mkdir -p "${destination}"
+fi
+
 
 # Dump Partition Table
   echo "backing up partition table"
@@ -201,18 +211,16 @@ sleep 2
   fi
   echo "Saving Bios mode type - ${vm_bios_mode}"
   touch "${destination}"/${vm_bios_mode}
-# Create image dir if doesn't exists
-
-if [ -d "${destination}" ]; then
-  echo "destination dir exists"
-else
-  echo "destination dir doesnt exist, creating"
-  mkdir -p "${destination}"
-fi
 
 
 # Start Actual Cloning
 for i in "${!selected_disk_partition_ids[@]}"; do
   echo "Cloning Partition $i"
-#  eval "${selected_disk_partition_command[${i}]}"
+  eval "${selected_disk_partition_command[${i}]}"
 done
+
+
+# Remove from losetup after clone finished
+#echo "Removing from losetup"
+#sleep 2
+#losetup -d ${source}
