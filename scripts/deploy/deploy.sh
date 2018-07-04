@@ -131,6 +131,7 @@ echo "Source partition_table file: $source/partition_table"
 if [ -f "${source}/partition_table" ]; then
 echo "DEBUG: partition table exists - writing"
 sfdisk "${destination}" < "${source}/partition_table" &>/dev/tty1
+sleep 5
 else
 echo "ERROR: mbr image missing - cancelling"
 sleep 60
@@ -142,6 +143,11 @@ fi
 partitions_source=($(ls "${source}"/p*.img))
 
 
+# Update partitions_destination array after changes
+partitions_destination=()
+partitions_destination=($(sfdisk -d /dev/sda | grep -v "device" | grep "/dev/sda" | awk '{print $1}'))
+sleep 2
+
 echo "DEBUG: Partition Source Amount: ${#partitions_source[@]}"
 echo "DEBUG: Partition Source Array: ${partitions_source[@]}"
 
@@ -152,11 +158,7 @@ echo "DEBUG: Partition Destination Array: ${partitions_destination[@]}"
 
 # Verify if partition array source NO matches partition array destination NO
 
-# Update partitions_destination array after changes
-partitions_destination=()
-sleep 2
-partitions_destination=($(sfdisk -d /dev/sda | grep -v "device" | grep "/dev/sda" | awk '{print $1}'))
-sleep 2
+
 
 if [ ${#partitions_source[@]} = ${#partitions_destination[@]} ]; then
   echo "DEBUG: partitions amount matching - arrays correct, partition map deployed correctly, will continue"
